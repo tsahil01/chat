@@ -26,7 +26,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@repo/db':
+      '@workspace/db':
         specifier: workspace:*
         version: link:../../packages/database
       '@workspace/ui':

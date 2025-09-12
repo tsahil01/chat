@@ -1,12 +1,12 @@
-import styles from "./page.module.css";
-import { prisma } from "@repo/db";
-
+import { Button } from "@workspace/ui/components/button";
 
 export default async function Home() {
-  const user = await prisma.user.findFirst() 
   return (
-    <div className={styles.page}>
-      {user?.name ?? "No user added yet"}
+    <div className="flex items-center justify-center min-h-svh">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <h1 className="text-2xl font-bold">Hello World</h1>
+        <Button size="sm">Button</Button>
+      </div>
     </div>
   );
 }

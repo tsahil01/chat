@@ -1,5 +1,5 @@
 {
-    "name": "@repo/db",
+    "name": "@workspace/db",
     "version": "0.0.0",
     "scripts": {
         "db:generate": "prisma generate",
