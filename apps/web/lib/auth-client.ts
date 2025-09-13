@@ -1,2 +1,6 @@
 import { createAuthClient } from "better-auth/react"
-export const authClient = createAuthClient({})
+import { dodopaymentsClient } from "@dodopayments/better-auth";
+
+export const authClient = createAuthClient({
+    plugins: [dodopaymentsClient()],
+})
