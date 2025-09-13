@@ -15,6 +15,10 @@ export default function Chat() {
             switch (part.type) {
               case 'text':
                 return <div key={`${message.id}-${i}`}>{part.text}</div>;
+              case 'tool-exaWebSearch':
+                return <div className='bg-zinc-100 dark:bg-zinc-800 p-2 rounded-md' key={`${message.id}-${i}`}>{`Tool: exaWebSearch`}</div>;
+              case 'reasoning':
+                return <div className="text-sm text-zinc-500" key={`${message.id}-${i}`}>{part.text}</div>;
             }
           })}
         </div>
