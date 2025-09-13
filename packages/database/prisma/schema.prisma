@@ -82,7 +82,6 @@ model Chat {
   // Relations
   user     User      @relation(fields: [userId], references: [id])
   messages Message[]
-  votes    Vote[]
   streams  Stream[]
 
   @@map("Chat")
@@ -98,23 +97,10 @@ model Message {
 
   // Relations
   chat  Chat   @relation(fields: [chatId], references: [id])
-  votes Vote[]
 
-  @@map("Message_v2")
+  @@map("Message")
 }
 
-model Vote {
-  chatId    String  @db.Uuid
-  messageId String  @db.Uuid
-  isUpvoted Boolean
-
-  // Relations
-  chat    Chat    @relation(fields: [chatId], references: [id])
-  message Message @relation(fields: [messageId], references: [id])
-
-  @@id([chatId, messageId])
-  @@map("Vote_v2")
-}
 
 model Document {
   id        String       @default(uuid()) @db.Uuid
