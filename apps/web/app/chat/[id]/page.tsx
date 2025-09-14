@@ -66,7 +66,6 @@ export default function Chat() {
     try {
       const response = await fetch(`/api/chat/${params.id}/messages`);
       const data = await response.json();
-      console.log("Chat:", data);
       const uiMessages = await getUIMessages(data.messages);
       setMessages(uiMessages);
     } catch (error) {
@@ -93,7 +92,6 @@ export default function Chat() {
     setIsSubmitting(true);
     try {
       const canSend = await canUserSendMessage();
-      console.log('canSend', canSend);
       if (!canSend) {
         messages.push({
           role: 'system',
