@@ -9,16 +9,19 @@ import { Copy, ChevronDown, ChevronUp } from 'lucide-react';
 import { FaArrowTurnUp } from 'react-icons/fa6';
 import { SelectModel } from '@/components/select-model';
 import { models, Models } from '@/lib/models';
+import { Toggle } from '@workspace/ui/components/toggle';
 import { CiGlobe } from 'react-icons/ci';
 import { authClient } from '@/lib/auth-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
+import { ChatMetadata } from '@/lib/types';
 
 export default function Chat() {
   const [input, setInput] = useState('');
-  const { messages, sendMessage } = useChat();
+  const { messages, sendMessage, regenerate } = useChat();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
   const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(new Set());
+  const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { data } = authClient.useSession();
 
@@ -28,7 +31,8 @@ export default function Chat() {
 
     setIsSubmitting(true);
     try {
-      await sendMessage({ text: input, metadata: { model: selectedModel?.model } });
+      const metadata: ChatMetadata = { model: selectedModel?.model, toggleWebSearch };
+      await sendMessage({ text: input, metadata });
       setInput('');
     } finally {
       setIsSubmitting(false);
@@ -53,14 +57,21 @@ export default function Chat() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Auto-scroll reasoning boxes when they expand
   useEffect(() => {
-    // Find all expanded reasoning boxes and scroll them to bottom
     const reasoningContainers = document.querySelectorAll('.max-h-32.overflow-y-auto');
     reasoningContainers.forEach(container => {
       container.scrollTop = container.scrollHeight;
     });
   }, [collapsedReasoning]);
+
+  // Send a message again.
+  // User will click on the retry button on the message which was sent by the AI.
+  // We will 
+
+  async function retryMessage(messageId: string) {
+
+    
+  }
 
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] max-w-4xl mx-auto">
@@ -105,7 +116,7 @@ export default function Chat() {
                             return (
                               <div
                                 key={`${message.id}-${i}`}
-                                className="bg-background/50 p-2 text-sm font-mono max-w-xl"
+                                className="bg-background/50 border rounded-lg p-2 text-sm font-mono max-w-xl"
                               >
                                 <div className="flex items-center gap-2">
                                   <span>Tool: Web Search</span>
@@ -129,7 +140,12 @@ export default function Chat() {
                                   onClick={() => toggleReasoning(message.id, i)}
                                   className="w-full justify-between p-2 h-auto text-sm font-medium text-muted-foreground hover:text-foreground"
                                 >
-                                  <span>Reasoning</span>
+                                  <div className="flex items-center gap-2">
+                                    <span>Reasoning</span>
+                                    {part.state !== 'done' && (
+                                      <Spinner variant="default" size={16} />
+                                    )}
+                                  </div>
                                   {isCollapsed ? (
                                     <ChevronDown className="w-4 h-4" />
                                   ) : (
@@ -158,7 +174,9 @@ export default function Chat() {
                       <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                         <Copy className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="h-8 p-0">
+                      <Button variant="ghost" size="sm" className="h-8 p-0" onClick={() => {
+                        regenerate({ messageId: message.id });
+                      }}>
                         <span>Retry</span>
                       </Button>
                     </div>
@@ -200,9 +218,9 @@ export default function Chat() {
         </div>
         <div className='flex flex-row justify-between'>
           <div className='flex flex-row gap-2'>
-            <Button className="hover:cursor-pointer" variant={"outline"} size={"icon"}>
+            <Toggle pressed={toggleWebSearch} onPressedChange={setToggleWebSearch}>
               <CiGlobe />
-            </Button>
+            </Toggle>
             <SelectModel models={models} selectedModel={selectedModel!} setSelectedModel={setSelectedModel} />
           </div>
           <div>
