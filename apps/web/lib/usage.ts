@@ -43,7 +43,7 @@ export async function getUserUsage(): Promise<UsageData | null> {
         const currentMonth = getCurrentMonth();
         
         // Fetch current usage from your API
-        const currentUsage = await getCurrentMonthUsage(currentMonth);
+        const currentUsage = await getCurrentMonthUsage();
         
         return {
             userId: session.user.id,
@@ -98,9 +98,9 @@ export async function incrementMessageUsage(): Promise<boolean> {
 }
 
 // Helper functions for API calls
-async function getCurrentMonthUsage(month: string): Promise<number> {
+async function getCurrentMonthUsage(): Promise<number> {
     try {
-        const response = await fetch(`/api/usage/${month}`, {
+        const response = await fetch(`/api/usage`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
