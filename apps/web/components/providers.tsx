@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { SidebarProvider, SidebarTrigger } from "@workspace/ui/components/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +14,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
       enableColorScheme
     >
-      {children}
+      <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
     </NextThemesProvider>
   )
 }
