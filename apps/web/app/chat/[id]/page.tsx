@@ -15,6 +15,8 @@ import { authClient } from '@/lib/auth-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { canUserSendMessage } from '@/lib/usage/client';
+import { generateUUID } from '@/lib/utils';
+import { getUIMessages } from '@/lib/chat';
 
 export default function Chat() {
   const [input, setInput] = useState('');
@@ -23,11 +25,11 @@ export default function Chat() {
   const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(new Set());
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [chatId, setChatId] = useState<string | null>(null);
-  
+
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
     if (params?.id && typeof params.id === 'string') {
       setChatId(params.id);
@@ -37,8 +39,8 @@ export default function Chat() {
   }, [params?.id]);
 
 
-  const { messages, sendMessage, regenerate } = useChat({
-    id: chatId || 'new-chat',
+  const { messages, setMessages, sendMessage, regenerate } = useChat({
+    id: chatId || generateUUID(),
     transport: new DefaultChatTransport({
       prepareSendMessagesRequest: ({ id, messages }) => {
         return {
@@ -54,6 +56,24 @@ export default function Chat() {
   });
   const { data } = authClient.useSession();
   const chatEndRef = useAutoScroll({ messages, collapsedReasoning });
+
+  useEffect(() => {
+    getChatsMessages();
+  }, [chatId]);
+
+
+  async function getChatsMessages() {
+    try {
+      const response = await fetch(`/api/chat/${params.id}/messages`);
+      const data = await response.json();
+      console.log("Chat:", data);
+      const uiMessages = await getUIMessages(data.messages);
+      setMessages(uiMessages);
+    } catch (error) {
+      console.error("Error getting chat messages:", error);
+    }
+
+  }
 
   useEffect(() => {
     const messageFromUrl = searchParams.get('message');
@@ -111,95 +131,95 @@ export default function Chat() {
     <div className="flex flex-col h-[calc(100vh-5rem)] max-w-4xl mx-auto">
       <div className="flex-1 overflow-y-auto space-y-4 p-4">
 
-          <div className="space-y-6">
-            {messages.map((message, index) => (
-              <div key={message.id} className="flex gap-3">
-                {/* Avatar */}
-                {message.role === 'user' && <>
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center my-auto">
-                    <Avatar>
-                      <AvatarImage src={data?.user?.image || ""} />
-                      <AvatarFallback className="text-xs">{data?.user?.name?.charAt(0) || 'U'}</AvatarFallback>
-                    </Avatar>
-                  </div>
-                </>}
-
-                {/* Message Content */}
-                <div className={`space-y-2 ${message.role === 'user' ? 'w-auto' : 'w-full'}`}>
-                  <div className={`rounded-lg p-3 ${message.role === 'user'
-                    ? 'bg-muted text-foreground max-w-xl w-auto'
-                    : 'text-foreground'
-                    }`}>
-                    <div className="space-y-3">
-                      {message.parts.map((part, i) => {
-                        switch (part.type) {
-                          case 'text':
-                            return (
-                              <TextPart
-                                key={`${message.id}-${i}`}
-                                text={part.text}
-                                messageId={message.id}
-                                partIndex={i}
-                              />
-                            );
-                          case 'tool-exaWebSearch':
-                            return (
-                              <ToolPart
-                                key={`${message.id}-${i}`}
-                                part={part}
-                                messageId={message.id}
-                                partIndex={i}
-                              />
-                            );
-                          case 'reasoning':
-                            const reasoningKey = `${message.id}-${i}`;
-                            const isCollapsed = collapsedReasoning.has(reasoningKey);
-                            return (
-                              <ReasoningPart
-                                key={`${message.id}-${i}`}
-                                part={part}
-                                messageId={message.id}
-                                partIndex={i}
-                                isCollapsed={isCollapsed}
-                                onToggle={toggleReasoning}
-                              />
-                            );
-                          default:
-                            return null;
-                        }
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Interactive Elements for AI messages */}
-                  {message.role === 'assistant' && (
-                    <MessageActions
-                      onCopy={() => {
-                        // TODO: Implement copy functionality
-                        const textParts = message.parts
-                          .filter(p => p.type === 'text' && 'text' in p)
-                          .map(p => (p as any).text)
-                          .join('');
-                        navigator.clipboard.writeText(textParts);
-                      }}
-                      onRetry={() => {
-                        regenerate({ messageId: message.id });
-                      }}
-                    />
-                  )}
-
-                  {/* Disclaimer for AI messages */}
-                  {message.role === 'assistant' && (
-                    <p className="text-xs text-muted-foreground text-end">
-                      AI can make mistakes. Please double-check responses.
-                    </p>
-                  )}
+        <div className="space-y-6">
+          {messages.map((message, index) => (
+            <div key={message.id} className="flex gap-3">
+              {/* Avatar */}
+              {message.role === 'user' && <>
+                <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center my-auto">
+                  <Avatar>
+                    <AvatarImage src={data?.user?.image || ""} />
+                    <AvatarFallback className="text-xs">{data?.user?.name?.charAt(0) || 'U'}</AvatarFallback>
+                  </Avatar>
                 </div>
+              </>}
+
+              {/* Message Content */}
+              <div className={`space-y-2 ${message.role === 'user' ? 'w-auto' : 'w-full'}`}>
+                <div className={`rounded-lg p-3 ${message.role === 'user'
+                  ? 'bg-muted text-foreground max-w-xl w-auto'
+                  : 'text-foreground'
+                  }`}>
+                  <div className="space-y-3">
+                    {message.parts.map((part, i) => {
+                      switch (part.type) {
+                        case 'text':
+                          return (
+                            <TextPart
+                              key={`${message.id}-${i}`}
+                              text={part.text}
+                              messageId={message.id}
+                              partIndex={i}
+                            />
+                          );
+                        case 'tool-exaWebSearch':
+                          return (
+                            <ToolPart
+                              key={`${message.id}-${i}`}
+                              part={part}
+                              messageId={message.id}
+                              partIndex={i}
+                            />
+                          );
+                        case 'reasoning':
+                          const reasoningKey = `${message.id}-${i}`;
+                          const isCollapsed = collapsedReasoning.has(reasoningKey);
+                          return (
+                            <ReasoningPart
+                              key={`${message.id}-${i}`}
+                              part={part}
+                              messageId={message.id}
+                              partIndex={i}
+                              isCollapsed={isCollapsed}
+                              onToggle={toggleReasoning}
+                            />
+                          );
+                        default:
+                          return null;
+                      }
+                    })}
+                  </div>
+                </div>
+
+                {/* Interactive Elements for AI messages */}
+                {message.role === 'assistant' && (
+                  <MessageActions
+                    onCopy={() => {
+                      // TODO: Implement copy functionality
+                      const textParts = message.parts
+                        .filter(p => p.type === 'text' && 'text' in p)
+                        .map(p => (p as any).text)
+                        .join('');
+                      navigator.clipboard.writeText(textParts);
+                    }}
+                    onRetry={() => {
+                      regenerate({ messageId: message.id });
+                    }}
+                  />
+                )}
+
+                {/* Disclaimer for AI messages */}
+                {message.role === 'assistant' && (
+                  <p className="text-xs text-muted-foreground text-end">
+                    AI can make mistakes. Please double-check responses.
+                  </p>
+                )}
               </div>
-            ))}
-            {/* Auto-scroll anchor */}
-            <div ref={chatEndRef} />
-          </div>
+            </div>
+          ))}
+          {/* Auto-scroll anchor */}
+          <div ref={chatEndRef} />
+        </div>
         {isSubmitting && (
           <div className="flex gap-3">
             <div className="flex-1">
