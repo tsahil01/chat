@@ -2,6 +2,7 @@ import { openrouter } from '@/lib/openrouter';
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from 'ai';
 import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
+import { getUserUsageAction, incrementMessageUsageAction } from '@/lib/usage/server';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -32,13 +33,20 @@ export async function POST(req: Request) {
     system += `- You need to use the exaWebSearch tool for next user message. It does not matter what the user asks, you need to use the exaWebSearch tool.\n`;
   }
 
+  if (system.trim() !== '') {
   messages.push({
     role: 'system',
     parts: [{ type: 'text', text: system }],
-    id: 'system',
-    createdAt: new Date(),
-  } as UIMessage);
+      id: 'system',
+      createdAt: new Date(),
+    } as UIMessage);
+  }
 
+  const userUsage = await getUserUsageAction();
+  console.log('userUsage', userUsage);
+  if(userUsage?.remaining! <= 0) {
+    return Response.json({ error: "Monthly message limit exceeded" }, { status: 429 });
+  }
 
   const result = streamText({
     model: openrouter(selectedChatModel || 'nvidia/nemotron-nano-9b-v2:free'),
@@ -47,6 +55,8 @@ export async function POST(req: Request) {
     stopWhen: stepCountIs(5),
     system,
   });
+
+  await incrementMessageUsageAction();
 
   return result.toUIMessageStreamResponse();
 }
