@@ -16,8 +16,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <SidebarProvider>
       <AppSidebar />
-      <main>
-        <SidebarTrigger />
+      <main className="flex-1 p-4">
+        <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
         {children}
       </main>
     </SidebarProvider>

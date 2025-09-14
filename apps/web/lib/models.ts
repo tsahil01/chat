@@ -1,9 +1,9 @@
-interface Models {
+export interface Models {
     model: string;
     provider: string;
 }
 
-const models: Models[] = [{
+export const models: Models[] = [{
     model: 'nvidia/nemotron-nano-9b-v2:free',
     provider: 'openrouter',
 }, {
@@ -19,5 +19,3 @@ const models: Models[] = [{
     model: 'moonshotai/kimi-k2:free',
     provider: 'openrouter',
 }];
-
-export default models;

@@ -3,7 +3,6 @@
 import { 
   MdMessage, 
   MdAdd, 
-  MdPerson, 
 } from "react-icons/md"
 import { useEffect, useState } from "react";
 import { Chat } from "@workspace/db";
@@ -21,6 +20,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { User } from "better-auth";
 import { AuthDialog } from "./auth-dialog";
+import { UserMenu } from "./user-menu";
 
 
 export function AppSidebar() {
@@ -31,6 +31,15 @@ export function AppSidebar() {
     async function getSession() {
         const { data: session } = await authClient.getSession();
         setUser(session?.user || null);
+    }
+
+    async function handleLogout() {
+        try {
+            await authClient.signOut();
+            setUser(null);
+        } catch (error) {
+            console.error("Error logging out:", error);
+        }
     }
 
     async function getRecentChats() {
@@ -148,12 +157,7 @@ export function AppSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               {user ? (
-                <SidebarMenuButton asChild>
-                  <a href="/profile">
-                    <MdPerson className="h-4 w-4" />
-                    <span>{user?.name}</span>
-                  </a>
-                </SidebarMenuButton>
+                <UserMenu user={user} onLogout={handleLogout} />
               ) : (
                 <AuthDialog />
               )}
@@ -164,4 +168,3 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
-

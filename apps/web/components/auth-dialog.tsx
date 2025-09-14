@@ -29,7 +29,7 @@ export function AuthDialog() {
           <div className="space-y-4 py-4">
             <Button 
               onClick={() => authClient.signIn.social({ provider: "github" })}
-              className="w-full h-12 text-base font-medium"
+              className="w-full h-12 text-base font-medium hover:cursor-pointer"
               variant="outline"
             >
               <svg className="h-5 w-5 mr-3" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@ export function AuthDialog() {
             
             <Button 
               onClick={() => authClient.signIn.social({ provider: "google" })}
-              className="w-full h-12 text-base font-medium"
+              className="w-full h-12 text-base font-medium hover:cursor-pointer"
               variant="outline"
             >
               <svg className="h-5 w-5 mr-3" viewBox="0 0 24 24">
