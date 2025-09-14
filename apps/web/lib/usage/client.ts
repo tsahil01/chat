@@ -1,19 +1,7 @@
-import { authClient } from "./auth-client";
-import { isProUser } from "./payments";
-import { getCurrentMonth, getNextMonthResetDate } from "./utils";
-
-const FREE_LIMIT = 30;
-const PRO_LIMIT = 1000;
-
-interface UsageData {
-    userId: string;
-    currentUsage: number;
-    limit: number;
-    remaining: number;
-    isProUser: boolean;
-    month: string;
-    resetDate: Date;
-}
+import { FREE_LIMIT, PRO_LIMIT, UsageData } from ".";
+import { isProUser } from "@/lib/payments/client";
+import { getCurrentMonth, getNextMonthResetDate } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
 
 export async function getUsageLimit(): Promise<number> {
     try {
@@ -43,7 +31,7 @@ export async function getUserUsage(): Promise<UsageData | null> {
         const currentMonth = getCurrentMonth();
         
         // Fetch current usage from your API
-        const currentUsage = await getCurrentMonthUsage(currentMonth);
+        const currentUsage = await getCurrentMonthUsage();
         
         return {
             userId: session.user.id,
@@ -98,9 +86,9 @@ export async function incrementMessageUsage(): Promise<boolean> {
 }
 
 // Helper functions for API calls
-async function getCurrentMonthUsage(month: string): Promise<number> {
+async function getCurrentMonthUsage(): Promise<number> {
     try {
-        const response = await fetch(`/api/usage/${month}`, {
+        const response = await fetch(`/api/usage`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
@@ -176,4 +164,4 @@ export async function shouldShowUpgradePrompt(): Promise<boolean> {
     if (!usage) return false;
     
     return !usage.isProUser && usage.remaining <= 5; // Show when 5 or fewer messages left
-}
+}   

@@ -1,5 +1,5 @@
 import { SubscriptionListResponse } from "dodopayments/resources/subscriptions.mjs";
-import { authClient } from "./auth-client";
+import { authClient } from "../auth-client";
 
 async function getSubscriptions(): Promise<SubscriptionListResponse[]> {
     try {
