@@ -1,0 +1,20 @@
+import { Button } from '@workspace/ui/components/button';
+import { Copy } from 'lucide-react';
+
+interface MessageActionsProps {
+  onCopy: () => void;
+  onRetry: () => void;
+}
+
+export function MessageActions({ onCopy, onRetry }: MessageActionsProps) {
+  return (
+    <div className="flex justify-end items-center gap-2 text-sm text-muted-foreground">
+      <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onCopy}>
+        <Copy className="w-4 h-4" />
+      </Button>
+      <Button variant="ghost" size="sm" className="h-8 p-0" onClick={onRetry}>
+        <span>Retry</span>
+      </Button>
+    </div>
+  );
+}

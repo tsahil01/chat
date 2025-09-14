@@ -1,29 +1,44 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@workspace/ui/components/button';
-import { Textarea } from '@workspace/ui/components/textarea';
+import { DefaultChatTransport } from 'ai';
+import { useState } from 'react';
 import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
-import { Copy, ChevronDown, ChevronUp } from 'lucide-react';
-import { FaArrowTurnUp } from 'react-icons/fa6';
 import { SelectModel } from '@/components/select-model';
+import { WelcomeScreen } from '@/components/welcome-screen';
+import { MessageActions } from '@/components/message-actions';
+import { ChatInput } from '@/components/chat-input';
+import { TextPart } from '@/components/message-parts/text-part';
+import { ToolPart } from '@/components/message-parts/tool-part';
+import { ReasoningPart } from '@/components/message-parts/reasoning-part';
+import { useAutoScroll } from '@/hooks/use-auto-scroll';
 import { models, Models } from '@/lib/models';
-import { Toggle } from '@workspace/ui/components/toggle';
-import { CiGlobe } from 'react-icons/ci';
 import { authClient } from '@/lib/auth-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
-import { ChatMetadata } from '@/lib/types';
 
 export default function Chat() {
   const [input, setInput] = useState('');
-  const { messages, sendMessage, regenerate } = useChat();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
   const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(new Set());
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const { messages, sendMessage, regenerate } = useChat({
+    id: 'chat',
+    transport: new DefaultChatTransport({
+      prepareSendMessagesRequest: ({ id, messages }) => {
+        return {
+          body: {
+            chatId: id,
+            messages,
+            selectedChatModel: selectedModel?.model,
+            toggleWebSearch: toggleWebSearch,
+          },
+        };
+      },
+    }),
+  });
   const { data } = authClient.useSession();
+  const chatEndRef = useAutoScroll({ messages, collapsedReasoning });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +46,7 @@ export default function Chat() {
 
     setIsSubmitting(true);
     try {
-      const metadata: ChatMetadata = { model: selectedModel?.model, toggleWebSearch };
-      await sendMessage({ text: input, metadata });
+      await sendMessage({ text: input });
       setInput('');
     } finally {
       setIsSubmitting(false);
@@ -52,37 +66,13 @@ export default function Chat() {
     });
   };
 
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
 
-  useEffect(() => {
-    const reasoningContainers = document.querySelectorAll('.max-h-32.overflow-y-auto');
-    reasoningContainers.forEach(container => {
-      container.scrollTop = container.scrollHeight;
-    });
-  }, [collapsedReasoning]);
-
-  // Send a message again.
-  // User will click on the retry button on the message which was sent by the AI.
-  // We will 
-
-  async function retryMessage(messageId: string) {
-
-    
-  }
-
+  
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] max-w-4xl mx-auto">
       <div className="flex-1 overflow-y-auto space-y-4 p-4">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-semibold tracking-tight">Welcome to Chat</h1>
-              <p className="text-muted-foreground">Start a conversation by typing a message below.</p>
-            </div>
-          </div>
+          <WelcomeScreen />
         ) : (
           <div className="space-y-6">
             {messages.map((message, index) => (
@@ -108,58 +98,34 @@ export default function Chat() {
                         switch (part.type) {
                           case 'text':
                             return (
-                              <div key={`${message.id}-${i}`} className="">
-                                {part.text}
-                              </div>
+                              <TextPart
+                                key={`${message.id}-${i}`}
+                                text={part.text}
+                                messageId={message.id}
+                                partIndex={i}
+                              />
                             );
                           case 'tool-exaWebSearch':
                             return (
-                              <div
+                              <ToolPart
                                 key={`${message.id}-${i}`}
-                                className="bg-background/50 border rounded-lg p-2 text-sm font-mono max-w-xl"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <span>Tool: Web Search</span>
-                                  {part.state !== 'output-available' && (
-                                    <Spinner variant="ring" size={16} />
-                                  )}
-                                </div>
-                              </div>
+                                part={part}
+                                messageId={message.id}
+                                partIndex={i}
+                              />
                             );
                           case 'reasoning':
                             const reasoningKey = `${message.id}-${i}`;
                             const isCollapsed = collapsedReasoning.has(reasoningKey);
                             return (
-                              <div
+                              <ReasoningPart
                                 key={`${message.id}-${i}`}
-                                className="border rounded-lg bg-muted/30 max-w-xl"
-                              >
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => toggleReasoning(message.id, i)}
-                                  className="w-full justify-between p-2 h-auto text-sm font-medium text-muted-foreground hover:text-foreground"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <span>Reasoning</span>
-                                    {part.state !== 'done' && (
-                                      <Spinner variant="default" size={16} />
-                                    )}
-                                  </div>
-                                  {isCollapsed ? (
-                                    <ChevronDown className="w-4 h-4" />
-                                  ) : (
-                                    <ChevronUp className="w-4 h-4" />
-                                  )}
-                                </Button>
-                                {!isCollapsed && (
-                                  <div className="px-3 pb-3">
-                                    <div className="max-h-32 overflow-y-auto text-sm opacity-70 italic whitespace-pre-wrap">
-                                      {part.text}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
+                                part={part}
+                                messageId={message.id}
+                                partIndex={i}
+                                isCollapsed={isCollapsed}
+                                onToggle={toggleReasoning}
+                              />
                             );
                           default:
                             return null;
@@ -170,16 +136,19 @@ export default function Chat() {
 
                   {/* Interactive Elements for AI messages */}
                   {message.role === 'assistant' && (
-                    <div className="flex justify-end items-center gap-2 text-sm text-muted-foreground">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                        <Copy className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-8 p-0" onClick={() => {
+                    <MessageActions
+                      onCopy={() => {
+                        // TODO: Implement copy functionality
+                        const textParts = message.parts
+                          .filter(p => p.type === 'text' && 'text' in p)
+                          .map(p => (p as any).text)
+                          .join('');
+                        navigator.clipboard.writeText(textParts);
+                      }}
+                      onRetry={() => {
                         regenerate({ messageId: message.id });
-                      }}>
-                        <span>Retry</span>
-                      </Button>
-                    </div>
+                      }}
+                    />
                   )}
 
                   {/* Disclaimer for AI messages */}
@@ -206,31 +175,16 @@ export default function Chat() {
         )}
       </div>
 
-      <div className="bg-muted/30 p-4 rounded-lg flex flex-col gap-5">
-        <div className="max-w-4xl mx-auto w-full">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything..."
-            disabled={isSubmitting}
-            className="py-3 text-base bg-muted/30 focus:bg-background resize-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent "
-          />
-        </div>
-        <div className='flex flex-row justify-between'>
-          <div className='flex flex-row gap-2'>
-            <Toggle pressed={toggleWebSearch} onPressedChange={setToggleWebSearch}>
-              <CiGlobe />
-            </Toggle>
-            <SelectModel models={models} selectedModel={selectedModel!} setSelectedModel={setSelectedModel} />
-          </div>
-          <div>
-            <Button className="hover:cursor-pointer" size={"icon"} onClick={handleSubmit}>
-              <FaArrowTurnUp />
-            </Button>
-          </div>
-
-        </div>
-      </div>
+      <ChatInput
+        input={input}
+        setInput={setInput}
+        isSubmitting={isSubmitting}
+        toggleWebSearch={toggleWebSearch}
+        setToggleWebSearch={setToggleWebSearch}
+        selectedModel={selectedModel}
+        setSelectedModel={setSelectedModel}
+        onSubmit={handleSubmit}
+      />
     </div >
   );
 }
