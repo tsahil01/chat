@@ -13,8 +13,8 @@ import { useAutoScroll } from '@/hooks/use-auto-scroll';
 import { models, Models } from '@/lib/models';
 import { authClient } from '@/lib/auth-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
-import { canUserSendMessage } from '@/lib/usage';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { canUserSendMessage } from '@/lib/usage/client';
 
 export default function Chat() {
   const [input, setInput] = useState('');
