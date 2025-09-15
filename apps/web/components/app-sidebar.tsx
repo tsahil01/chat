@@ -78,11 +78,11 @@ export function AppSidebar() {
   }, [user]);
 
   return (
-    <Sidebar>
+    <Sidebar variant="floating">
       <SidebarContent>
         {/* Header */}
-        <div className="p-4 border-b">
-          <h1 className="text-lg font-semibold">AI Chat</h1>
+        <div className="p-3 border-b border-sidebar-border">
+          <h1 className="text-base font-semibold">AI Chat</h1>
         </div>
         <div className="">
           <SidebarGroup>
@@ -126,7 +126,6 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
                       <a href={`/chat/${item.id}`}>
-                        <MdMessage />
                         <span>{item.title}</span>
                       </a>
                     </SidebarMenuButton>
@@ -145,7 +144,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       {/* Footer: fixed, non-scrollable */}
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="border-t border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
             {user ? (
