@@ -1,8 +1,8 @@
 "use client"
 
-import { 
-  MdMessage, 
-  MdAdd, 
+import {
+  MdMessage,
+  MdAdd,
 } from "react-icons/md"
 import { useEffect, useState } from "react";
 import { Chat } from "@workspace/db";
@@ -22,49 +22,59 @@ import { User } from "better-auth";
 import { AuthDialog } from "./auth-dialog";
 import { UserMenu } from "./user-menu";
 
-
 export function AppSidebar() {
-    const [recentChats, setRecentChats] = useState<Chat[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState<User | null>(null);
+  const [recentChats, setRecentChats] = useState<Chat[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-    async function getSession() {
-        const { data: session } = await authClient.getSession();
-        setUser(session?.user || null);
+  async function getSession() {
+    const { data: session } = await authClient.getSession();
+    setUser(session?.user || null);
+  }
+
+  async function handleLogout() {
+    try {
+      await authClient.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error("Error logging out:", error);
     }
+  }
 
-    async function handleLogout() {
-        try {
-            await authClient.signOut();
-            setUser(null);
-        } catch (error) {
-            console.error("Error logging out:", error);
-        }
+  async function getRecentChats() {
+    try {
+      if (!user) return;
+      setIsLoading(true);
+      const response = await fetch("/api/chat/conversations");
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setRecentChats(data);
+      } else {
+        console.error("API response is not an array:", data);
+        setRecentChats([]);
+      }
+    } catch (error) {
+      console.error("Error getting recent chats:", error);
+      setRecentChats([]);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    async function getRecentChats() {
-        try {
-            setIsLoading(true);
-            const response = await fetch("/api/chat/conversations");
-            const data = await response.json();
-            if (Array.isArray(data)) {
-                setRecentChats(data);
-            } else {
-                console.error("API response is not an array:", data);
-                setRecentChats([]);
-            }
-        } catch (error) {
-            console.error("Error getting recent chats:", error);
-            setRecentChats([]);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+  useEffect(() => {
+    getSession();
+  }, []);
 
-    useEffect(() => {
-        getRecentChats();
-        getSession();
-    }, []);
+  useEffect(() => {
+    if (!user) return;
+    getRecentChats();
+    
+    const intervalId = setInterval(() => {
+      getRecentChats();
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [user]);
 
   return (
     <Sidebar>
