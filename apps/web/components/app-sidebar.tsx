@@ -4,7 +4,7 @@ import {
   MdMessage,
   MdAdd,
 } from "react-icons/md"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Chat } from "@workspace/db";
 
 import {
@@ -30,6 +30,8 @@ export function AppSidebar() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const { theme, setTheme } = useTheme();
+  const hasFetchedOnce = useRef(false);
+  const lastChatsSignature = useRef<string>("");
 
   async function getSession() {
     const { data: session } = await authClient.getSession();
@@ -45,23 +47,38 @@ export function AppSidebar() {
     }
   }
 
+  function computeChatsSignature(items: Chat[]): string {
+    return items.map((c) => `${c.id}:${c.title ?? ""}`).join("|");
+  }
+
   async function getRecentChats() {
     try {
       if (!user) return;
-      setIsLoading(true);
+      if (!hasFetchedOnce.current) {
+        setIsLoading(true);
+      }
       const response = await fetch("/api/chat/conversations");
       const data = await response.json();
-      if (Array.isArray(data) && recentChats !== data) {
-        setRecentChats(data);
-      } else {
+      if (!Array.isArray(data)) {
         console.error("API response is not an array:", data);
-        setRecentChats(recentChats);
+        return;
+      }
+
+      const newSignature = computeChatsSignature(data as Chat[]);
+      if (newSignature !== lastChatsSignature.current) {
+        lastChatsSignature.current = newSignature;
+        setRecentChats(data);
       }
     } catch (error) {
       console.error("Error getting recent chats:", error);
-      setRecentChats([]);
+      if (!hasFetchedOnce.current) {
+        setRecentChats([]);
+      }
     } finally {
-      setIsLoading(false);
+      if (!hasFetchedOnce.current) {
+        setIsLoading(false);
+        hasFetchedOnce.current = true;
+      }
     }
   }
 
@@ -82,12 +99,12 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="floating">
-      <SidebarContent>
+      <SidebarContent className="overflow-hidden">
         {/* Header */}
         <div className="p-3 border-b border-sidebar-border">
           <h1 className="text-base font-semibold">AI Chat</h1>
         </div>
-        <div className="">
+        <div>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -111,40 +128,41 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         </div>
-
-        {/* Recent Chats */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Recents</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {isLoading ? (
-                <SidebarMenuItem>
-                  <SidebarMenuButton disabled>
-                    <MdMessage />
-                    <span>Loading...</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ) : Array.isArray(recentChats) && recentChats.length > 0 ? (
-                recentChats.map((item) => (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton asChild>
-                      <a href={`/chat/${item.id}`}>
-                        <span>{item.title}</span>
-                      </a>
+        {/* Recent Chats - scrollable only */}
+        <div className="min-h-0 flex-1 overflow-auto">
+          <SidebarGroup>
+            <SidebarGroupLabel>Recents</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {isLoading ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton disabled>
+                      <MdMessage />
+                      <span>Loading...</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                ))
-              ) : (
-                <SidebarMenuItem>
-                  <SidebarMenuButton disabled>
-                    <MdMessage />
-                    <span>No recent chats</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                ) : Array.isArray(recentChats) && recentChats.length > 0 ? (
+                  recentChats.map((item) => (
+                    <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton asChild>
+                        <a href={`/chat/${item.id}`}>
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))
+                ) : (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton disabled>
+                      <MdMessage />
+                      <span>No recent chats</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
       </SidebarContent>
       {/* Footer: fixed, non-scrollable */}
       <SidebarFooter className="border-t border-sidebar-border">
