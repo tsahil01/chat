@@ -1,4 +1,4 @@
-const FREE_LIMIT = 30;
+const FREE_LIMIT = 300;
 const PRO_LIMIT = 1000;
 
 interface UsageData {

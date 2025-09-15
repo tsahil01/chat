@@ -10,15 +10,25 @@ import {
   } from "@workspace/ui/components/dialog"
 import { MdLogin } from "react-icons/md"
 
-export function AuthDialog() {
+export function AuthDialog({
+    open,
+    onOpenChange,
+    showTrigger = true,
+  }: {
+    open?: boolean
+    onOpenChange?: (open: boolean) => void
+    showTrigger?: boolean
+  }) {
     return (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="ghost" className="w-full justify-start">
-            <MdLogin className="h-4 w-4" />
-            <span>Login</span>
-          </Button>
-        </DialogTrigger>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        {showTrigger && (
+          <DialogTrigger asChild>
+            <Button variant="ghost" className="w-full justify-start">
+              <MdLogin className="h-4 w-4" />
+              <span>Login</span>
+            </Button>
+          </DialogTrigger>
+        )}
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl font-bold">Welcome back</DialogTitle>

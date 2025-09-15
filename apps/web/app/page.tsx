@@ -7,12 +7,17 @@ import { ChatInput } from '@/components/chat-input';
 import { models, Models } from '@/lib/models';
 import { useRouter } from 'next/navigation';
 import { generateUUID } from '@/lib/utils';
+import { authClient } from '@/lib/auth-client';
+import { AuthDialog } from '@/components/auth-dialog';
 
 export default function Chat() {
   const [input, setInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  const { data: session, isPending } = authClient.useSession();
   
   const router = useRouter();
   
@@ -22,9 +27,13 @@ export default function Chat() {
 
     setIsSubmitting(true);
     try {
+        if (!session && !isPending) {
+          setAuthOpen(true);
+          return;
+        }
         const newChatId = generateUUID();
         const encodedInput = encodeURIComponent(input);
-        router.replace(`/chat/${newChatId}?message=${encodedInput}`, { scroll: false });
+        router.replace(`/chat/${newChatId}?input=${encodedInput}`, { scroll: false });
     } finally {
       setIsSubmitting(false);
     }
@@ -55,6 +64,7 @@ export default function Chat() {
         setSelectedModel={setSelectedModel}
         onSubmit={handleSubmit}
       />
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
     </div >
   );
 }

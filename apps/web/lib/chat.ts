@@ -1,6 +1,8 @@
 import { generateText, UIMessage } from "ai";
-import { openrouter } from "./openrouter";
+import { openrouter } from "./providers/openrouter";
 import { Message } from "@workspace/db";
+import { moonshot } from "./providers/moonshot";
+import { getChat } from "@/app/api/chat/action";
 
 export async function generateTitleFromUserMessage({
     message,
@@ -9,7 +11,7 @@ export async function generateTitleFromUserMessage({
   }) {
     try {
     const { text: title } = await generateText({
-      model: openrouter('nvidia/nemotron-nano-9b-v2:free'),
+      model: moonshot('kimi-k2-0905-preview'),
       system: `\n
       - you will generate a short title based on the first message a user begins a conversation with
       - ensure it is not more than 80 characters long
@@ -25,7 +27,14 @@ export async function generateTitleFromUserMessage({
     }
   }
 
-  export async function getUIMessages(messages: Message[]): Promise<UIMessage[]> {
+  export async function getChatTitle(chatId: string) {
+    const chat = await getChat(chatId);
+    if (!chat) return "New Chat";
+    return chat.title;
+  }
+
+  export async function getUIMessages(messages?: Message[] | null): Promise<UIMessage[]> {
+    if (!Array.isArray(messages) || messages.length === 0) return [];
     return messages.map((message) => ({ 
       role: message.role as 'system' | 'user' | 'assistant',
       parts: JSON.parse(JSON.stringify(message.parts)),
