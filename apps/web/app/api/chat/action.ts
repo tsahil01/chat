@@ -75,6 +75,7 @@ export async function addMessage({chatId, message}: {chatId: string, message: UI
         const createdMessage = await prisma.message.create({
             data: {
                 chatId,
+                id: message.id,
                 role: message.role,
                 parts: JSON.parse(JSON.stringify(message.parts)),
                 attachments: JSON.parse(JSON.stringify(message.parts.filter((part: any)=>{
@@ -87,5 +88,43 @@ export async function addMessage({chatId, message}: {chatId: string, message: UI
     } catch (error) {
         console.error("Error adding message:", error);
         return null;
+    }
+}
+
+export async function deleteAllMessagesAfter(chatId: string, messageId: string): Promise<boolean> {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+
+        if (!session) {
+            return false;
+        }
+
+        const targetMessage = await prisma.message.findFirst({
+            where: {
+                id: messageId,
+                chatId,
+            },
+            select: { createdAt: true },
+        });
+
+        if (!targetMessage) {
+            return false;
+        }
+
+        await prisma.message.deleteMany({
+            where: {
+                chatId,
+                createdAt: {
+                    gt: targetMessage.createdAt,
+                },
+            },
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting messages after target:", error);
+        return false;
     }
 }

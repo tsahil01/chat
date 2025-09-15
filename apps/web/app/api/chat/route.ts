@@ -2,7 +2,7 @@ import { streamText, UIMessage, convertToModelMessages, stepCountIs } from 'ai';
 import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
 import { getUserUsageAction, incrementMessageUsageAction } from '@/lib/usage/server';
-import { addMessage, createChat, getChat } from './action';
+import { addMessage, createChat, getChat, deleteAllMessagesAfter } from './action';
 import { generateTitleFromUserMessage } from '@/lib/chat';
 import { Visibility } from '@workspace/db';
 import { generateUUID } from '@/lib/utils';
@@ -26,6 +26,8 @@ export async function POST(req: Request) {
       selectedChatProvider: string,
       toggleWebSearch: boolean
     } = await req.json();
+
+  console.log(`Messages: ${JSON.stringify(messages)}`);
 
   const session = await auth.api.getSession({
     headers: req.headers
@@ -53,8 +55,17 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
-
-  await addMessage({chatId, message: messages[messages.length - 1]!}); 
+  // Detect regenerate: if the last user message already exists in DB, remove all messages after it
+  const lastIncoming = messages[messages.length - 1]!;
+  if (chat && lastIncoming?.role === 'user') {
+    const isDuplicateUser = chat.messages.some((m) => m.id === lastIncoming.id);
+    if (isDuplicateUser) {
+      await deleteAllMessagesAfter(chatId, lastIncoming.id);
+    }
+  }
+  if (lastIncoming?.role === 'user') {
+    await addMessage({chatId, message: lastIncoming});
+  }
 
   system += `- you are a helpful assistant that can answer questions and help with tasks and your model is ${selectedChatModel}`;
 
