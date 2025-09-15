@@ -13,6 +13,7 @@ import { canUserSendMessage } from '@/lib/usage/client';
 import { generateUUID } from '@/lib/utils';
 import { getUIMessages } from '@/lib/chat';
 import { authClient } from '@/lib/auth-client';
+import { AuthDialog } from '@/components/auth-dialog';
 
 export default function Page() {
   const [input, setInput] = useState('');
@@ -23,6 +24,7 @@ export default function Page() {
   const [chatId, setChatId] = useState<string | null>(null);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [hasProcessedUrlInput, setHasProcessedUrlInput] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
   const { data: session } = authClient.useSession();
 
   const router = useRouter();
@@ -31,7 +33,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!session) {
-      router.replace('/');
+      setAuthOpen(true);
     }
   }, [session]);
 
@@ -115,6 +117,10 @@ export default function Page() {
 
     setIsSubmitting(true);
     try {
+      if (!session) {
+        setAuthOpen(true);
+        return;
+      }
       const canSend = await canUserSendMessage();
       if (!canSend) {
         setMessages(prev => [...prev, {
@@ -171,6 +177,7 @@ export default function Page() {
         setSelectedModel={setSelectedModel}
         onSubmit={handleSubmit}
       />
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
     </div >
   );
 }
