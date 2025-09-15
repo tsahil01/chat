@@ -22,11 +22,14 @@ import { authClient } from "@/lib/auth-client";
 import { User } from "better-auth";
 import { AuthDialog } from "./auth-dialog";
 import { UserMenu } from "./user-menu";
+import { useTheme } from "next-themes";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 
 export function AppSidebar() {
   const [recentChats, setRecentChats] = useState<Chat[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const { theme, setTheme } = useTheme();
 
   async function getSession() {
     const { data: session } = await authClient.getSession();
@@ -147,11 +150,26 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            {user ? (
-              <UserMenu user={user} onLogout={handleLogout} />
-            ) : (
-              <AuthDialog />
-            )}
+            <div className="flex w-full flex-row items-center gap-2">
+              <div className="flex-1 min-w-0 overflow-hidden">
+                {user ? (
+                  <UserMenu user={user} onLogout={handleLogout} />
+                ) : (
+                  <AuthDialog />
+                )}
+              </div>
+              <button
+                aria-label="Toggle theme"
+                className="shrink-0 rounded p-2 text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                {theme === "dark" ? (
+                  <MdLightMode className="h-4 w-4" />
+                ) : (
+                  <MdDarkMode className="h-4 w-4" />
+                )}
+              </button>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
