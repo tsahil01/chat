@@ -1,4 +1,3 @@
-import { openrouter } from '@/lib/providers/openrouter';
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from 'ai';
 import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
@@ -7,7 +6,7 @@ import { addMessage, createChat, getChat } from './action';
 import { generateTitleFromUserMessage } from '@/lib/chat';
 import { Visibility } from '@workspace/db';
 import { generateUUID } from '@/lib/utils';
-import { moonshot } from '@/lib/providers/moonshot';
+import { getSelectedModel } from '@/lib/models';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -18,11 +17,13 @@ export async function POST(req: Request) {
   const { chatId,
     messages,
     selectedChatModel,
+    selectedChatProvider,
     toggleWebSearch }:
     {
       chatId: string,
       messages: UIMessage[],
       selectedChatModel: string,
+      selectedChatProvider: string,
       toggleWebSearch: boolean
     } = await req.json();
 
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: moonshot('kimi-k2-0905-preview'),
+    model: getSelectedModel({model: selectedChatModel, provider: selectedChatProvider})!,
     messages: convertToModelMessages(messages),
     tools: tools,
     stopWhen: stepCountIs(5),

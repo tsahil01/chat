@@ -55,6 +55,7 @@ export default function Page() {
             chatId: chatId || id,
             messages,
             selectedChatModel: selectedModel?.model,
+            selectedChatProvider: selectedModel?.provider,
             toggleWebSearch: toggleWebSearch,
           },
         };

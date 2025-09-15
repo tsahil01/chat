@@ -92,7 +92,7 @@ export function AppSidebar() {
 
     const intervalId = setInterval(() => {
       getRecentChats();
-    }, 10000);
+    }, 15000); // 15 seconds
 
     return () => clearInterval(intervalId);
   }, [user]);

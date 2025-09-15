@@ -1,8 +1,9 @@
 import { getChat } from "@/app/api/chat/action";
+import type { NextRequest } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
     try {
-    const chatId = params.id;
+    const chatId = context.params.id;
 
     if (!chatId) {
         return Response.json({ error: "Chat ID is required" }, { status: 400 });
