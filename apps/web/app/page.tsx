@@ -17,7 +17,7 @@ export default function Chat() {
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
 
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   
   const router = useRouter();
   
@@ -27,7 +27,7 @@ export default function Chat() {
 
     setIsSubmitting(true);
     try {
-        if (!session) {
+        if (!session && !isPending) {
           setAuthOpen(true);
           return;
         }

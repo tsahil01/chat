@@ -25,14 +25,14 @@ export default function Page() {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [hasProcessedUrlInput, setHasProcessedUrlInput] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!session) {
+    if (!session && !isPending) {
       setAuthOpen(true);
     }
   }, [session]);
