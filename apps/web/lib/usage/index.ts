@@ -1,7 +1,7 @@
-const FREE_LIMIT = 300;
-const PRO_LIMIT = 1000;
+export const FREE_LIMIT = 30;
+export const PRO_LIMIT = 1000;
 
-interface UsageData {
+export interface UsageData {
     userId: string;
     currentUsage: number;
     limit: number;
@@ -10,5 +10,3 @@ interface UsageData {
     month: string;
     resetDate: Date;
 }
-
-export { FREE_LIMIT, PRO_LIMIT, type UsageData };

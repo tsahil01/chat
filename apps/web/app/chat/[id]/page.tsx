@@ -33,7 +33,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!session && !isPending) {
-      setAuthOpen(true);
+      router.replace('/');
     }
   }, [session]);
 
