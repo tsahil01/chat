@@ -47,7 +47,6 @@ export function AppSidebar() {
             setIsLoading(true);
             const response = await fetch("/api/chat/conversations");
             const data = await response.json();
-            console.log(data);
             if (Array.isArray(data)) {
                 setRecentChats(data);
             } else {
@@ -131,7 +130,7 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ) : Array.isArray(recentChats) && recentChats.length > 0 ? (
                 recentChats.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
                       <a href={`/chat/${item.id}`}>
                         <MdMessage />

@@ -25,7 +25,8 @@ export async function generateTitleFromUserMessage({
     }
   }
 
-  export async function getUIMessages(messages: Message[]): Promise<UIMessage[]> {
+  export async function getUIMessages(messages?: Message[] | null): Promise<UIMessage[]> {
+    if (!Array.isArray(messages) || messages.length === 0) return [];
     return messages.map((message) => ({ 
       role: message.role as 'system' | 'user' | 'assistant',
       parts: JSON.parse(JSON.stringify(message.parts)),
