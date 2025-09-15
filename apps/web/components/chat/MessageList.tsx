@@ -13,6 +13,8 @@ type MessageListProps = {
 };
 
 export function MessageList({ messages, isReasoningCollapsed, onToggleReasoning, onRetry, chatEndRef }: MessageListProps) {
+  const lastAssistantId = [...messages].reverse().find((m) => m.role === 'assistant')?.id;
+
   return (
     <div className="space-y-6">
       {messages.map((message) => (
@@ -22,6 +24,7 @@ export function MessageList({ messages, isReasoningCollapsed, onToggleReasoning,
           isReasoningCollapsed={isReasoningCollapsed}
           onToggleReasoning={onToggleReasoning}
           onRetry={onRetry}
+          isLastAssistant={message.role === 'assistant' && message.id === lastAssistantId}
         />
       ))}
       <div ref={chatEndRef} />

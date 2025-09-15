@@ -13,9 +13,10 @@ type MessageItemProps = {
   isReasoningCollapsed: (key: string) => boolean;
   onToggleReasoning: (messageId: string, partIndex: number) => void;
   onRetry: (messageId: string) => void;
+  isLastAssistant?: boolean;
 };
 
-export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, onRetry }: MessageItemProps) {
+export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, onRetry, isLastAssistant }: MessageItemProps) {
   const { data } = authClient.useSession();
 
   return (
@@ -65,7 +66,9 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
         {message.role === 'assistant' && (
           <>
             <AssistantActions message={message} onRetry={onRetry} />
-            <p className="text-xs text-muted-foreground text-end">AI can make mistakes. Please double-check responses.</p>
+            {isLastAssistant && (
+              <p className="text-xs text-muted-foreground text-end">AI can make mistakes. Please double-check responses.</p>
+            )}
           </>
         )}
       </div>
