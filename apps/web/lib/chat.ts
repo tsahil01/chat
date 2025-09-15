@@ -1,5 +1,5 @@
 import { generateText, UIMessage } from "ai";
-import { openrouter } from "./openrouter";
+import { openrouter } from "./providers/openrouter";
 import { Message } from "@workspace/db";
 
 export async function generateTitleFromUserMessage({

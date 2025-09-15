@@ -24,7 +24,7 @@ export default function Chat() {
     try {
         const newChatId = generateUUID();
         const encodedInput = encodeURIComponent(input);
-        router.replace(`/chat/${newChatId}?message=${encodedInput}`, { scroll: false });
+        router.replace(`/chat/${newChatId}?input=${encodedInput}`, { scroll: false });
     } finally {
       setIsSubmitting(false);
     }
