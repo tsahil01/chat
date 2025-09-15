@@ -12,10 +12,15 @@ import { useEffect, useState } from "react"
 export function Providers({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const [title, setTitle] = useState("");
+  const [displayedTitle, setDisplayedTitle] = useState("");
+  const [typingIndex, setTypingIndex] = useState(0);
 
   async function getTitle() {
     const chatId = params.id as string;
-    if (!chatId) return "New Chat";
+    if (!chatId) {
+      setTitle("New Chat");
+      return;
+    }
     const title = await getChatTitle(chatId);
     setTitle(title);
   }
@@ -23,6 +28,25 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     getTitle();
   }, [params.id]);
+
+  // Reset typing when the title changes
+  useEffect(() => {
+    setDisplayedTitle("");
+    setTypingIndex(0);
+  }, [title]);
+
+  // Typewriter effect
+  useEffect(() => {
+    if (!title) return;
+    if (typingIndex >= title.length) return;
+
+    const intervalId = setInterval(() => {
+      setDisplayedTitle((prev) => prev + title.charAt(typingIndex));
+      setTypingIndex((idx) => idx + 1);
+    }, 24);
+
+    return () => clearInterval(intervalId);
+  }, [title, typingIndex]);
 
   return (
     <NextThemesProvider
@@ -37,7 +61,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <main className="flex-1 p-4">
           <div className="flex flex-row items-center gap-2">
             <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
-            <h1 className="text-base">{title}</h1>
+            <h1 className="text-base">{displayedTitle || title}</h1>
           </div>
           {children}
         </main>
