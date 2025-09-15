@@ -12,18 +12,28 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { canUserSendMessage } from '@/lib/usage/client';
 import { generateUUID } from '@/lib/utils';
 import { getUIMessages } from '@/lib/chat';
+import { authClient } from '@/lib/auth-client';
 
-export default function Chat() {
+export default function Page() {
   const [input, setInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
   const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(new Set());
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [chatId, setChatId] = useState<string | null>(null);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [hasProcessedUrlInput, setHasProcessedUrlInput] = useState(false);
+  const { data: session } = authClient.useSession();
 
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (!session) {
+      router.replace('/');
+    }
+  }, [session]);
 
   useEffect(() => {
     if (params?.id && typeof params.id === 'string') {
@@ -48,36 +58,56 @@ export default function Chat() {
         };
       },
     }),
+    onFinish: () => {
+      setIsSubmitting(false);
+    },
   });
   const chatEndRef = useAutoScroll({ messages, collapsedReasoning });
 
   useEffect(() => {
-    getChatsMessages();
+    if (chatId) {
+      const messageFromUrl = searchParams.get('input');
+      if (!messageFromUrl) {
+        getChatsMessages();
+      }
+    }
   }, [chatId]);
 
-
   async function getChatsMessages() {
+    if (!chatId) return;
+    
+    setIsLoadingMessages(true);
     try {
-      const response = await fetch(`/api/chat/${params.id}/messages`);
+      const response = await fetch(`/api/chat/${chatId}/messages`);
+      if (!response.ok) {
+        if (response.status === 404) {
+          setMessages([]);
+          return;
+        }
+        throw new Error(`Failed to fetch messages: ${response.status}`);
+      }
+      
       const data = await response.json();
       const uiMessages = await getUIMessages(data.messages);
       setMessages(uiMessages);
     } catch (error) {
       console.error("Error getting chat messages:", error);
+      setMessages([]);
+    } finally {
+      setIsLoadingMessages(false);
     }
-
   }
 
   useEffect(() => {
-    const messageFromUrl = searchParams.get('message');
-    if (messageFromUrl && messages.length === 0 && !isSubmitting) {
+    const messageFromUrl = searchParams.get('input');
+    if (messageFromUrl && !hasProcessedUrlInput && !isLoadingMessages && !isSubmitting && chatId) {
       const decodedMessage = decodeURIComponent(messageFromUrl);
-      setInput(decodedMessage);
-      sendMessage({ text: decodedMessage });
-      setInput('');
+      setHasProcessedUrlInput(true);
       router.replace(`/chat/${chatId}`, { scroll: false });
+      setIsSubmitting(true);
+      sendMessage({ text: decodedMessage });
     }
-  }, [searchParams, messages.length, isSubmitting, sendMessage, chatId, router]);
+  }, [searchParams, hasProcessedUrlInput, isLoadingMessages, isSubmitting, sendMessage, chatId, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,12 +117,13 @@ export default function Chat() {
     try {
       const canSend = await canUserSendMessage();
       if (!canSend) {
-        messages.push({
+        setMessages(prev => [...prev, {
           role: 'system',
           parts: [{ type: 'text', text: '⚠️ You have reached your message limit for the month. Please upgrade to a paid plan to continue using the app.' }],
           id: `assistant-${Date.now()}`,
           createdAt: new Date(),
-        } as UIMessage);
+        } as UIMessage]);
+        setIsSubmitting(false);
         return;
       }
 
@@ -115,9 +146,6 @@ export default function Chat() {
       return newSet;
     });
   };
-
-
-
 
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] max-w-4xl mx-auto">
