@@ -27,8 +27,6 @@ export async function POST(req: Request) {
       toggleWebSearch: boolean
     } = await req.json();
 
-  console.log(`Messages: ${JSON.stringify(messages)}`);
-
   const session = await auth.api.getSession({
     headers: req.headers
   });

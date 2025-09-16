@@ -2,7 +2,7 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, UIMessage } from 'ai';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChatInput } from '@/components/chat-input';
 import { MessageList } from '@/components/chat/MessageList';
 import { TypingIndicator } from '@/components/chat/TypingIndicator';
@@ -46,21 +46,44 @@ export default function Page() {
   }, [params?.id]);
 
 
-  const { messages, setMessages, sendMessage, regenerate } = useChat({
-    id: chatId || generateUUID(),
-    transport: new DefaultChatTransport({
+  const chatIdRef = useRef<string | null>(null);
+  const selectedModelRef = useRef<Models | null>(null);
+  const toggleWebSearchRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    chatIdRef.current = chatId;
+  }, [chatId]);
+
+  useEffect(() => {
+    selectedModelRef.current = selectedModel;
+  }, [selectedModel]);
+
+  useEffect(() => {
+    toggleWebSearchRef.current = toggleWebSearch;
+  }, [toggleWebSearch]);
+
+  const transport = useMemo(() => {
+    return new DefaultChatTransport({
       prepareSendMessagesRequest: ({ id, messages }) => {
+        const effectiveChatId = chatIdRef.current || id;
+        const effectiveModel = selectedModelRef.current;
+        const effectiveToggle = toggleWebSearchRef.current;
         return {
           body: {
-            chatId: chatId || id,
+            chatId: effectiveChatId,
             messages,
-            selectedChatModel: selectedModel?.model,
-            selectedChatProvider: selectedModel?.provider,
-            toggleWebSearch: toggleWebSearch,
+            selectedChatModel: effectiveModel?.model,
+            selectedChatProvider: effectiveModel?.provider,
+            toggleWebSearch: effectiveToggle,
           },
         };
       },
-    }),
+    });
+  }, []);
+
+  const { messages, setMessages, sendMessage, regenerate } = useChat({
+    id: chatId || generateUUID(),
+    transport,
     onFinish: () => {
       setIsSubmitting(false);
     },
@@ -70,6 +93,14 @@ export default function Page() {
   useEffect(() => {
     if (chatId) {
       const messageFromUrl = searchParams.get('input');
+      const selectedModelNameFromUrl = searchParams.get('selectedModel');
+      const toggleWebSearchFromUrl = searchParams.get('toggleWebSearch');
+      if (selectedModelNameFromUrl) {
+        setSelectedModel(models.find(model => model.model === selectedModelNameFromUrl) || models[0]!);
+      }
+      if (toggleWebSearchFromUrl === 'true') {
+        setToggleWebSearch(true);
+      }
       if (!messageFromUrl) {
         getChatsMessages();
       }

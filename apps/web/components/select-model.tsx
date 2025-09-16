@@ -9,7 +9,7 @@ import { Models } from "@/lib/models";
 export function SelectModel({ models, selectedModel, setSelectedModel }: { models: Models[], selectedModel: Models, setSelectedModel: (model: Models) => void }) {
     const [open, setOpen] = useState(false);
 
-    const handleModelSelect = (model: typeof models[0]) => {
+    const handleModelSelect = (model: Models) => {
         setSelectedModel(model);
         setOpen(false);
     };
