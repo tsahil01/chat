@@ -19,7 +19,7 @@ let shikiModulePromise: Promise<typeof import('shiki')> | null = null;
 let sharedWorker: Worker | null = null;
 
 const baseContainerClassName = cn(
-  'mt-0 bg-background text-sm rounded-md border overflow-hidden',
+  'mt-2 mb-5 bg-background text-sm rounded-md border overflow-hidden',
   '[&_pre]:py-4',
   '[&_pre]:m-0',
   '[&_code]:w-full',
