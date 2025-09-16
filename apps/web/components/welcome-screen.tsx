@@ -3,6 +3,8 @@
 import { ClockWidget } from "@/components/widgets/ClockWidget";
 import { WeatherWidget } from "@/components/widgets/WeatherWidget";
 import { NewsWidget } from "@/components/widgets/NewsWidget";
+import { CryptoWidget } from "@/components/widgets/CryptoWidget";
+import { DemoPromptWidget } from "@/components/widgets/DemoPromptWidget";
 
 interface WelcomeScreenProps {
   className?: string;
@@ -17,10 +19,11 @@ export function WelcomeScreen({ className = "" }: WelcomeScreenProps) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-0">
-        <ClockWidget className="sm:col-span-2" />
+        <ClockWidget className="sm:col-span-2 bg-muted/30 dark:bg-muted/10" />
         <WeatherWidget />
-
-        <NewsWidget className="sm:col-span-2 lg:col-span-4" />
+        <CryptoWidget />
+        <DemoPromptWidget className="sm:col-span-1 bg-muted/30 dark:bg-muted/10" />
+        <NewsWidget className="sm:col-span-2 lg:col-span-3 bg-muted/30 dark:bg-muted/10" />
       </div>
     </div>
   );

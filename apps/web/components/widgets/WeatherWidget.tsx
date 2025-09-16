@@ -16,6 +16,34 @@ export function WeatherWidget({ className }: { className?: string }) {
     lowC: number | null;
   } | null>(null);
 
+  function backgroundForCondition(condition: string | undefined): string {
+    const c = (condition || "").toLowerCase();
+    // Map of condition -> Tailwind classes
+    if (c.includes("thunder")) {
+      return "bg-gradient-to-b from-indigo-200/60 to-slate-200/40 dark:from-indigo-900/40 dark:to-slate-900/30";
+    }
+    if (c.includes("snow")) {
+      return "bg-gradient-to-b from-blue-50/70 to-white/60 dark:from-slate-800/50 dark:to-slate-900/40";
+    }
+    if (c.includes("shower") || c.includes("rain")) {
+      return "bg-gradient-to-b from-sky-200/60 to-slate-200/40 dark:from-sky-900/40 dark:to-slate-900/30";
+    }
+    if (c.includes("drizzle")) {
+      return "bg-gradient-to-b from-sky-100/70 to-sky-200/40 dark:from-sky-900/40 dark:to-sky-800/30";
+    }
+    if (c.includes("fog") || c.includes("overcast")) {
+      return "bg-gradient-to-b from-slate-200/70 to-slate-100/50 dark:from-slate-800/60 dark:to-slate-900/40";
+    }
+    if (c.includes("cloud")) {
+      return "bg-gradient-to-b from-slate-100/70 to-slate-200/40 dark:from-slate-800/50 dark:to-slate-900/40";
+    }
+    if (c.includes("clear") || c === "clear") {
+      return "bg-gradient-to-b from-sky-200/50 to-amber-100/40 dark:from-sky-900/30 dark:to-amber-900/10";
+    }
+    // Default subtle background
+    return "bg-muted/30 dark:bg-muted/10";
+  }
+
   useEffect(() => {
     if (!("geolocation" in navigator)) {
       setLoading(false);
@@ -45,8 +73,10 @@ export function WeatherWidget({ className }: { className?: string }) {
     })();
   }, [coords]);
 
+  const bgClass = backgroundForCondition(data?.condition);
+
   return (
-    <Card className={className}>
+    <Card className={`${className ?? ""} ${bgClass}`}>
       <CardHeader>
         <CardTitle>Weather</CardTitle>
       </CardHeader>
