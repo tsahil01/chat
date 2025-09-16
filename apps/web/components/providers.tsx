@@ -5,7 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { SidebarProvider, SidebarTrigger } from "@workspace/ui/components/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { getChatTitle } from "@/lib/chat"
-import { useParams } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 
@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   async function getTitle() {
     const chatId = params.id as string;
     if (!chatId) {
-      setTitle("New Chat");
+      setTitle("");
       return;
     }
     const title = await getChatTitle(chatId);
