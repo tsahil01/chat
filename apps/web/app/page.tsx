@@ -33,7 +33,7 @@ export default function Chat() {
         }
         const newChatId = generateUUID();
         const encodedInput = encodeURIComponent(input);
-        router.replace(`/chat/${newChatId}?input=${encodedInput}`, { scroll: false });
+        router.replace(`/chat/${newChatId}?input=${encodedInput}&selectedModel=${selectedModel?.model}&toggleWebSearch=${toggleWebSearch}`, { scroll: false });
     } finally {
       setIsSubmitting(false);
     }
