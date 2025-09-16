@@ -20,7 +20,7 @@ export function TextPart({ text, messageId, partIndex }: TextPartProps) {
 
           return (
             <LightCodeBlock
-              key={`code-${index}`}
+              key={`code-${messageId}-${partIndex}-${index}`}
               language={language}
               filename={filename}
               code={part.content}
@@ -31,7 +31,7 @@ export function TextPart({ text, messageId, partIndex }: TextPartProps) {
         }
 
         return (
-          <div key={`text-${index}`}>
+          <div key={`text-${messageId}-${partIndex}-${index}`}>
             <MarkdownRenderer content={part.content} />
           </div>
         );

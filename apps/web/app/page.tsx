@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
 import { WelcomeScreen } from '@/components/welcome-screen';
-import { ChatInput } from '@/components/chat-input';
+import { ChatInput } from '@/components/chat/chat-input';
 import { models, Models } from '@/lib/models';
 import { useRouter } from 'next/navigation';
 import { generateUUID } from '@/lib/utils';

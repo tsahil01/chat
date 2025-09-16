@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, UIMessage } from 'ai';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChatInput } from '@/components/chat-input';
+import { ChatInput } from '@/components/chat/chat-input';
 import { MessageList } from '@/components/chat/MessageList';
 import { TypingIndicator } from '@/components/chat/TypingIndicator';
 import { useAutoScroll } from '@/hooks/use-auto-scroll';

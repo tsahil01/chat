@@ -35,6 +35,7 @@ export function ChatInput({
       }
     }
   }
+  
   return (
     <div className="bg-muted/30 p-4 rounded-lg flex flex-col gap-5">
       <div className="max-w-4xl mx-auto w-full">

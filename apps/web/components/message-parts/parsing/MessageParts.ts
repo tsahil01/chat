@@ -5,6 +5,7 @@ export type MessagePart =
 const CODE_BLOCK_REGEX = /```(\w+)?\n([\s\S]*?)```/g;
 
 export function parseCodeBlocks(text: string): MessagePart[] {
+  CODE_BLOCK_REGEX.lastIndex = 0;
   const parts: MessagePart[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;

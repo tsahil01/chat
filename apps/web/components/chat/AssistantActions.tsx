@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageActions } from '@/components/message-actions';
+import { MessageActions } from '@/components/chat/message-actions';
 import { UIMessage } from 'ai';
 
 type AssistantActionsProps = {

@@ -89,7 +89,7 @@ export async function POST(req: Request) {
     onFinish: async (result) => {
       await addMessage({chatId, message: {
         role: 'assistant',
-        parts: result.text ? [{ type: 'text', text: result.text }] : [],
+        parts: result.content,
         id: generateUUID(),
         createdAt: new Date(),
       } as UIMessage});

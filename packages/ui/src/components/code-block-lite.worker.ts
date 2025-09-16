@@ -4,8 +4,9 @@
 let shikiPromise: Promise<any> | null = null;
 
 self.onmessage = async (e: MessageEvent) => {
-  const { id, code, language, themes } = e.data as {
+  const { id, instanceId, code, language, themes } = e.data as {
     id: number;
+    instanceId?: string;
     code: string;
     language: string;
     themes: { light: string; dark: string };
@@ -18,9 +19,9 @@ self.onmessage = async (e: MessageEvent) => {
       lang: language as any,
       themes,
     });
-    (self as unknown as Worker)['postMessage']({ id, html });
+    (self as unknown as Worker)['postMessage']({ id, instanceId, html });
   } catch (err) {
-    (self as unknown as Worker)['postMessage']({ id, html: '' });
+    (self as unknown as Worker)['postMessage']({ id, instanceId, html: '' });
   }
 };
 

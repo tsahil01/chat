@@ -11,9 +11,9 @@ export const markdownComponents = {
   p: ({ children }: { children: ReactNode }) => <p className="leading-relaxed">{children}</p>,
 
   // Lists
-  ul: ({ children }: { children: ReactNode }) => <ul className="list-disc list-inside mb-4 space-y-1">{children}</ul>,
-  ol: ({ children }: { children: ReactNode }) => <ol className="list-decimal list-inside mb-4 space-y-1">{children}</ol>,
-  li: ({ children }: { children: ReactNode }) => <li className="ml-2">{children}</li>,
+  ul: ({ children }: { children: ReactNode }) => <ul className="list-disc list-outside pl-6 mb-4 space-y-1">{children}</ul>,
+  ol: ({ children }: { children: ReactNode }) => <ol className="list-decimal list-outside pl-6 mb-4 space-y-1">{children}</ol>,
+  li: ({ children }: { children: ReactNode }) => <li className="m-0">{children}</li>,
 
   // Links
   a: ({ href, children }: { href?: string; children: ReactNode }) => (
