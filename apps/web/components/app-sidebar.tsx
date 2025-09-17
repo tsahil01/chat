@@ -3,6 +3,7 @@
 import {
   MdMessage,
   MdAdd,
+  MdSearch,
 } from "react-icons/md"
 import { useEffect, useRef, useState } from "react";
 import { Chat } from "@workspace/db";
@@ -64,7 +65,7 @@ export function AppSidebar() {
       if (!hasFetchedOnce.current) {
         setIsLoading(true);
       }
-      const response = await fetch("/api/chat/conversations");
+      const response = await fetch("/api/chat/recent");
       const data = await response.json();
       if (!Array.isArray(data)) {
         console.error("API response is not an array:", data);
@@ -128,6 +129,14 @@ export function AppSidebar() {
                     <a href="/chats">
                       <MdMessage className="h-4 w-4" />
                       <span>Chats</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="/search">
+                      <MdSearch className="h-4 w-4" />
+                      <span>Search</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
