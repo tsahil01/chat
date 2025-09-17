@@ -34,7 +34,7 @@ export function ReasoningPart({
       >
         <div className="flex items-center gap-2">
           <span>Reasoning</span>
-          {part.state !== 'done' && (
+          {part.state && part.state !== 'done' && (
             <Spinner variant="default" size={16} />
           )}
         </div>

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { generateUUID } from '@/lib/utils';
 import { authClient } from '@/lib/auth-client';
 import { AuthDialog } from '@/components/auth-dialog';
+import Image from 'next/image';
 
 export default function Chat() {
   const [input, setInput] = useState('');
@@ -16,6 +17,7 @@ export default function Chat() {
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [fileUrls, setFileUrls] = useState<string[] | null>(null);
 
   const { data: session, isPending } = authClient.useSession();
   
@@ -32,8 +34,24 @@ export default function Chat() {
           return;
         }
         const newChatId = generateUUID();
-        const encodedInput = encodeURIComponent(input);
-        router.replace(`/chat/${newChatId}?input=${encodedInput}&selectedModel=${selectedModel?.model}&toggleWebSearch=${toggleWebSearch}`, { scroll: false });
+        let url = `/chat/${newChatId}`;
+        const encodedInput = `?input=${encodeURIComponent(input)}`;
+        const encodedSelectedModel = `&selectedModel=${encodeURIComponent(selectedModel?.model || '')}`;
+        const encodedToggleWebSearch = `&toggleWebSearch=${encodeURIComponent(toggleWebSearch)}`;
+        const encodedFileUrls = fileUrls ? `&fileUrls=${encodeURIComponent(fileUrls.join(','))}` : '';
+        if (encodedInput) {
+          url += encodedInput;
+        }
+        if (encodedSelectedModel) {
+          url += encodedSelectedModel;
+        }
+        if (encodedToggleWebSearch) {
+          url += encodedToggleWebSearch;
+        }
+        if (encodedFileUrls) {
+          url += encodedFileUrls;
+        }
+        router.replace(url, { scroll: false });
     } finally {
       setIsSubmitting(false);
     }
@@ -63,6 +81,8 @@ export default function Chat() {
         selectedModel={selectedModel}
         setSelectedModel={setSelectedModel}
         onSubmit={handleSubmit}
+        fileUrls={fileUrls}
+        setFileUrls={setFileUrls}
       />
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
     </div >

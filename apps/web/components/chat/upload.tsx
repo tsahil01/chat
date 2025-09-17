@@ -3,14 +3,30 @@
 import { upload } from '@vercel/blob/client';
 import { Button } from '@workspace/ui/components/button';
 import { Paperclip } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-export default function Upload({ fileUrls, setFileUrls }: { fileUrls: string[] | null, setFileUrls: (urls: string[] | null) => void }) {
+export default function Upload({
+  fileUrls,
+  setFileUrls,
+  setIsUploading,
+  setUploadingPreview,
+}: {
+  fileUrls: string[] | null;
+  setFileUrls: (urls: string[] | null) => void;
+  setIsUploading: (val: boolean) => void;
+  setUploadingPreview: (url: string | null) => void;
+}) {
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const [objectUrl, setObjectUrl] = useState<string | null>(null);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    const tempUrl = URL.createObjectURL(file);
+    setObjectUrl(tempUrl);
+    setUploadingPreview(tempUrl);
+    setIsUploading(true);
 
     try {
       const blob = await upload(file.name, file, {
@@ -18,10 +34,15 @@ export default function Upload({ fileUrls, setFileUrls }: { fileUrls: string[] |
         handleUploadUrl: '/api/upload',
       });
 
-      console.log('Upload successful:', blob);
       setFileUrls([...(fileUrls || []), blob.url]);
     } catch (error) {
       console.error('Upload failed:', error);
+    } finally {
+      setIsUploading(false);
+      setUploadingPreview(null);
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      // reset input to allow same file re-upload
+      if (inputFileRef.current) inputFileRef.current.value = '';
     }
   };
 

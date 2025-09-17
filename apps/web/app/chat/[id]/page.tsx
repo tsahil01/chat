@@ -25,6 +25,7 @@ export default function Page() {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [hasProcessedUrlInput, setHasProcessedUrlInput] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [fileUrls, setFileUrls] = useState<string[] | null>(null);
   const { data: session, isPending } = authClient.useSession();
 
   const router = useRouter();
@@ -95,11 +96,15 @@ export default function Page() {
       const messageFromUrl = searchParams.get('input');
       const selectedModelNameFromUrl = searchParams.get('selectedModel');
       const toggleWebSearchFromUrl = searchParams.get('toggleWebSearch');
+      const fileUrlsFromUrl = searchParams.get('fileUrls');
       if (selectedModelNameFromUrl) {
         setSelectedModel(models.find(model => model.model === selectedModelNameFromUrl) || models[0]!);
       }
       if (toggleWebSearchFromUrl === 'true') {
         setToggleWebSearch(true);
+      }
+      if (fileUrlsFromUrl) {
+        setFileUrls(fileUrlsFromUrl.split(','));
       }
       if (!messageFromUrl) {
         getChatsMessages();
@@ -135,11 +140,10 @@ export default function Page() {
   useEffect(() => {
     const messageFromUrl = searchParams.get('input');
     if (messageFromUrl && !hasProcessedUrlInput && !isLoadingMessages && !isSubmitting && chatId) {
-      const decodedMessage = decodeURIComponent(messageFromUrl);
       setHasProcessedUrlInput(true);
       router.replace(`/chat/${chatId}`, { scroll: false });
       setIsSubmitting(true);
-      sendMessage({ text: decodedMessage });
+      sendMessage({ text: messageFromUrl });
     }
   }, [searchParams, hasProcessedUrlInput, isLoadingMessages, isSubmitting, sendMessage, chatId, router]);
 
@@ -208,6 +212,8 @@ export default function Page() {
         selectedModel={selectedModel}
         setSelectedModel={setSelectedModel}
         onSubmit={handleSubmit}
+        fileUrls={fileUrls}
+        setFileUrls={setFileUrls}
       />
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
     </div >
