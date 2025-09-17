@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport, UIMessage } from 'ai';
+import { DefaultChatTransport, FileUIPart, UIMessage } from 'ai';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChatInput } from '@/components/chat/chat-input';
 import { MessageList } from '@/components/chat/MessageList';
@@ -25,7 +25,7 @@ export default function Page() {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [hasProcessedUrlInput, setHasProcessedUrlInput] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [fileUrls, setFileUrls] = useState<string[] | null>(null);
+  const [fileParts, setFileParts] = useState<FileUIPart[] | null>(null);
   const { data: session, isPending } = authClient.useSession();
 
   const router = useRouter();
@@ -96,15 +96,11 @@ export default function Page() {
       const messageFromUrl = searchParams.get('input');
       const selectedModelNameFromUrl = searchParams.get('selectedModel');
       const toggleWebSearchFromUrl = searchParams.get('toggleWebSearch');
-      const fileUrlsFromUrl = searchParams.get('fileUrls');
       if (selectedModelNameFromUrl) {
         setSelectedModel(models.find(model => model.model === selectedModelNameFromUrl) || models[0]!);
       }
       if (toggleWebSearchFromUrl === 'true') {
         setToggleWebSearch(true);
-      }
-      if (fileUrlsFromUrl) {
-        setFileUrls(fileUrlsFromUrl.split(','));
       }
       if (!messageFromUrl) {
         getChatsMessages();
@@ -141,9 +137,22 @@ export default function Page() {
     const messageFromUrl = searchParams.get('input');
     if (messageFromUrl && !hasProcessedUrlInput && !isLoadingMessages && !isSubmitting && chatId) {
       setHasProcessedUrlInput(true);
+      let fileParts: FileUIPart[] | null = null;
+      const filePartsFromUrl = searchParams.get('fileParts');
+      if (filePartsFromUrl) {
+        try {
+          const decoded = decodeURIComponent(filePartsFromUrl);
+          const parsed = JSON.parse(decoded);
+          if (Array.isArray(parsed)) {
+            fileParts = parsed;
+          }
+        } catch (err) {
+          console.error('Failed to parse fileParts from URL', err);
+        }
+      }
       router.replace(`/chat/${chatId}`, { scroll: false });
       setIsSubmitting(true);
-      sendMessage({ text: messageFromUrl });
+      sendMessage({ text: messageFromUrl, ...(fileParts ? { files: fileParts } : {}) });
     }
   }, [searchParams, hasProcessedUrlInput, isLoadingMessages, isSubmitting, sendMessage, chatId, router]);
 
@@ -169,8 +178,9 @@ export default function Page() {
         return;
       }
 
-      await sendMessage({ text: input });
+      await sendMessage({ text: input, ...(fileParts ? { files: fileParts } : {}) });
       setInput('');
+      setFileParts(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -190,7 +200,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-5rem)] max-w-4xl mx-auto">
+    <div className="flex flex-col h-[calc(100vh-4rem)] md:max-w-4xl max-w-full mx-auto">
       <div className="flex-1 overflow-y-auto space-y-4 p-4">
 
         <MessageList
@@ -212,8 +222,8 @@ export default function Page() {
         selectedModel={selectedModel}
         setSelectedModel={setSelectedModel}
         onSubmit={handleSubmit}
-        fileUrls={fileUrls}
-        setFileUrls={setFileUrls}
+        fileParts={fileParts}
+        setFileParts={setFileParts}
       />
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
     </div >
