@@ -2,17 +2,18 @@
 
 import { upload } from '@vercel/blob/client';
 import { Button } from '@workspace/ui/components/button';
+import { FileUIPart } from 'ai';
 import { Paperclip } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 export default function Upload({
-  fileUrls,
-  setFileUrls,
+  fileParts,
+  setFileParts,
   setIsUploading,
   setUploadingPreview,
 }: {
-  fileUrls: string[] | null;
-  setFileUrls: (urls: string[] | null) => void;
+  fileParts: FileUIPart[] | null;
+  setFileParts: (parts: FileUIPart[] | null) => void;
   setIsUploading: (val: boolean) => void;
   setUploadingPreview: (url: string | null) => void;
 }) {
@@ -33,8 +34,9 @@ export default function Upload({
         access: 'public',
         handleUploadUrl: '/api/upload',
       });
+      console.log('blob', blob);
 
-      setFileUrls([...(fileUrls || []), blob.url]);
+      setFileParts([...(fileParts || []), { url: blob.url, type: 'file', mediaType: blob.contentType }]);
     } catch (error) {
       console.error('Upload failed:', error);
     } finally {
@@ -52,7 +54,7 @@ export default function Upload({
         ref={inputFileRef}
         type="file"
         className="hidden"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/png,image/webp,application/pdf"
         onChange={handleFileChange}
       />
       <Button

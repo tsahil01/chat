@@ -9,6 +9,7 @@ import { models, Models } from '@/lib/models';
 import Upload from './upload';
 import { useState } from 'react';
 import ImageSquarePreview from './ImageSquarePreview';
+import { FileUIPart } from 'ai';
 
 interface ChatInputProps {
   input: string;
@@ -19,8 +20,8 @@ interface ChatInputProps {
   selectedModel: Models | null;
   setSelectedModel: (model: Models) => void;
   onSubmit: (e: React.FormEvent) => void;
-  fileUrls: string[] | null;
-  setFileUrls: (url: string[] | null) => void;
+  fileParts: FileUIPart[] | null;
+  setFileParts: (parts: FileUIPart[] | null) => void;
 }
 
 export function ChatInput({
@@ -32,8 +33,8 @@ export function ChatInput({
   selectedModel,
   setSelectedModel,
   onSubmit,
-  fileUrls,
-  setFileUrls
+  fileParts,
+  setFileParts
 }: ChatInputProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadingPreview, setUploadingPreview] = useState<string | null>(null);
@@ -50,7 +51,7 @@ export function ChatInput({
     <>
     <div className="bg-muted/30 p-4 rounded-lg flex flex-col gap-5">
       <div className="max-w-4xl mx-auto w-full">
-        {(uploadingPreview || fileUrls) && (
+        {(uploadingPreview || fileParts) && (
       <div className="rounded-lg mb-3 flex flex-row gap-2 flex-wrap">
         {uploadingPreview && (
           <ImageSquarePreview 
@@ -60,15 +61,15 @@ export function ChatInput({
             onRemove={() => setUploadingPreview(null)}
           />
         )}
-        {fileUrls?.map((url, index) => (
+        {fileParts?.map((part, index) => (
           <ImageSquarePreview 
             key={index} 
-            src={url} 
+            src={part.url} 
             size={96} 
             onRemove={() => {
-              const next = [...(fileUrls || [])];
+              const next = [...(fileParts || [])];
               next.splice(index, 1);
-              setFileUrls(next.length ? next : null);
+              setFileParts(next.length ? next : null);
             }}
           />
         ))}
@@ -89,8 +90,8 @@ export function ChatInput({
             <CiGlobe />
           </Toggle>
           <Upload 
-            fileUrls={fileUrls} 
-            setFileUrls={setFileUrls} 
+            fileParts={fileParts} 
+            setFileParts={setFileParts} 
             setIsUploading={setIsUploading}
             setUploadingPreview={setUploadingPreview}
           />
