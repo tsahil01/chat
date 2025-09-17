@@ -1,11 +1,11 @@
 'use client';
 
-import { UIMessage } from 'ai';
+import { UIDataTypes, UIMessage, UITools } from 'ai';
 import { RefObject } from 'react';
 import { MessageItem } from '@/components/chat/MessageItem';
 
 type MessageListProps = {
-  messages: UIMessage[];
+  messages: UIMessage<unknown, UIDataTypes, UITools>[];
   isReasoningCollapsed: (key: string) => boolean;
   onToggleReasoning: (messageId: string, partIndex: number) => void;
   onRetry: (messageId: string) => void;
@@ -17,7 +17,7 @@ export function MessageList({ messages, isReasoningCollapsed, onToggleReasoning,
 
   return (
     <div className="space-y-6">
-      {messages.map((message) => (
+      {messages.map((message: UIMessage<unknown, UIDataTypes, UITools>) => (
         <MessageItem
           key={message.id}
           message={message}
