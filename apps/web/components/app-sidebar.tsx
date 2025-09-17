@@ -1,10 +1,5 @@
 "use client"
 
-import {
-  MdMessage,
-  MdAdd,
-  MdSearch,
-} from "react-icons/md"
 import { useEffect, useRef, useState } from "react";
 import { Chat } from "@workspace/db";
 
@@ -25,6 +20,9 @@ import { AuthDialog } from "./auth-dialog";
 import { UserMenu } from "./user-menu";
 import { useTheme } from "next-themes";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { FiMessageCircle, FiSearch } from "react-icons/fi";
+import { PiPlusBold } from "react-icons/pi";
+
 
 export function AppSidebar() {
   const [recentChats, setRecentChats] = useState<Chat[]>([]);
@@ -119,7 +117,7 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <a href="/">
-                      <MdAdd className="h-4 w-4" />
+                      <PiPlusBold className="h-4 w-4" />
                       <span>New chat</span>
                     </a>
                   </SidebarMenuButton>
@@ -127,7 +125,7 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <a href="/chats">
-                      <MdMessage className="h-4 w-4" />
+                      <FiMessageCircle className="h-4 w-4" />
                       <span>Chats</span>
                     </a>
                   </SidebarMenuButton>
@@ -135,7 +133,7 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <a href="/search">
-                      <MdSearch className="h-4 w-4" />
+                      <FiSearch className="h-4 w-4" />
                       <span>Search</span>
                     </a>
                   </SidebarMenuButton>
@@ -153,7 +151,7 @@ export function AppSidebar() {
                 {isLoading ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton disabled>
-                      <MdMessage />
+                      <FiMessageCircle className="h-4 w-4" />
                       <span>Loading...</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -170,7 +168,7 @@ export function AppSidebar() {
                 ) : (
                   <SidebarMenuItem>
                     <SidebarMenuButton disabled>
-                      <MdMessage />
+                      <FiMessageCircle className="h-4 w-4" />
                       <span>No recent chats</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
