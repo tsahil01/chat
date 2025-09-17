@@ -85,6 +85,15 @@ export function LightCodeBlock({
   const lastHighlightedRef = useRef<string>('');
   const debouncedCode = useDebouncedValue(code, syntaxHighlighting ? 150 : 0);
   const requestIdRef = useRef<number>(0);
+  const instanceIdRef = useRef<string>((() => {
+    try {
+      return (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+        ? (crypto as any).randomUUID()
+        : Math.random().toString(36).slice(2);
+    } catch {
+      return Math.random().toString(36).slice(2);
+    }
+  })());
 
   useEffect(() => {
     if (!syntaxHighlighting) {
@@ -105,11 +114,13 @@ export function LightCodeBlock({
             );
           }
           const currentId = (requestIdRef.current = requestIdRef.current + 1);
-          const payload = { id: currentId, code: debouncedCode, language, themes };
+          const instanceId = instanceIdRef.current as string;
+          const payload = { id: currentId, instanceId, code: debouncedCode, language, themes } as any;
           sharedWorker.postMessage(payload);
           const onMessage = (e: MessageEvent) => {
-            const data = e.data as { id: number; html?: string };
+            const data = e.data as { id: number; instanceId?: string; html?: string };
             if (!data || data.id !== currentId) return;
+            if (data.instanceId && data.instanceId !== (instanceId as string)) return;
             sharedWorker?.removeEventListener('message', onMessage);
             if (isCancelled) return;
             const cacheKey = `${language}\n${debouncedCode}`;
@@ -185,11 +196,13 @@ export function LightCodeBlock({
           {isCopied ? <CheckIcon size={14} className="text-muted-foreground" /> : <CopyIcon size={14} className="text-muted-foreground" />}
         </Button>
       </div>
-      {syntaxHighlighting && html ? (
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      ) : (
-        <Fallback code={code} />
-      )}
+      <div className="max-h-[600px] overflow-y-auto">
+        {syntaxHighlighting && html ? (
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        ) : (
+          <Fallback code={code} />
+        )}
+      </div>
     </div>
   );
 }

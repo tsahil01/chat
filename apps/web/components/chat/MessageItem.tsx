@@ -1,12 +1,14 @@
 'use client';
 
-import { UIMessage } from 'ai';
+import { FileUIPart, UIDataTypes, UITools } from 'ai';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { TextPart } from '@/components/message-parts/text-part';
 import { ToolPart } from '@/components/message-parts/tool-part';
 import { ReasoningPart } from '@/components/message-parts/reasoning-part';
+import { FilePart } from '@/components/message-parts/file-part';
 import { AssistantActions } from '@/components/chat/AssistantActions';
 import { authClient } from '@/lib/auth-client';
+import { UIMessage } from '@/lib/types';
 
 type MessageItemProps = {
   message: UIMessage;
@@ -18,8 +20,15 @@ type MessageItemProps = {
 
 export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, onRetry, isLastAssistant }: MessageItemProps) {
   const { data } = authClient.useSession();
+  console.log('message', message);
 
   return (
+    <div className="flex flex-col gap-2">
+      {message.attachments && message.attachments.map((attachment: FileUIPart, i: number) => {
+        return (
+          <FilePart key={`${message.id}-${i}`} attachment={attachment} messageId={message.id} partIndex={i} />
+        );
+      })}
     <div className="flex gap-3">
       {message.role === 'user' && (
         <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center my-auto">
@@ -31,9 +40,9 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
       )}
 
       <div className={`space-y-2 ${message.role === 'user' ? 'w-auto' : 'w-full'}`}>
-        <div className={`rounded-lg p-3 ${message.role === 'user' ? 'bg-muted text-foreground max-w-xl w-auto' : 'text-foreground'}`}>
+        <div className={`rounded-xl px-4 py-2 shadow-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground max-w-xl w-auto rounded-bl-sm' : 'text-foreground'}`}>
           <div className="space-y-3">
-            {message.parts.map((part, i) => {
+            {message.parts.map((part, i: number) => {
               switch (part.type) {
                 case 'text':
                   return (
@@ -72,6 +81,7 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
           </>
         )}
       </div>
+    </div>
     </div>
   );
 }

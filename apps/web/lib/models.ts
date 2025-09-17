@@ -25,6 +25,9 @@ export const models: Models[] = [{
 }, {
     model: 'moonshotai/kimi-k2:free',
     provider: 'openrouter',
+}, {
+    model: 'google/gemini-2.5-flash',
+    provider: 'openrouter',
 }];
 
 

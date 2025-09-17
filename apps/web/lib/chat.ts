@@ -1,8 +1,8 @@
-import { generateText, UIMessage } from "ai";
-import { openrouter } from "./providers/openrouter";
+import { generateText } from "ai";
 import { Message } from "@workspace/db";
 import { moonshot } from "./providers/moonshot";
 import { getChat } from "@/app/api/chat/action";
+import { UIMessage } from "./types";
 
 export async function generateTitleFromUserMessage({
   message,
@@ -35,10 +35,11 @@ export async function getChatTitle(chatId: string) {
 
 export async function getUIMessages(messages?: Message[] | null): Promise<UIMessage[]> {
   if (!Array.isArray(messages) || messages.length === 0) return [];
-  return messages.map((message) => ({
+  return messages.map((message: Message) => ({
     role: message.role as 'system' | 'user' | 'assistant',
     parts: JSON.parse(JSON.stringify(message.parts)),
     id: message.id,
     createdAt: message.createdAt,
+    attachments: JSON.parse(JSON.stringify(message.attachments)),
   }));
 }

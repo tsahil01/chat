@@ -17,6 +17,7 @@
     "@mendable/firecrawl-js": "^4.3.4",
     "@openrouter/ai-sdk-provider": "^1.2.0",
     "@prisma/client": "^6.16.1",
+    "@vercel/blob": "^2.0.0",
     "@workspace/db": "workspace:*",
     "@workspace/ui": "workspace:*",
     "ai": "^5.0.44",
