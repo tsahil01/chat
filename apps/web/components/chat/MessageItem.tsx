@@ -40,7 +40,7 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
       )}
 
       <div className={`space-y-2 ${message.role === 'user' ? 'w-auto' : 'w-full'}`}>
-        <div className={`rounded-lg p-3 ${message.role === 'user' ? 'bg-muted text-foreground max-w-xl w-auto' : 'text-foreground'}`}>
+        <div className={`rounded-xl px-4 py-2 shadow-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground max-w-xl w-auto rounded-bl-sm' : 'text-foreground'}`}>
           <div className="space-y-3">
             {message.parts.map((part, i: number) => {
               switch (part.type) {

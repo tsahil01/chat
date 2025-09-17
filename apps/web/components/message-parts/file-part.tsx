@@ -4,7 +4,6 @@ import { FileUIPart } from 'ai';
 import { Button } from '@workspace/ui/components/button';
 import { Card } from '@workspace/ui/components/card';
 import { FileText, Image as ImageIcon, File, ExternalLink } from 'lucide-react';
-import Image from 'next/image';
 
 interface FilePartProps {
   attachment: FileUIPart;
@@ -39,12 +38,12 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
     return (
       <div key={`${messageId}-${partIndex}`} className="max-w-md">
         <div className="relative group">
-          <Image
+          <img
             src={attachment.url}
             alt={getFileName()}
-            className="max-w-full h-auto rounded-lg shadow-sm border"
-            width={300}
-            height={300}
+            className="rounded-lg shadow-sm border max-w-full w-auto h-auto max-h-80"
+            loading="lazy"
+            decoding="async"
           />
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="flex gap-1">
