@@ -34,8 +34,15 @@ export function AppSidebar() {
   const lastChatsSignature = useRef<string>("");
 
   async function getSession() {
-    const { data: session } = await authClient.getSession();
-    setUser(session?.user || null);
+    try {
+      const { data: session } = await authClient.getSession();
+      setUser(session?.user || null);
+      if (!session?.user) {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error getting session:", error);
+    }
   }
 
   async function handleLogout() {
