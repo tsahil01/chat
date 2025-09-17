@@ -34,9 +34,8 @@ export default function Upload({
         access: 'public',
         handleUploadUrl: '/api/upload',
       });
-      console.log('blob', blob);
 
-      setFileParts([...(fileParts || []), { url: blob.url, type: 'file', mediaType: blob.contentType }]);
+      setFileParts([...(fileParts || []), { url: blob.url, type: 'file', mediaType: blob.contentType, filename: file.name }]);
     } catch (error) {
       console.error('Upload failed:', error);
     } finally {

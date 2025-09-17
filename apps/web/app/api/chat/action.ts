@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { Chat, Message, prisma, Visibility } from "@workspace/db";
-import { UIMessage } from "ai";
+import { FileUIPart, UIMessage } from "ai";
 import { headers } from "next/headers";
 
 export async function getChat(chatId: string): Promise<Chat & { messages: Message[] } | null> {
@@ -71,16 +71,15 @@ export async function addMessage({chatId, message}: {chatId: string, message: UI
         if (!session) {
             return null;
         }
-
         const createdMessage = await prisma.message.create({
             data: {
                 chatId,
                 id: message.id,
                 role: message.role,
                 parts: JSON.parse(JSON.stringify(message.parts)),
-                attachments: JSON.parse(JSON.stringify(message.parts.filter((part: any)=>{
-                    return part.type === 'image' || part.type === 'file';
-                }))),
+                attachments: JSON.parse(JSON.stringify(
+                    message.parts.filter((part): part is FileUIPart => part.type === 'file')
+                )),
             }
         });
 
