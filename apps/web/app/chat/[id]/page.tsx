@@ -177,9 +177,9 @@ export default function Page() {
         setIsSubmitting(false);
         return;
       }
-
-      await sendMessage({ text: input, ...(fileParts ? { files: fileParts } : {}) });
+      const inputToSend = input;
       setInput('');
+      await sendMessage({ text: inputToSend, ...(fileParts ? { files: fileParts } : {}) });
       setFileParts(null);
     } finally {
       setIsSubmitting(false);

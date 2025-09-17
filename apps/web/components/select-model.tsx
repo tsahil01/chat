@@ -5,6 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@workspace/ui/components/popover";
 import { LuCpu, LuChevronDown } from "react-icons/lu";
 import { Models } from "@/lib/models";
+import { Badge } from "@workspace/ui/components/badge";
 
 export function SelectModel({ models, selectedModel, setSelectedModel }: { models: Models[], selectedModel: Models, setSelectedModel: (model: Models) => void }) {
     const [open, setOpen] = useState(false);
@@ -38,11 +39,18 @@ export function SelectModel({ models, selectedModel, setSelectedModel }: { model
                                 className="w-full justify-start h-auto p-2 sm:p-3"
                                 onClick={() => handleModelSelect(model)}
                             >
-                                <div className="flex flex-col items-start gap-1">
-                                    <div className="font-medium text-sm sm:text-base">{model.displayName}</div>
-                                    <div className="text-xs text-muted-foreground">
-                                        Provider: {model.provider}
+                                <div className="flex flex-col justify-between gap-1 w-full">
+                                    <div className="flex flex-row justify-between items-start gap-1">
+                                        <div className="font-medium text-sm sm:text-base">{model.displayName}</div>
+                                        {model.fileSupport && (
+                                        <Badge className="text-xs">
+                                            File Upload
+                                        </Badge>
+                                    )}
                                     </div>
+                                        <div className="text-xs text-start text-muted-foreground truncate">
+                                            Provider: {model.provider}
+                                        </div>
                                 </div>
                             </Button>
                         ))}

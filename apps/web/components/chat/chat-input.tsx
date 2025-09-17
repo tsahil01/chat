@@ -81,7 +81,7 @@ export function ChatInput({
           onKeyDown={handleKeyDown}
           placeholder="Ask me anything..."
           disabled={isSubmitting}
-          className="py-3 text-sm sm:text-base bg-muted/30 dark:bg-muted/30 focus:bg-background dark:focus:bg-background resize-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent min-h-[60px] sm:min-h-[80px]"
+          className="py-3 text-sm sm:text-base bg-muted/30 dark:bg-muted/30 focus:bg-background dark:focus:bg-background resize-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent min-h-[60px] sm:min-h-[80px] max-h-[200px] sm:max-h-[300px]"
         />
       </div>
       <div className='flex flex-row justify-between items-center gap-2'>

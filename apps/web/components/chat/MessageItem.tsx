@@ -29,9 +29,9 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
           <FilePart key={`${message.id}-${i}`} attachment={attachment} messageId={message.id} partIndex={i} />
         );
       })}
-    <div className="flex gap-2 sm:gap-3">
+    <div className="flex gap-2 sm:gap-3 items-start">
       {message.role === 'user' && (
-        <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center my-auto">
+        <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
           <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
             <AvatarImage src={data?.user?.image || ''} />
             <AvatarFallback className="text-xs">{data?.user?.name?.charAt(0) || 'U'}</AvatarFallback>
@@ -40,7 +40,7 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
       )}
 
       <div className={`space-y-2 ${message.role === 'user' ? 'w-auto max-w-[85%] sm:max-w-xl' : 'w-full'}`}>
-        <div className={`rounded-xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground w-auto rounded-bl-sm' : 'text-foreground'}`}>
+        <div className={`rounded-xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm ${message.role === 'user' ? 'bg-muted text-foreground w-auto rounded-tl-sm' : 'text-foreground'}`}>
           <div className="space-y-2 sm:space-y-3">
             {message.parts.map((part, i: number) => {
               switch (part.type) {
