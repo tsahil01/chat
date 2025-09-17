@@ -200,31 +200,36 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] md:max-w-4xl max-w-full mx-auto">
-      <div className="flex-1 overflow-y-auto space-y-4 p-4">
+    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto w-full">
+      <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
 
         <MessageList
           messages={messages}
           isReasoningCollapsed={(key) => collapsedReasoning.has(key)}
           onToggleReasoning={toggleReasoning}
-          onRetry={(messageId) => regenerate({ messageId })}
+          onRetry={(messageId) => {
+            setIsSubmitting(true);
+            regenerate({ messageId });
+          }}
           chatEndRef={chatEndRef}
         />
         {isSubmitting && <TypingIndicator />}
       </div>
 
-      <ChatInput
-        input={input}
-        setInput={setInput}
-        isSubmitting={isSubmitting}
-        toggleWebSearch={toggleWebSearch}
-        setToggleWebSearch={setToggleWebSearch}
-        selectedModel={selectedModel}
-        setSelectedModel={setSelectedModel}
-        onSubmit={handleSubmit}
-        fileParts={fileParts}
-        setFileParts={setFileParts}
-      />
+      <div className="flex-shrink-0 p-2 sm:p-4">
+        <ChatInput
+          input={input}
+          setInput={setInput}
+          isSubmitting={isSubmitting}
+          toggleWebSearch={toggleWebSearch}
+          setToggleWebSearch={setToggleWebSearch}
+          selectedModel={selectedModel}
+          setSelectedModel={setSelectedModel}
+          onSubmit={handleSubmit}
+          fileParts={fileParts}
+          setFileParts={setFileParts}
+        />
+      </div>
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
     </div >
   );

@@ -1,5 +1,5 @@
 import { Button } from '@workspace/ui/components/button';
-import { Copy } from 'lucide-react';
+import { Copy, RefreshCcw } from 'lucide-react';
 
 interface MessageActionsProps {
   onCopy: () => void;
@@ -12,8 +12,8 @@ export function MessageActions({ onCopy, onRetry }: MessageActionsProps) {
       <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onCopy}>
         <Copy className="w-4 h-4" />
       </Button>
-      <Button variant="ghost" size="sm" className="h-8 p-0" onClick={onRetry}>
-        <span>Retry</span>
+      <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onRetry}>
+        <RefreshCcw className="w-4 h-4" />
       </Button>
     </div>
   );

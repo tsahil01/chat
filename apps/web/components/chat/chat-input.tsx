@@ -49,15 +49,15 @@ export function ChatInput({
   
   return (
     <>
-    <div className="bg-muted/30 p-4 rounded-lg flex flex-col gap-5">
-      <div className="max-w-4xl mx-auto w-full">
+    <div className="bg-muted/30 p-3 sm:p-4 rounded-lg flex flex-col gap-3 sm:gap-5">
+      <div className="w-full">
         {(uploadingPreview || fileParts) && (
       <div className="rounded-lg mb-3 flex flex-row gap-2 flex-wrap">
         {uploadingPreview && (
           <ImageSquarePreview 
             src={uploadingPreview} 
             loading 
-            size={96}
+            size={80}
             onRemove={() => setUploadingPreview(null)}
           />
         )}
@@ -65,7 +65,7 @@ export function ChatInput({
           <ImageSquarePreview 
             key={index} 
             src={part.url} 
-            size={96} 
+            size={80} 
             onRemove={() => {
               const next = [...(fileParts || [])];
               next.splice(index, 1);
@@ -81,13 +81,13 @@ export function ChatInput({
           onKeyDown={handleKeyDown}
           placeholder="Ask me anything..."
           disabled={isSubmitting}
-          className="py-3 text-base bg-muted/30 dark:bg-muted/30 focus:bg-background dark:focus:bg-background resize-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent"
+          className="py-3 text-sm sm:text-base bg-muted/30 dark:bg-muted/30 focus:bg-background dark:focus:bg-background resize-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent min-h-[60px] sm:min-h-[80px]"
         />
       </div>
-      <div className='flex flex-row justify-between'>
-        <div className='flex flex-row gap-2'>
-          <Toggle pressed={toggleWebSearch} onPressedChange={setToggleWebSearch}>
-            <CiGlobe />
+      <div className='flex flex-row justify-between items-center gap-2'>
+        <div className='flex flex-row gap-1 sm:gap-2 flex-wrap'>
+          <Toggle pressed={toggleWebSearch} onPressedChange={setToggleWebSearch} size="sm">
+            <CiGlobe className="w-4 h-4" />
           </Toggle>
           <Upload 
             fileParts={fileParts} 
@@ -101,14 +101,14 @@ export function ChatInput({
             setSelectedModel={setSelectedModel} 
           />
         </div>
-        <div>
+        <div className="flex-shrink-0">
           <Button 
             className="hover:cursor-pointer" 
             size={"icon"} 
             onClick={onSubmit}
             disabled={isSubmitting || isUploading}
           >
-            <FaArrowTurnUp />
+            <FaArrowTurnUp className="w-4 h-4" />
           </Button>
         </div>
       </div>

@@ -29,19 +29,19 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
           <FilePart key={`${message.id}-${i}`} attachment={attachment} messageId={message.id} partIndex={i} />
         );
       })}
-    <div className="flex gap-3">
+    <div className="flex gap-2 sm:gap-3">
       {message.role === 'user' && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center my-auto">
-          <Avatar>
+        <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center my-auto">
+          <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
             <AvatarImage src={data?.user?.image || ''} />
             <AvatarFallback className="text-xs">{data?.user?.name?.charAt(0) || 'U'}</AvatarFallback>
           </Avatar>
         </div>
       )}
 
-      <div className={`space-y-2 ${message.role === 'user' ? 'w-auto' : 'w-full'}`}>
-        <div className={`rounded-xl px-4 py-2 shadow-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground max-w-xl w-auto rounded-bl-sm' : 'text-foreground'}`}>
-          <div className="space-y-3">
+      <div className={`space-y-2 ${message.role === 'user' ? 'w-auto max-w-[85%] sm:max-w-xl' : 'w-full'}`}>
+        <div className={`rounded-xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground w-auto rounded-bl-sm' : 'text-foreground'}`}>
+          <div className="space-y-2 sm:space-y-3">
             {message.parts.map((part, i: number) => {
               switch (part.type) {
                 case 'text':
@@ -76,7 +76,7 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
           <>
             <AssistantActions message={message} onRetry={onRetry} />
             {isLastAssistant && (
-              <p className="text-xs text-muted-foreground text-end">AI can make mistakes. Please double-check responses.</p>
+              <p className="text-xs text-muted-foreground text-end px-1">AI can make mistakes. Please double-check responses.</p>
             )}
           </>
         )}
