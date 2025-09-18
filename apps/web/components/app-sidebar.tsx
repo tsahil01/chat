@@ -20,7 +20,7 @@ import { AuthDialog } from "./auth-dialog";
 import { UserMenu } from "./user-menu";
 import { useTheme } from "next-themes";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
-import { FiMessageCircle, FiSearch } from "react-icons/fi";
+import { FiMessageCircle } from "react-icons/fi";
 import { PiPlusBold } from "react-icons/pi";
 
 
@@ -127,14 +127,6 @@ export function AppSidebar() {
                     <a href="/chats">
                       <FiMessageCircle className="h-4 w-4" />
                       <span>Chats</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <a href="/search">
-                      <FiSearch className="h-4 w-4" />
-                      <span>Search</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
