@@ -1,4 +1,4 @@
-import { streamText, UIMessage, convertToModelMessages, stepCountIs } from 'ai';
+import { streamText, UIMessage, convertToModelMessages, stepCountIs, StepResult, ToolSet } from 'ai';
 import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
 import { getUserUsageAction, incrementMessageUsageAction } from '@/lib/usage/server';
@@ -86,11 +86,11 @@ export async function POST(req: Request) {
     tools: tools,
     stopWhen: stepCountIs(5),
     system: system.trim() !== '' ? system : undefined,
-    onFinish: async (result) => {
+    onFinish: async (result: StepResult<ToolSet>) => {
       await addMessage({chatId, message: {
         role: 'assistant',
         parts: result.content,
-        id: generateUUID(),
+        id: result.response.id,
         createdAt: new Date(),
       } as UIMessage});
     },

@@ -34,9 +34,10 @@ export default function Page() {
 
   useEffect(() => {
     if (!session && !isPending) {
-      router.replace('/');
+      setAuthOpen(true);
+      router.push('/');
     }
-  }, [session]);
+  }, [session, isPending]);
 
   useEffect(() => {
     if (params?.id && typeof params.id === 'string') {
