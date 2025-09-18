@@ -19,8 +19,8 @@ export function WelcomeScreen({ className = "" }: WelcomeScreenProps) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-0">
-        <ClockWidget className="sm:col-span-2 bg-muted/30 dark:bg-muted/10" />
-        <WeatherWidget />
+        <ClockWidget className="sm:col-span-1 bg-muted/30 dark:bg-muted/10" />
+        <WeatherWidget className="sm:col-span-2" />
         <CryptoWidget />
         <DemoPromptWidget className="sm:col-span-1 bg-muted/30 dark:bg-muted/10" />
         <NewsWidget className="sm:col-span-2 lg:col-span-3 bg-muted/30 dark:bg-muted/10" />
