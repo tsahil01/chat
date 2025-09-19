@@ -21,8 +21,6 @@ function formatTime(date: Date, timeZone?: string) {
 export function ClockWidget({ className }: { className?: string }) {
   const browserTimeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
   const [now, setNow] = useState<Date>(new Date());
-  const [coords, setCoords] = useState<string>("");
-  const [denied, setDenied] = useState<boolean>(false);
   const [city, setCity] = useState<string>("");
   const regionFallback = useMemo(() => {
     if (!browserTimeZone) return "";
@@ -39,7 +37,6 @@ export function ClockWidget({ className }: { className?: string }) {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
-        setCoords(`${latitude.toFixed(2)}, ${longitude.toFixed(2)}`);
         try {
           const res = await fetch(`/api/location/reverse?lat=${latitude}&lon=${longitude}`, { cache: "no-store" });
           if (res.ok) {
@@ -48,7 +45,7 @@ export function ClockWidget({ className }: { className?: string }) {
           }
         } catch { }
       },
-      () => setDenied(true),
+      () => {},
       { enableHighAccuracy: false, timeout: 3000 }
     );
   }, []);
