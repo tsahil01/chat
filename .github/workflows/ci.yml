@@ -37,3 +37,16 @@ jobs:
         run: pnpm build
         env:
           DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+          BETTER_AUTH_SECRET: "dummy_auth_secret"
+          BETTER_AUTH_URL: "http://localhost:3000"
+          GITHUB_CLIENT_ID: "dummy_github_client"
+          GITHUB_CLIENT_SECRET: "dummy_github_secret"
+          GOOGLE_CLIENT_ID: "dummy_google_client"
+          GOOGLE_CLIENT_SECRET: "dummy_google_secret"
+          OPENROUTER_API_KEY: "dummy_openrouter_key"
+          MOONSHOT_API_KEY: "dummy_moonshot_key"
+          EXA_API_KEY: "dummy_exa_key"
+          FIRECRAWL_API_KEY: "dummy_firecrawl_key"
+          DODO_PAYMENTS_API_KEY: "dummy_payments_key"
+          DODO_PAYMENTS_WEBHOOK_SECRET: "dummy_webhook_secret"
+          BLOB_READ_WRITE_TOKEN: "dummy_blob_token"
