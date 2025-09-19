@@ -1,7 +1,6 @@
 // Worker for off-main-thread Shiki highlighting
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let shikiPromise: Promise<any> | null = null;
+let shikiPromise: Promise<typeof import('shiki')> | null = null;
 
 self.onmessage = async (e: MessageEvent) => {
   const { id, instanceId, code, language, themes } = e.data as {
@@ -16,11 +15,12 @@ self.onmessage = async (e: MessageEvent) => {
     if (!shikiPromise) shikiPromise = import('shiki');
     const { codeToHtml } = await shikiPromise;
     const html = await codeToHtml(code, {
-      lang: language as any,
+      lang: language,
       themes,
     });
     (self as unknown as Worker)['postMessage']({ id, instanceId, html });
-  } catch (err) {
+  } catch {
+    // Ignore errors and send empty HTML
     (self as unknown as Worker)['postMessage']({ id, instanceId, html: '' });
   }
 };

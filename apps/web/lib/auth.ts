@@ -11,7 +11,7 @@ import {
 import DodoPayments from "dodopayments";
 
 export const dodoPayments = new DodoPayments({
-  bearerToken: process.env.DODO_PAYMENTS_API_KEY!,
+  bearerToken: process.env.DODO_PAYMENTS_API_KEY || "dummy_payments_key",
   environment: "test_mode"
 });
 
@@ -46,7 +46,7 @@ export const auth = betterAuth({
         }),
         portal(),
         webhooks({
-          webhookKey: process.env.DODO_PAYMENTS_WEBHOOK_SECRET!,
+          webhookKey: process.env.DODO_PAYMENTS_WEBHOOK_SECRET || "dummy_webhook_secret",
           onPayload: async (payload) => {
             console.log("Received webhook:", payload.type);
           },

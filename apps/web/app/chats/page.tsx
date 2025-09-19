@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@workspace/ui/components/button';
 import { Skeleton } from '@workspace/ui/components/skeleton';
@@ -54,7 +54,7 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export default function ChatsPage() {
+function ChatsPageContent() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -271,5 +271,36 @@ export default function ChatsPage() {
         />
       </div>
     </div>
+  );
+}
+
+export default function ChatsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col max-w-4xl mx-auto p-4">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+          <Skeleton className="h-10 w-full" />
+          <Separator />
+          <div className="space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Card key={i}>
+                <CardContent className="p-4">
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/4" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    }>
+      <ChatsPageContent />
+    </Suspense>
   );
 }

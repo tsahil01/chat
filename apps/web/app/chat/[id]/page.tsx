@@ -9,7 +9,6 @@ import { TypingIndicator } from '@/components/chat/TypingIndicator';
 import { useAutoScroll } from '@/hooks/use-auto-scroll';
 import { models, Models } from '@/lib/models';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { canUserSendMessage } from '@/lib/usage/client';
 import { generateUUID } from '@/lib/utils';
 import { getUIMessages } from '@/lib/chat';
 import { authClient } from '@/lib/auth-client';
@@ -89,6 +88,46 @@ export default function Page() {
     onFinish: () => {
       setIsSubmitting(false);
     },
+    onError: (error) => {
+      console.error('Chat error:', error);
+      setIsSubmitting(false);
+      
+      // Handle different error types
+      if (error.message?.includes('Monthly message limit exceeded')) {
+        // Try to parse error details if available
+        let errorMessage = '⚠️ You have reached your message limit for the month. Please upgrade to a paid plan to continue using the app.';
+        
+        try {
+          const errorData = JSON.parse(error.message);
+          if (errorData.currentUsage && errorData.limit) {
+            errorMessage = `⚠️ You have used ${errorData.currentUsage}/${errorData.limit} messages this month. Please upgrade to a paid plan to continue using the app.`;
+          }
+        } catch {
+          // Use default message if parsing fails
+        }
+        
+        setMessages(prev => [...prev, {
+          role: 'system',
+          parts: [{ type: 'text', text: errorMessage }],
+          id: `error-${Date.now()}`,
+          createdAt: new Date(),
+        } as UIMessage]);
+      } else if (error.message?.includes('Failed to generate response')) {
+        setMessages(prev => [...prev, {
+          role: 'system',
+          parts: [{ type: 'text', text: '❌ Sorry, there was an error generating the response. Please try again.' }],
+          id: `error-${Date.now()}`,
+          createdAt: new Date(),
+        } as UIMessage]);
+      } else {
+        setMessages(prev => [...prev, {
+          role: 'system',
+          parts: [{ type: 'text', text: '❌ An unexpected error occurred. Please try again.' }],
+          id: `error-${Date.now()}`,
+          createdAt: new Date(),
+        } as UIMessage]);
+      }
+    },
   });
   const chatEndRef = useAutoScroll({ messages, collapsedReasoning });
 
@@ -165,17 +204,6 @@ export default function Page() {
     try {
       if (!session) {
         setAuthOpen(true);
-        return;
-      }
-      const canSend = await canUserSendMessage();
-      if (!canSend) {
-        setMessages(prev => [...prev, {
-          role: 'system',
-          parts: [{ type: 'text', text: '⚠️ You have reached your message limit for the month. Please upgrade to a paid plan to continue using the app.' }],
-          id: `assistant-${Date.now()}`,
-          createdAt: new Date(),
-        } as UIMessage]);
-        setIsSubmitting(false);
         return;
       }
       const inputToSend = input;

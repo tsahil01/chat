@@ -27,10 +27,14 @@ import { PiPlusBold } from "react-icons/pi";
 export function AppSidebar() {
   const [recentChats, setRecentChats] = useState<Chat[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const [user, setUser] = useState<User | null>(null);
   const { theme, setTheme } = useTheme();
   const hasFetchedOnce = useRef(false);
   const lastChatsSignature = useRef<string>("");
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   async function getSession() {
     try {
@@ -57,34 +61,64 @@ export function AppSidebar() {
     return items.map((c) => `${c.id}:${c.title ?? ""}`).join("|");
   }
 
-  async function getRecentChats() {
+  async function getRecentChats(pageNum = 1, append = false) {
     try {
       if (!user) return;
-      if (!hasFetchedOnce.current) {
+      
+      if (pageNum === 1 && !hasFetchedOnce.current) {
         setIsLoading(true);
+      } else if (append) {
+        setIsLoadingMore(true);
       }
-      const response = await fetch("/api/chat/recent");
+
+      const response = await fetch(`/api/chat/recent?page=${pageNum}&limit=20`);
       const data = await response.json();
-      if (!Array.isArray(data)) {
-        console.error("API response is not an array:", data);
+      
+      if (!data || !Array.isArray(data.chats)) {
+        console.error("API response is not valid:", data);
         return;
       }
 
-      const newSignature = computeChatsSignature(data as Chat[]);
-      if (newSignature !== lastChatsSignature.current) {
-        lastChatsSignature.current = newSignature;
-        setRecentChats(data);
+      const { chats, hasMore: moreAvailable } = data;
+      
+      if (append) {
+        setRecentChats(prev => [...prev, ...chats]);
+      } else {
+        const newSignature = computeChatsSignature(chats);
+        if (newSignature !== lastChatsSignature.current) {
+          lastChatsSignature.current = newSignature;
+          setRecentChats(chats);
+        }
       }
+      
+      setHasMore(moreAvailable);
+      setPage(pageNum);
     } catch (error) {
       console.error("Error getting recent chats:", error);
       if (!hasFetchedOnce.current) {
         setRecentChats([]);
       }
     } finally {
-      if (!hasFetchedOnce.current) {
+      if (pageNum === 1 && !hasFetchedOnce.current) {
         setIsLoading(false);
         hasFetchedOnce.current = true;
+      } else if (append) {
+        setIsLoadingMore(false);
       }
+    }
+  }
+
+  async function loadMoreChats() {
+    if (isLoadingMore || !hasMore) return;
+    await getRecentChats(page + 1, true);
+  }
+
+  function handleScroll(e: React.UIEvent<HTMLDivElement>) {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
+    
+    if (isNearBottom && hasMore && !isLoadingMore) {
+      loadMoreChats();
     }
   }
 
@@ -94,11 +128,12 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (!user) return;
-    getRecentChats();
+    getRecentChats(1, false);
 
+    // Reduced polling frequency for better performance
     const intervalId = setInterval(() => {
-      getRecentChats();
-    }, 15000); // 15 seconds
+      getRecentChats(1, false);
+    }, 30000); // 30 seconds
 
     return () => clearInterval(intervalId);
   }, [user]);
@@ -135,7 +170,11 @@ export function AppSidebar() {
           </SidebarGroup>
         </div>
         {/* Recent Chats - scrollable only */}
-        <div className="min-h-0 flex-1 overflow-auto">
+        <div 
+          ref={sidebarRef}
+          className="min-h-0 flex-1 overflow-auto"
+          onScroll={handleScroll}
+        >
           <SidebarGroup>
             <SidebarGroupLabel>Recents</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -143,24 +182,38 @@ export function AppSidebar() {
                 {isLoading ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton disabled>
-                      <FiMessageCircle className="h-4 w-4" />
                       <span>Loading...</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ) : Array.isArray(recentChats) && recentChats.length > 0 ? (
-                  recentChats.map((item) => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton asChild>
-                        <a href={`/chat/${item.id}`}>
-                          <span>{item.title}</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))
+                  <>
+                    {recentChats.map((item) => (
+                      <SidebarMenuItem key={item.id}>
+                        <SidebarMenuButton asChild>
+                          <a href={`/chat/${item.id}`}>
+                            <span className="truncate">{item.title}</span>
+                          </a>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                    {isLoadingMore && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton disabled>
+                          <span>Loading more...</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                    {!hasMore && recentChats.length > 20 && (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton disabled>
+                          <span className="text-xs text-muted-foreground">No more chats</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )}
+                  </>
                 ) : (
                   <SidebarMenuItem>
                     <SidebarMenuButton disabled>
-                      <FiMessageCircle className="h-4 w-4" />
                       <span>No recent chats</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
