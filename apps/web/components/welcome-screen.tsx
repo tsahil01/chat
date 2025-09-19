@@ -18,7 +18,7 @@ export function WelcomeScreen({ className = "" }: WelcomeScreenProps) {
         <p className="text-xs sm:text-sm text-muted-foreground">Start a conversation by typing a message below.</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-0">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-0">
         <ClockWidget className="sm:col-span-1 bg-muted/30 dark:bg-muted/10" />
         <WeatherWidget className="sm:col-span-2" />
         <CryptoWidget />

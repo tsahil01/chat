@@ -57,7 +57,6 @@ export function ClockWidget({ className }: { className?: string }) {
     try {
       return new Intl.DateTimeFormat(undefined, {
         weekday: "long",
-        year: "numeric",
         month: "short",
         day: "2-digit",
       }).format(now);
