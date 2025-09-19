@@ -1,11 +1,10 @@
 import { streamText, UIMessage, convertToModelMessages, stepCountIs, StepResult, ToolSet } from 'ai';
 import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
-import { getUserUsageAction, incrementMessageUsageAction } from '@/lib/usage/server';
-import { addMessage, createChat, getChat, deleteAllMessagesAfter } from './action';
+import { incrementMessageUsageAction } from '@/lib/usage/server';
+import { addMessage, createChat, getChatWithUsage, deleteAllMessagesAfter } from './action';
 import { generateTitleFromUserMessage } from '@/lib/chat';
 import { Visibility } from '@workspace/db';
-import { generateUUID } from '@/lib/utils';
 import { getSelectedModel } from '@/lib/models';
 
 // Allow streaming responses up to 30 seconds
@@ -35,34 +34,58 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userUsage = await getUserUsageAction();
-  if (userUsage?.remaining! <= 0) {
-    return Response.json({ error: "Monthly message limit exceeded" }, { status: 429 });
-  }
+  const { chat, usage } = await getChatWithUsage(chatId, session.user.id);
 
-  const chat = await getChat(chatId);
+  if (!usage || usage.remaining <= 0) {
+    return Response.json({ 
+      error: "Monthly message limit exceeded",
+      errorType: "USAGE_LIMIT",
+      remaining: usage?.remaining || 0,
+      limit: usage?.limit || 150,
+      currentUsage: usage?.currentUsage || 0
+    }, { status: 429 });
+  }
 
   if (!chat) {
     const lastMessage = messages[messages.length - 1];
     if (lastMessage) {
-      const title = await generateTitleFromUserMessage({ message: lastMessage });
-      await createChat({ chatId, title, visibility: Visibility.PRIVATE });
+      setImmediate(async () => {
+        try {
+          const title = await generateTitleFromUserMessage({ message: lastMessage });
+          await createChat({ chatId, title, visibility: Visibility.PRIVATE });
+        } catch (error) {
+          console.error('Background chat creation failed:', error);
+        }
+      });
     }
   } else {
     if (chat.userId !== session.user.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
-  // Detect regenerate: if the last user message already exists in DB, remove all messages after it
+
   const lastIncoming = messages[messages.length - 1]!;
   if (chat && lastIncoming?.role === 'user') {
     const isDuplicateUser = chat.messages.some((m) => m.id === lastIncoming.id);
     if (isDuplicateUser) {
-      await deleteAllMessagesAfter(chatId, lastIncoming.id);
+      setImmediate(async () => {
+        try {
+          await deleteAllMessagesAfter(chatId, lastIncoming.id);
+        } catch (error) {
+          console.error('Background message cleanup failed:', error);
+        }
+      });
     }
   }
+
   if (lastIncoming?.role === 'user') {
-    await addMessage({chatId, message: lastIncoming});
+    setImmediate(async () => {
+      try {
+        await addMessage({chatId, message: lastIncoming});
+      } catch (error) {
+        console.error('Background user message storage failed:', error);
+      }
+    });
   }
 
   system += `- you are a helpful assistant that can answer questions and help with tasks and your model is ${selectedChatModel}`;
@@ -80,23 +103,36 @@ export async function POST(req: Request) {
     } as UIMessage);
   }
 
-  const result = streamText({
-    model: getSelectedModel({model: selectedChatModel, provider: selectedChatProvider})!,
-    messages: convertToModelMessages(messages),
-    tools: tools,
-    stopWhen: stepCountIs(5),
-    system: system.trim() !== '' ? system : undefined,
-    onFinish: async (result: StepResult<ToolSet>) => {
-      await addMessage({chatId, message: {
-        role: 'assistant',
-        parts: result.content,
-        id: result.response.id,
-        createdAt: new Date(),
-      } as UIMessage});
-    },
-  });
+  try {
+    const result = streamText({
+      model: getSelectedModel({model: selectedChatModel, provider: selectedChatProvider})!,
+      messages: convertToModelMessages(messages),
+      tools: tools,
+      stopWhen: stepCountIs(5),
+      system: system.trim() !== '' ? system : undefined,
+      onFinish: async (result: StepResult<ToolSet>) => {
+        try {
+          await Promise.all([
+            addMessage({chatId, message: {
+              role: 'assistant',
+              parts: result.content,
+              id: result.response.id,
+              createdAt: new Date(),
+            } as UIMessage}),
+            incrementMessageUsageAction()
+          ]);
+        } catch (error) {
+          console.error('Error storing assistant message:', error);
+        }
+      },
+    });
 
-  await incrementMessageUsageAction();
-
-  return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse();
+  } catch (error) {
+    console.error('Error in streamText:', error);
+    return Response.json({ 
+      error: "Failed to generate response",
+      errorType: "STREAM_ERROR"
+    }, { status: 500 });
+  }
 }
