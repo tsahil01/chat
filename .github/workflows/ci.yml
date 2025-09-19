@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+      BETTER_AUTH_SECRET: "dummy_auth_secret_for_ci_build_only"
       GITHUB_CLIENT_ID: "dummy_github_client"
       GITHUB_CLIENT_SECRET: "dummy_github_secret"
       GOOGLE_CLIENT_ID: "dummy_google_client"
