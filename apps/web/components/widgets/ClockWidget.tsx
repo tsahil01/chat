@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
+import { SlidingNumber } from "@workspace/ui/components/sliding-number";
 
 function formatTime(date: Date, timeZone?: string) {
   try {
@@ -53,6 +54,10 @@ export function ClockWidget({ className }: { className?: string }) {
   }, []);
 
   const timeText = formatTime(now, browserTimeZone);
+  const [hourStr = "00", minuteStr = "00", secondStr = "00"] = timeText.split(":");
+  const hour = parseInt(hourStr, 10) || 0;
+  const minute = parseInt(minuteStr, 10) || 0;
+  const second = parseInt(secondStr, 10) || 0;
   const dayDate = useMemo(() => {
     try {
       return new Intl.DateTimeFormat(undefined, {
@@ -73,7 +78,13 @@ export function ClockWidget({ className }: { className?: string }) {
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
           <div className="text-sm text-muted-foreground">{city || regionFallback}</div>
-          <div className="text-2xl sm:text-3xl font-semibold tabular-nums">{timeText}</div>
+          <div className="text-2xl sm:text-3xl font-semibold tabular-nums flex items-center gap-1">
+            <SlidingNumber value={hour} padStart />
+            <span>:</span>
+            <SlidingNumber value={minute} padStart />
+            <span>:</span>
+            <SlidingNumber value={second} padStart />
+          </div>
           <div className="text-xs sm:text-sm text-muted-foreground">{dayDate}</div>
         </div>
       </CardContent>
