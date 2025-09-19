@@ -58,10 +58,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <SidebarProvider>
         <AppSidebar />
-        <main className="flex-1 md:p-4 p-2">
-          <div className="flex flex-row items-center gap-2">
+        <main className="flex-1">
+          <div className="flex flex-row items-center gap-2 p-4">
             <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
-            <h1 className="text-base">{displayedTitle || title}</h1>
+            <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">{displayedTitle || title}</h1>
           </div>
           {children}
         </main>

@@ -49,7 +49,7 @@ export function ChatInput({
   
   return (
     <>
-    <div className="bg-muted/30 p-3 sm:p-4 rounded-lg flex flex-col gap-3 sm:gap-5">
+    <div className="bg-muted/30 p-2 rounded-lg flex flex-col gap-3 border border-border">
       <div className="w-full">
         {(uploadingPreview || fileParts) && (
       <div className="rounded-lg mb-3 flex flex-row gap-2 flex-wrap">
@@ -95,13 +95,13 @@ export function ChatInput({
             setIsUploading={setIsUploading}
             setUploadingPreview={setUploadingPreview}
           />
-          <SelectModel 
+        </div>
+        <div className="flex-shrink-0 flex flex-row gap-2">
+        <SelectModel 
             models={models} 
             selectedModel={selectedModel!} 
             setSelectedModel={setSelectedModel} 
           />
-        </div>
-        <div className="flex-shrink-0">
           <Button 
             className="hover:cursor-pointer" 
             size={"icon"} 

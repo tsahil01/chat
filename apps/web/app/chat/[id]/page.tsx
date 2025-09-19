@@ -217,7 +217,7 @@ export default function Page() {
         {isSubmitting && <TypingIndicator />}
       </div>
 
-      <div className="flex-shrink-0 p-2 sm:p-4">
+      <div className="flex-shrink-0 p-2">
         <ChatInput
           input={input}
           setInput={setInput}
