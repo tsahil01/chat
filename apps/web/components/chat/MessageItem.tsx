@@ -44,9 +44,18 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
             {message.parts.map((part, i: number) => {
               switch (part.type) {
                 case 'text':
-                  return (
-                    <TextPart key={`${message.id}-${i}`} text={part.text} messageId={message.id} partIndex={i} />
-                  );
+                  // Render user messages as plain text, assistant messages as markdown
+                  if (message.role === 'user') {
+                    return (
+                      <div key={`${message.id}-${i}`} className="whitespace-pre-wrap max-h-90 overflow-y-auto">
+                        {part.text}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <TextPart key={`${message.id}-${i}`} text={part.text} messageId={message.id} partIndex={i} />
+                    );
+                  }
                 case 'tool-exaWebSearch':
                   return (
                     <ToolPart key={`${message.id}-${i}`} part={part} messageId={message.id} partIndex={i} />
