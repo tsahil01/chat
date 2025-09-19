@@ -88,7 +88,7 @@ export function LightCodeBlock({
   const instanceIdRef = useRef<string>((() => {
     try {
       return (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
-        ? (crypto as any).randomUUID()
+        ? (crypto as Crypto & { randomUUID: () => string }).randomUUID()
         : Math.random().toString(36).slice(2);
     } catch {
       return Math.random().toString(36).slice(2);
@@ -115,7 +115,7 @@ export function LightCodeBlock({
           }
           const currentId = (requestIdRef.current = requestIdRef.current + 1);
           const instanceId = instanceIdRef.current as string;
-          const payload = { id: currentId, instanceId, code: debouncedCode, language, themes } as any;
+          const payload = { id: currentId, instanceId, code: debouncedCode, language, themes };
           sharedWorker.postMessage(payload);
           const onMessage = (e: MessageEvent) => {
             const data = e.data as { id: number; instanceId?: string; html?: string };
@@ -130,7 +130,9 @@ export function LightCodeBlock({
           sharedWorker.addEventListener('message', onMessage);
           return;
         }
-      } catch {}
+      } catch {
+        // Worker not available, fallback to main thread
+      }
 
       // Fallback to main thread highlighting
       try {
@@ -139,7 +141,7 @@ export function LightCodeBlock({
         const cacheKey = `${language}\n${debouncedCode}`;
         if (cacheKey === lastHighlightedRef.current) return;
         const result = await codeToHtml(debouncedCode, {
-          lang: language as any,
+          lang: language,
           themes,
         });
         if (!isCancelled) {
@@ -152,11 +154,11 @@ export function LightCodeBlock({
     };
 
     // Use requestIdleCallback to avoid blocking typing/streaming
-    if (typeof (window as any).requestIdleCallback === 'function') {
-      const id = (window as any).requestIdleCallback(runInWorkerIfPossible, { timeout: 200 });
+    if (typeof (window as Window & { requestIdleCallback?: typeof requestIdleCallback }).requestIdleCallback === 'function') {
+      const id = (window as Window & { requestIdleCallback: typeof requestIdleCallback }).requestIdleCallback(runInWorkerIfPossible, { timeout: 200 });
       return () => {
         isCancelled = true;
-        (window as any).cancelIdleCallback?.(id);
+        (window as Window & { cancelIdleCallback?: typeof cancelIdleCallback }).cancelIdleCallback?.(id);
       };
     }
 
