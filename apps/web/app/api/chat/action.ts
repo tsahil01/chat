@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import { Chat, Message, prisma, Visibility } from "@workspace/db";
 import { FileUIPart, UIMessage } from "ai";
 import { headers } from "next/headers";
+import { isProUserAction } from "@/lib/payments/server";
+import { FREE_LIMIT, PRO_LIMIT } from "@/lib/usage";
 
 export async function getChat(chatId: string): Promise<Chat & { messages: Message[] } | null> {
     try {
@@ -33,6 +35,51 @@ export async function getChat(chatId: string): Promise<Chat & { messages: Messag
     } catch (error) {
         console.error("Error getting chat:", error);
         return null;
+    }
+}
+
+export async function getChatWithUsage(chatId: string, userId: string): Promise<{
+    chat: (Chat & { messages: Message[] }) | null;
+    usage: { currentUsage: number; limit: number; remaining: number } | null;
+}> {
+    try {
+        const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
+        
+        const [chat, usage, isPro] = await Promise.all([
+            prisma.chat.findUnique({
+                where: {
+                    id: chatId,
+                    userId: userId
+                },
+                include: {
+                    messages: true
+                }
+            }),
+            prisma.userUsage.findUnique({
+                where: {
+                    userId_month: {
+                        userId: userId,
+                        month: currentMonth
+                    }
+                }
+            }),
+            isProUserAction()
+        ]);
+
+        const limit = isPro ? PRO_LIMIT : FREE_LIMIT;
+        const currentUsage = usage?.messages || 0;
+        
+        return {
+            chat,
+            usage: {
+                currentUsage,
+                limit,
+                remaining: Math.max(0, limit - currentUsage)
+            }
+        };
+    } catch (error) {
+        console.error("Error getting chat with usage:", error);
+        return { chat: null, usage: null };
     }
 }
 
