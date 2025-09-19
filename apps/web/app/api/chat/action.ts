@@ -6,6 +6,8 @@ import { FileUIPart, UIMessage } from "ai";
 import { headers } from "next/headers";
 import { isProUserAction } from "@/lib/payments/server";
 import { FREE_LIMIT, PRO_LIMIT } from "@/lib/usage";
+import { generateTitleFromUserMessage } from "@/lib/chat";
+import { incrementMessageUsageAction } from "@/lib/usage/server";
 
 export async function getChat(chatId: string): Promise<Chat & { messages: Message[] } | null> {
     try {
@@ -43,7 +45,7 @@ export async function getChatWithUsage(chatId: string, userId: string): Promise<
     usage: { currentUsage: number; limit: number; remaining: number } | null;
 }> {
     try {
-        const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
+        const currentMonth = new Date().toISOString().slice(0, 7);
         
         const [chat, usage, isPro] = await Promise.all([
             prisma.chat.findUnique({
@@ -171,6 +173,104 @@ export async function deleteAllMessagesAfter(chatId: string, messageId: string):
         return true;
     } catch (error) {
         console.error("Error deleting messages after target:", error);
+        return false;
+    }
+}
+
+export async function handleChatCompletion({
+    chatId,
+    lastIncoming,
+    needsChatCreation,
+    needsMessageCleanup,
+    assistantMessage
+}: {
+    chatId: string;
+    lastIncoming: UIMessage;
+    needsChatCreation: boolean;
+    needsMessageCleanup: boolean;
+    assistantMessage: UIMessage;
+}): Promise<{ success: boolean; errors: string[] }> {
+    const errors: string[] = [];
+    
+    try {
+        if (needsChatCreation) {
+            try {
+                await createChat({ chatId, title: "New Chat", visibility: Visibility.PRIVATE });
+                
+                setImmediate(async () => {
+                    try {
+                        const title = await generateTitleFromUserMessage({ message: lastIncoming });
+                        await prisma.chat.update({
+                            where: { id: chatId },
+                            data: { title }
+                        });
+                    } catch (error) {
+                        console.error('Background title generation failed:', error);
+                    }
+                });
+            } catch (error) {
+                console.error('Chat creation failed:', error);
+                errors.push('Failed to create chat');
+            }
+        }
+
+        if (needsMessageCleanup) {
+            try {
+                await deleteAllMessagesAfter(chatId, lastIncoming.id);
+            } catch (error) {
+                console.error('Message cleanup failed:', error);
+                errors.push('Failed to clean up duplicate messages');
+            }
+        }
+
+        if (lastIncoming?.role === 'user') {
+            try {
+                const savedMessage = await addMessage({chatId, message: lastIncoming});
+                if (!savedMessage) {
+                    errors.push('Failed to save user message');
+                }
+            } catch (error) {
+                console.error('User message save failed:', error);
+                errors.push('Failed to save user message');
+            }
+        }
+
+        try {
+            await Promise.all([
+                addMessage({chatId, message: assistantMessage}),
+                incrementMessageUsageAction()
+            ]);
+        } catch (error) {
+            console.error('Assistant message save failed:', error);
+            errors.push('Failed to save assistant message');
+        }
+
+        return { success: errors.length === 0, errors };
+    } catch (error) {
+        console.error('Critical error in background operations:', error);
+        return { success: false, errors: ['Critical error in background operations'] };
+    }
+}
+
+export async function handleStreamingError({
+    chatId,
+    lastIncoming,
+    needsChatCreation
+}: {
+    chatId: string;
+    lastIncoming: UIMessage;
+    needsChatCreation: boolean;
+}): Promise<boolean> {
+    if (lastIncoming?.role !== 'user') return false;
+    
+    try {
+        if (needsChatCreation) {
+            await createChat({ chatId, title: "New Chat", visibility: Visibility.PRIVATE });
+        }
+        await addMessage({chatId, message: lastIncoming});
+        return true;
+    } catch (error) {
+        console.error('Failed to save user message after streaming error:', error);
         return false;
     }
 }

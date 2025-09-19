@@ -1,13 +1,9 @@
 import { streamText, UIMessage, convertToModelMessages, stepCountIs, StepResult, ToolSet } from 'ai';
 import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
-import { incrementMessageUsageAction } from '@/lib/usage/server';
-import { addMessage, createChat, getChatWithUsage, deleteAllMessagesAfter } from './action';
-import { generateTitleFromUserMessage } from '@/lib/chat';
-import { Visibility } from '@workspace/db';
+import { getChatWithUsage, handleChatCompletion, handleStreamingError } from './action';
 import { getSelectedModel } from '@/lib/models';
 
-// Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
@@ -46,47 +42,10 @@ export async function POST(req: Request) {
     }, { status: 429 });
   }
 
-  if (!chat) {
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage) {
-      setImmediate(async () => {
-        try {
-          const title = await generateTitleFromUserMessage({ message: lastMessage });
-          await createChat({ chatId, title, visibility: Visibility.PRIVATE });
-        } catch (error) {
-          console.error('Background chat creation failed:', error);
-        }
-      });
-    }
-  } else {
-    if (chat.userId !== session.user.id) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
-
   const lastIncoming = messages[messages.length - 1]!;
-  if (chat && lastIncoming?.role === 'user') {
-    const isDuplicateUser = chat.messages.some((m) => m.id === lastIncoming.id);
-    if (isDuplicateUser) {
-      setImmediate(async () => {
-        try {
-          await deleteAllMessagesAfter(chatId, lastIncoming.id);
-        } catch (error) {
-          console.error('Background message cleanup failed:', error);
-        }
-      });
-    }
-  }
-
-  if (lastIncoming?.role === 'user') {
-    setImmediate(async () => {
-      try {
-        await addMessage({chatId, message: lastIncoming});
-      } catch (error) {
-        console.error('Background user message storage failed:', error);
-      }
-    });
-  }
+  const needsChatCreation = !chat;
+  const needsMessageCleanup = Boolean(chat && lastIncoming?.role === 'user' && 
+    chat.messages.some((m) => m.id === lastIncoming.id));
 
   system += `- you are a helpful assistant that can answer questions and help with tasks and your model is ${selectedChatModel}`;
 
@@ -103,36 +62,46 @@ export async function POST(req: Request) {
     } as UIMessage);
   }
 
-  try {
-    const result = streamText({
-      model: getSelectedModel({model: selectedChatModel, provider: selectedChatProvider})!,
-      messages: convertToModelMessages(messages),
-      tools: tools,
-      stopWhen: stepCountIs(5),
-      system: system.trim() !== '' ? system : undefined,
-      onFinish: async (result: StepResult<ToolSet>) => {
-        try {
-          await Promise.all([
-            addMessage({chatId, message: {
-              role: 'assistant',
-              parts: result.content,
-              id: result.response.id,
-              createdAt: new Date(),
-            } as UIMessage}),
-            incrementMessageUsageAction()
-          ]);
-        } catch (error) {
-          console.error('Error storing assistant message:', error);
-        }
-      },
-    });
+  const result = streamText({
+    model: getSelectedModel({model: selectedChatModel, provider: selectedChatProvider})!,
+    messages: convertToModelMessages(messages),
+    tools: tools,
+    stopWhen: stepCountIs(5),
+    system: system.trim() !== '' ? system : undefined,
+    onFinish: async (result: StepResult<ToolSet>) => {
+      const assistantMessage = {
+        role: 'assistant' as const,
+        parts: result.content,
+        id: result.response.id,
+        createdAt: new Date(),
+      } as UIMessage;
 
-    return result.toUIMessageStreamResponse();
-  } catch (error) {
-    console.error('Error in streamText:', error);
-    return Response.json({ 
-      error: "Failed to generate response",
-      errorType: "STREAM_ERROR"
-    }, { status: 500 });
-  }
+      const { success, errors } = await handleChatCompletion({
+        chatId,
+        lastIncoming,
+        needsChatCreation,
+        needsMessageCleanup,
+        assistantMessage
+      });
+
+      if (!success) {
+        console.error('Background operations completed with errors:', errors);
+      }
+    },
+    onError: async (error) => {
+      console.error('Streaming error:', error);
+      
+      const saved = await handleStreamingError({
+        chatId,
+        lastIncoming,
+        needsChatCreation
+      });
+
+      if (!saved) {
+        console.error('Failed to save user message after streaming error');
+      }
+    }
+  });
+
+  return result.toUIMessageStreamResponse();
 }
