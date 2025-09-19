@@ -10,6 +10,19 @@ export async function GET(request: Request) {
         if (!session) {
             return Response.json({ error: "Unauthorized" }, { status: 401 });
         }
+
+        const url = new URL(request.url);
+        const page = parseInt(url.searchParams.get('page') || '1');
+        const limit = parseInt(url.searchParams.get('limit') || '20');
+        const offset = (page - 1) * limit;
+
+        // Get total count for pagination
+        const totalCount = await prisma.chat.count({
+            where: {
+                userId: session.user.id
+            }
+        });
+
         const chats: Chat[] = await prisma.chat.findMany({
             where: {
                 userId: session.user.id
@@ -17,9 +30,27 @@ export async function GET(request: Request) {
             orderBy: {
                 createdAt: "desc"
             },
+            skip: offset,
+            take: limit,
+            select: {
+                id: true,
+                title: true,
+                createdAt: true,
+                visibility: true,
+                userId: true,
+                lastContext: true
+            }
         });
 
-        return Response.json(chats);
+        const hasMore = offset + chats.length < totalCount;
+
+        return Response.json({
+            chats,
+            hasMore,
+            totalCount,
+            page,
+            limit
+        });
     } catch (error) {
         console.error("Error getting recent chats:", error);
         return Response.json({ error: "Internal server error" }, { status: 500 });
