@@ -39,7 +39,6 @@ export default function Chat() {
         const encodedSelectedModel = `&selectedModel=${encodeURIComponent(selectedModel?.model || '')}`;
         const encodedToggleWebSearch = `&toggleWebSearch=${encodeURIComponent(toggleWebSearch)}`;
         const encodedFileParts = fileParts ? `&fileParts=${encodeURIComponent(JSON.stringify(fileParts))}` : '';
-        console.log('encodedFileParts', encodedFileParts);
         if (encodedInput) {
           url += encodedInput;
         }

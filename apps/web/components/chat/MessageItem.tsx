@@ -20,7 +20,6 @@ type MessageItemProps = {
 
 export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, onRetry, isLastAssistant }: MessageItemProps) {
   const { data } = authClient.useSession();
-  console.log('message', message);
 
   return (
     <div className="flex flex-col gap-2">
