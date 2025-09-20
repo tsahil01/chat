@@ -3,6 +3,7 @@ import tools from '@/lib/tools';
 import { auth } from '@/lib/auth';
 import { getChatWithUsage, handleChatCompletion, handleStreamingError } from './action';
 import { getSelectedModel } from '@/lib/models';
+import { system_prompt } from '@/lib/prompts/system';
 
 export const maxDuration = 30;
 
@@ -13,13 +14,15 @@ export async function POST(req: Request) {
     messages,
     selectedChatModel,
     selectedChatProvider,
-    toggleWebSearch }:
+    toggleWebSearch,
+    timezone = 'UTC' }:
     {
       chatId: string,
       messages: UIMessage[],
       selectedChatModel: string,
       selectedChatProvider: string,
-      toggleWebSearch: boolean
+      toggleWebSearch: boolean,
+      timezone: string
     } = await req.json();
 
   const session = await auth.api.getSession({
@@ -47,7 +50,7 @@ export async function POST(req: Request) {
   const needsMessageCleanup = Boolean(chat && lastIncoming?.role === 'user' && 
     chat.messages.some((m) => m.id === lastIncoming.id));
 
-  system += `- you are a helpful assistant that can answer questions and help with tasks and your model is ${selectedChatModel}`;
+  system += system_prompt(selectedChatModel, timezone);
 
   if (toggleWebSearch) {
     system += `- You need to use the exaWebSearch tool for next user message. It does not matter what the user asks, you need to use the exaWebSearch tool.\n`;
