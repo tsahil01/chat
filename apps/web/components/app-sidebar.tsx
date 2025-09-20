@@ -22,6 +22,7 @@ import { useTheme } from "next-themes";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FiMessageCircle } from "react-icons/fi";
 import { PiPlusBold } from "react-icons/pi";
+import { LuWorkflow } from "react-icons/lu";
 
 
 export function AppSidebar() {
@@ -162,6 +163,14 @@ export function AppSidebar() {
                     <a href="/chats">
                       <FiMessageCircle className="h-4 w-4" />
                       <span>Chats</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="/integrations">
+                      <LuWorkflow className="h-4 w-4" />
+                      <span>Integrations</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
