@@ -63,7 +63,19 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
                   }
                 case 'tool-exaWebSearch':
                   return (
-                    <ToolPart key={`${message.id}-${i}`} part={part} messageId={message.id} partIndex={i} />
+                    <ToolPart key={`${message.id}-${i}`} toolName="Web Search" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-createCalendarEvent':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Create Calendar Event" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-listCalendarEvents':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="List Calendar Events" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-checkCalendarAvailability':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Check Calendar Availability" part={part} messageId={message.id} partIndex={i} />
                   );
                 case 'reasoning':
                   const reasoningKey = `${message.id}-${i}`;

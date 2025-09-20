@@ -76,6 +76,7 @@ export default function Page() {
             selectedChatModel: effectiveModel?.model,
             selectedChatProvider: effectiveModel?.provider,
             toggleWebSearch: effectiveToggle,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           },
         };
       },
