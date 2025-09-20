@@ -1,6 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { makeGitHubRequest, handleGitHubError } from './utils';
+import { makeGitHubRequestWithFallback, handleGitHubError } from './utils';
 
 export const getGitHubUserInfo = tool({
   description: 'Get GitHub user information',
@@ -10,7 +10,9 @@ export const getGitHubUserInfo = tool({
   execute: async ({ username }) => {
     try {
       const endpoint = username ? `/users/${username}` : '/user';
-      const user = await makeGitHubRequest(endpoint);
+      
+      // Try authenticated first, fallback to public if no auth
+      const user = await makeGitHubRequestWithFallback(endpoint);
 
       return `👤 **${user.name || user.login}**\n${user.bio ? `📝 ${user.bio}\n` : ''}🔗 ${user.html_url}\n📍 ${user.location || 'Location not set'}\n👥 ${user.followers} followers • ${user.following} following\n📂 ${user.public_repos} public repositories`;
     } catch (error: any) {
@@ -28,7 +30,9 @@ export const listGitHubFollowers = tool({
   execute: async ({ username, maxResults }) => {
     try {
       const endpoint = username ? `/users/${username}/followers` : '/user/followers';
-      const followers = await makeGitHubRequest(`${endpoint}?per_page=${maxResults}`);
+      
+      // Try authenticated first, fallback to public if no auth
+      const followers = await makeGitHubRequestWithFallback(`${endpoint}?per_page=${maxResults}`);
 
       if (!followers || followers.length === 0) {
         return `👥 No followers found${username ? ` for ${username}` : ''}.`;

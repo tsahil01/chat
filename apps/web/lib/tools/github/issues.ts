@@ -1,6 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { makeGitHubRequest, handleGitHubError } from './utils';
+import { makeGitHubRequest, makeGitHubRequestWithFallback, handleGitHubError } from './utils';
 
 export const listGitHubIssues = tool({
   description: 'List GitHub issues for a repository',
@@ -12,7 +12,8 @@ export const listGitHubIssues = tool({
   }),
   execute: async ({ owner, repo, state, maxResults }) => {
     try {
-      const issues = await makeGitHubRequest(`/repos/${owner}/${repo}/issues?state=${state}&per_page=${maxResults}`);
+      // Try authenticated first, fallback to public if no auth
+      const issues = await makeGitHubRequestWithFallback(`/repos/${owner}/${repo}/issues?state=${state}&per_page=${maxResults}`);
 
       if (!issues || issues.length === 0) {
         return `📋 No ${state} issues found in ${owner}/${repo}.`;
@@ -66,7 +67,8 @@ export const getGitHubIssue = tool({
   }),
   execute: async ({ owner, repo, issueNumber }) => {
     try {
-      const issue = await makeGitHubRequest(`/repos/${owner}/${repo}/issues/${issueNumber}`);
+      // Try authenticated first, fallback to public if no auth
+      const issue = await makeGitHubRequestWithFallback(`/repos/${owner}/${repo}/issues/${issueNumber}`);
 
       return `📋 **#${issue.number}** ${issue.title}\n\n${issue.body || 'No description'}\n\n👤 **Author:** ${issue.user.login}\n📅 **Created:** ${new Date(issue.created_at).toLocaleDateString()}\n🏷️ **State:** ${issue.state}\n${issue.labels.length > 0 ? `🏷️ **Labels:** ${issue.labels.map((label: any) => label.name).join(', ')}\n` : ''}🔗 ${issue.html_url}`;
     } catch (error: any) {

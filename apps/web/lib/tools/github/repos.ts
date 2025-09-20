@@ -1,6 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { makeGitHubRequest, handleGitHubError } from './utils';
+import { makeGitHubRequest, makeGitHubRequestWithFallback, handleGitHubError } from './utils';
 
 export const listGitHubRepos = tool({
   description: 'List user\'s GitHub repositories',
@@ -11,7 +11,8 @@ export const listGitHubRepos = tool({
   }),
   execute: async ({ maxResults, type, sort }) => {
     try {
-      const repos = await makeGitHubRequest(`/user/repos?type=${type}&sort=${sort}&per_page=${maxResults}`);
+      // Try authenticated first, fallback to public if no auth
+      const repos = await makeGitHubRequestWithFallback(`/user/repos?type=${type}&sort=${sort}&per_page=${maxResults}`);
 
       if (!repos || repos.length === 0) {
         return "📂 No repositories found.";
@@ -64,7 +65,8 @@ export const getGitHubRepoInfo = tool({
   }),
   execute: async ({ owner, repo }) => {
     try {
-      const repoData = await makeGitHubRequest(`/repos/${owner}/${repo}`);
+      // Try authenticated first, fallback to public if no auth
+      const repoData = await makeGitHubRequestWithFallback(`/repos/${owner}/${repo}`);
 
       return `📂 **${repoData.full_name}**\n${repoData.description || 'No description'}\n\n🔗 ${repoData.html_url}\n${repoData.private ? '🔒 Private' : '🌍 Public'} repository\n⭐ ${repoData.stargazers_count} stars\n🍴 ${repoData.forks_count} forks\n👁️ ${repoData.watchers_count} watchers\n\n📅 Created: ${new Date(repoData.created_at).toLocaleDateString()}\n📅 Updated: ${new Date(repoData.updated_at).toLocaleDateString()}\n📝 Language: ${repoData.language || 'Not specified'}`;
     } catch (error: any) {
