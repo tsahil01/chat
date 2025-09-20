@@ -44,7 +44,7 @@ export async function getCurrentUserGitHubAccount() {
   const githubAccount = await getGitHubTokens(session.user.id);
 
   if (!githubAccount || !githubAccount.accessToken) {
-    throw new Error("To use GitHub services, you need to link your GitHub account. Please use the 'Link GitHub Account' button to connect your GitHub account.");
+    throw new Error("To use GitHub services, you need to link your GitHub account. Please use the go to the integrations page and link your GitHub account.");
   }
 
   return { session, githubAccount };

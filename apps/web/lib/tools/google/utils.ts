@@ -45,7 +45,7 @@ export async function getCurrentUserGoogleAccount() {
   const googleAccount = await getGoogleTokens(session.user.id);
 
   if (!googleAccount) {
-    throw new Error("To use Google services, you need to link your Google account. Please use the 'Link Google Account' button to connect your Google Calendar.");
+    throw new Error("To use Google services, you need to link your Google account. Please use the go to the integrations page and link your Google account.");
   }
 
   return { session, googleAccount };
