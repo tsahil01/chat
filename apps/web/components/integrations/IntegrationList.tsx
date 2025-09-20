@@ -52,7 +52,7 @@ export function IntegrationList({ integrations, connectingProvider, onConnect, o
 
     return {
       ...integration,
-      isComingSoon: !['google'].includes(id) // Only Google is currently available
+      isComingSoon: !['google', 'github'].includes(id) // Only Google and GitHub are currently available
     };
   });
 
