@@ -77,6 +77,38 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
                   return (
                     <ToolPart key={`${message.id}-${i}`} toolName="Check Calendar Availability" part={part} messageId={message.id} partIndex={i} />
                   );
+                case 'tool-listGitHubRepos':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Repos" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-createGitHubRepo':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Create GitHub Repo" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-getGitHubRepoInfo':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub Repo Info" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-listGitHubIssues':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Issues" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-createGitHubIssue':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Create GitHub Issue" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-getGitHubIssue':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub Issue" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-getGitHubUserInfo':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub User Info" part={part} messageId={message.id} partIndex={i} />
+                  );
+                case 'tool-listGitHubFollowers':
+                  return (
+                    <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Followers" part={part} messageId={message.id} partIndex={i} />
+                  );
                 case 'reasoning':
                   const reasoningKey = `${message.id}-${i}`;
                   const collapsed = isReasoningCollapsed(reasoningKey);
