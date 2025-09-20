@@ -94,7 +94,6 @@ export default function Page() {
       
       // Handle different error types
       if (error.message?.includes('Monthly message limit exceeded')) {
-        // Try to parse error details if available
         let errorMessage = '⚠️ You have reached your message limit for the month. Please upgrade to a paid plan to continue using the app.';
         
         try {
@@ -115,14 +114,14 @@ export default function Page() {
       } else if (error.message?.includes('Failed to generate response')) {
         setMessages(prev => [...prev, {
           role: 'system',
-          parts: [{ type: 'text', text: '❌ Sorry, there was an error generating the response. Please try again.' }],
+          parts: [{ type: 'text', text: `⚠️ Sorry, there was an error generating the response. Please try again. \nError: ${error.message}` }],
           id: `error-${Date.now()}`,
           createdAt: new Date(),
         } as UIMessage]);
       } else {
         setMessages(prev => [...prev, {
           role: 'system',
-          parts: [{ type: 'text', text: '❌ An unexpected error occurred. Please try again.' }],
+          parts: [{ type: 'text', text: `⚠️ An unexpected error occurred. Please try again. \nError: ${error.message}` }],
           id: `error-${Date.now()}`,
           createdAt: new Date(),
         } as UIMessage]);
@@ -204,6 +203,15 @@ export default function Page() {
     try {
       if (!session) {
         setAuthOpen(true);
+        return;
+      }
+      if (fileParts && !selectedModel?.fileSupport) {
+        setMessages(prev => [...prev, {
+          role: 'system',
+          parts: [{ type: 'text', text: `⚠️ File upload is not supported for this model. Please try again with a different model.` }],
+          id: `error-${Date.now()}`,
+          createdAt: new Date(),
+        } as UIMessage]);
         return;
       }
       const inputToSend = input;

@@ -23,11 +23,16 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
 
   return (
     <div className="flex flex-col gap-2">
-      {message.attachments && message.attachments.map((attachment: FileUIPart, i: number) => {
-        return (
-          <FilePart key={`${message.id}-${i}`} attachment={attachment} messageId={message.id} partIndex={i} />
-        );
-      })}
+      {(() => {
+        const attachments = message.attachments && message.attachments.length > 0 
+          ? message.attachments 
+          : message.parts.filter(part => part.type === 'file');
+        return attachments.map((attachment: FileUIPart, i: number) => {
+          return (
+            <FilePart key={`${message.id}-${i}`} attachment={attachment} messageId={message.id} partIndex={i} />
+          );
+        });
+      })()}
     <div className="flex gap-2 sm:gap-3 items-start">
       {message.role === 'user' && (
         <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
