@@ -51,6 +51,43 @@ export async function getCurrentUserGitHubAccount() {
 }
 
 /**
+ * Make unauthenticated GitHub API request (for public data)
+ */
+export async function makePublicGitHubRequest(endpoint: string, options: RequestInit = {}) {
+  const response = await fetch(`https://api.github.com${endpoint}`, {
+    ...options,
+    headers: {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'YourApp/1.0',
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Try authenticated GitHub request first, fallback to public if no auth
+ */
+export async function makeGitHubRequestWithFallback(endpoint: string, options: RequestInit = {}) {
+  try {
+    // Try authenticated request first
+    return await makeGitHubRequest(endpoint, options);
+  } catch (error: any) {
+    // If auth fails (user not authenticated or no GitHub account), try public
+    if (error.message.includes('not authenticated') || error.message.includes('link your GitHub account')) {
+      return await makePublicGitHubRequest(endpoint, options);
+    }
+    // Re-throw other errors
+    throw error;
+  }
+}
+
+/**
  * Make authenticated GitHub API request
  */
 export async function makeGitHubRequest(endpoint: string, options: RequestInit = {}) {
