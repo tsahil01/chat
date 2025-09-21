@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 60; // cache on the server for 60s
 
 export async function GET(req: NextRequest) {

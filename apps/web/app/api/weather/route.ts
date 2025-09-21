@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 60; // 1 minute cache on the server
 
 function mapWeatherCodeToText(code: number): string {
