@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "cd ../../packages/database && pnpm db:generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
