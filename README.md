@@ -12,16 +12,17 @@ A modern chat application built with Next.js, shadcn/ui, and PostgreSQL.
 - **Monorepo**: Turborepo with pnpm workspaces
 
 ## Development
+
+1. **Set up environment variables:**
 ```bash
-cd apps/web
-cp .env.example .env
+# Copy the example environment file to root directory
+cp env.example .env
+
+# Edit .env with your actual values
+nano .env
 ```
 
-```bash
-cd packages/database
-cp .env.example .env
-```
-
+2. **Install dependencies and start development:**
 ```bash
 pnpm install
 pnpm dev

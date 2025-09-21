@@ -1,6 +1,6 @@
 'use client';
 
-import { FileUIPart, UIDataTypes, UITools } from 'ai';
+import { FileUIPart } from 'ai';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { TextPart } from '@/components/message-parts/text-part';
 import { ToolPart } from '@/components/message-parts/tool-part';
@@ -109,7 +109,7 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
                   return (
                     <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Followers" part={part} messageId={message.id} partIndex={i} />
                   );
-                case 'reasoning':
+                case 'reasoning': {
                   const reasoningKey = `${message.id}-${i}`;
                   const collapsed = isReasoningCollapsed(reasoningKey);
                   return (
@@ -122,6 +122,7 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
                       onToggle={onToggleReasoning}
                     />
                   );
+                }
                 default:
                   return null;
               }

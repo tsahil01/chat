@@ -2,9 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Button } from '@workspace/ui/components/button';
-import { Badge } from '@workspace/ui/components/badge';
-import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
-import { FiX } from 'react-icons/fi';
 
 interface Integration {
   id: string;

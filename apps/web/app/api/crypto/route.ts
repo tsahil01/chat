@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
 
     return new Response(JSON.stringify(data), { headers: { "content-type": "application/json" } });
   } catch (err) {
+    console.error("Route crypto error:", err);
     return new Response(JSON.stringify({ error: "server_error" }), { status: 500 });
   }
 }
