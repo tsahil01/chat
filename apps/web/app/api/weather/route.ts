@@ -68,6 +68,7 @@ export async function GET(req: NextRequest) {
       { headers: { "content-type": "application/json" } }
     );
   } catch (err) {
+    console.error("Route weather error:", err);
     return new Response(JSON.stringify({ error: "server_error" }), { status: 500 });
   }
 }

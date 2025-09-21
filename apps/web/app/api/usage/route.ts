@@ -2,9 +2,9 @@ import { auth } from "@/lib/auth";
 import { getCurrentMonth } from "@/lib/utils";
 import { prisma } from "@workspace/db";
 import { headers } from "next/headers";
-import { NextRequest } from "next/server";
+// import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         // Verify authentication
         const session = await auth.api.getSession({

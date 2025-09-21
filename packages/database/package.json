@@ -11,7 +11,8 @@
     },
     "dependencies": {
         "@prisma/client": "^6.16.1",
-        "@prisma/extension-accelerate": "^2.0.2"
+        "@prisma/extension-accelerate": "^2.0.2",
+        "dotenv": "^17.2.2"
     },
     "exports": {
         ".": "./src/index.ts"

@@ -5,7 +5,7 @@ import { prisma } from '@workspace/db';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { integrationId: string } }
+  { params }: { params: Promise<{ integrationId: string }> }
 ) {
   try {
     const session = await auth.api.getSession({
@@ -16,7 +16,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { integrationId } = params;
+    const { integrationId } = await params;
     const url = new URL(request.url);
     const accountId = url.searchParams.get('accountId');
 

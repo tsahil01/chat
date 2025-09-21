@@ -5,7 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { SidebarProvider, SidebarTrigger } from "@workspace/ui/components/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { getChatTitle } from "@/lib/chat"
-import { useParams, usePathname } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 

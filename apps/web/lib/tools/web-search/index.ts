@@ -2,7 +2,6 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import Exa from 'exa-js';
 import FirecrawlApp from '@mendable/firecrawl-js';
-import 'dotenv/config';
 
 export const exa = new Exa(process.env.EXA_API_KEY as string);
 
