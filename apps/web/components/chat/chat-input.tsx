@@ -3,7 +3,7 @@ import { Button } from '@workspace/ui/components/button';
 import { Textarea } from '@workspace/ui/components/textarea';
 import { Toggle } from '@workspace/ui/components/toggle';
 import { CiGlobe } from 'react-icons/ci';
-import { FaArrowTurnUp } from 'react-icons/fa6';
+import { FaArrowUp } from 'react-icons/fa6';
 import { SelectModel } from '@/components/select-model';
 import { models, Models } from '@/lib/models';
 import Upload from './upload';
@@ -49,7 +49,7 @@ export function ChatInput({
   
   return (
     <>
-    <div className="bg-muted/30 p-2 rounded-lg flex flex-col gap-3 border border-border">
+    <div className="bg-muted/30 rounded-lg flex flex-col border border-border">
       <div className="w-full">
         {(uploadingPreview || fileParts) && (
       <div className="rounded-lg mb-3 flex flex-row gap-2 flex-wrap">
@@ -81,10 +81,10 @@ export function ChatInput({
           onKeyDown={handleKeyDown}
           placeholder="Ask me anything..."
           disabled={isSubmitting}
-          className="py-3 text-sm sm:text-base bg-muted/30 dark:bg-muted/30 focus:bg-background dark:focus:bg-background resize-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent min-h-[60px] sm:min-h-[80px] max-h-[200px] sm:max-h-[300px]"
+          className="text-sm sm:text-base bg-muted/30 dark:bg-muted/30 focus:bg-muted/30 dark:focus:bg-muted/30 resize-none focus:outline-none focus:ring-0 border-none focus:border-none focus-visible:border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:shadow-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent shadow-none ring-0 outline-none min-h-[60px] sm:min-h-[80px] max-h-[200px] sm:max-h-[300px] rounded-t-lg rounded-b-none px-3 py-2"
         />
       </div>
-      <div className='flex flex-row justify-between items-center gap-2'>
+      <div className='flex flex-row justify-between items-center gap-2 p-2 my-auto'>
         <div className='flex flex-row gap-1 sm:gap-2 flex-wrap'>
           <Toggle pressed={toggleWebSearch} onPressedChange={setToggleWebSearch} size="sm">
             <CiGlobe className="w-4 h-4" />
@@ -96,19 +96,19 @@ export function ChatInput({
             setUploadingPreview={setUploadingPreview}
           />
         </div>
-        <div className="flex-shrink-0 flex flex-row gap-2">
+        <div className="flex-shrink-0 flex flex-row gap-2 my-auto">
         <SelectModel 
             models={models} 
             selectedModel={selectedModel!} 
             setSelectedModel={setSelectedModel} 
           />
           <Button 
-            className="hover:cursor-pointer" 
-            size={"icon"} 
+            className="hover:cursor-pointer my-auto" 
+            size='sm' 
             onClick={onSubmit}
             disabled={isSubmitting || isUploading}
           >
-            <FaArrowTurnUp className="w-4 h-4" />
+            <FaArrowUp className="my-auto" />
           </Button>
         </div>
       </div>

@@ -21,7 +21,7 @@ export function SelectModel({ models, selectedModel, setSelectedModel }: { model
                 <Button variant='ghost' className="justify-between min-w-[80px] max-w-[120px] sm:min-w-[100px] sm:max-w-[150px]">
                     <div className="flex items-center gap-1 sm:gap-2 truncate">
                         <LuCpu className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                        <span className="truncate text-xs sm:text-sm">{selectedModel?.displayName || "Model"}</span>
+                        <span className="truncate text-xs">{selectedModel?.displayName || "Model"}</span>
                     </div>
                     <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
                 </Button>
