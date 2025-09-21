@@ -87,3 +87,12 @@ export function handleGoogleError(error: any, operation: string): string {
   console.error(`Google ${operation} error:`, error);
   return `❌ Failed to ${operation}: ${error.message}`;
 }
+
+
+/**
+ * Create a Google Gmail client
+ */
+export function createGoogleGmailClient(googleAccount: { accessToken: string | null; refreshToken: string | null }) {
+  const oauth2Client = createGoogleOAuth2Client(googleAccount);
+  return google.gmail({ version: 'v1', auth: oauth2Client });
+}
