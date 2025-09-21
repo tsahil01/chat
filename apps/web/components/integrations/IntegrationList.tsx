@@ -20,13 +20,13 @@ interface IntegrationListProps {
 
 const INTEGRATION_CONFIG = {
   google: {
-    name: 'Google Calendar',
-    description: 'Create, view, and manage your Google Calendar events',
+    name: 'Google',
+    description: 'Create, view, and manage your Emails, Google Calendar events, and more',
     icon: <FiCalendar className="h-5 w-5" />
   },
   github: {
     name: 'GitHub',
-    description: 'Access your GitHub repositories and manage issues',
+    description: 'Access GitHub repositories, manage issues, pull requests, and more',
     icon: <FiGithub className="h-5 w-5" />
   },
   slack: {
