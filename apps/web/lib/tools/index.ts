@@ -2,8 +2,13 @@ import { ToolSet } from "ai";
 import { exaWebSearch } from "./web-search";
 import { 
   createCalendarEvent, 
+  deleteCalendarEvent,
   listCalendarEvents, 
-  checkCalendarAvailability 
+  checkCalendarAvailability,
+  listEmails,
+  getEmail,
+  searchEmails,
+  sendEmail
 } from "./google";
 
 import { 
@@ -14,7 +19,11 @@ import {
   createGitHubIssue, 
   getGitHubIssue,
   getGitHubUserInfo,
-  listGitHubFollowers
+  listGitHubFollowers,
+  listGitHubPullRequests,
+  createGitHubPullRequest,
+  getGitHubPullRequest,
+  viewCodeDiff
 } from "./github";
 
 const tools: ToolSet = {
@@ -23,8 +32,15 @@ const tools: ToolSet = {
   
   // Google Calendar
   createCalendarEvent,
+  deleteCalendarEvent,
   listCalendarEvents,
   checkCalendarAvailability,
+
+  // Google Email
+  // listEmails,
+  // getEmail,
+  // searchEmails,
+  // sendEmail,
   
   // GitHub Repositories
   listGitHubRepos,
@@ -39,6 +55,12 @@ const tools: ToolSet = {
   // GitHub Users
   getGitHubUserInfo,
   listGitHubFollowers,
+  
+  // GitHub Pull Requests
+  listGitHubPullRequests,
+  createGitHubPullRequest,
+  getGitHubPullRequest,
+  viewCodeDiff
 };
 
 export default tools;
