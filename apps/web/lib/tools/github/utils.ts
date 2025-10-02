@@ -3,22 +3,22 @@ import { headers } from 'next/headers';
 import { prisma } from '@workspace/db';
 
 /**
- * Get GitHub account tokens for a user
+ * Get GitHub integration tokens for a user
  */
 export async function getGitHubTokens(userId: string) {
-  const account = await prisma.account.findFirst({
+  const integration = await prisma.integration.findFirst({
     where: {
       userId: userId,
-      providerId: 'github'
+      name: 'github'
     },
     select: {
       accessToken: true,
       refreshToken: true,
-      accessTokenExpiresAt: true,
+      expiresAt: true,
     }
   });
 
-  return account;
+  return integration;
 }
 
 /**
@@ -37,17 +37,17 @@ export async function getCurrentSession() {
 }
 
 /**
- * Get GitHub account for the current user
+ * Get GitHub integration for the current user
  */
 export async function getCurrentUserGitHubAccount() {
   const session = await getCurrentSession();
-  const githubAccount = await getGitHubTokens(session.user.id);
+  const githubIntegration = await getGitHubTokens(session.user.id);
 
-  if (!githubAccount || !githubAccount.accessToken) {
-    throw new Error("To use GitHub services, you need to link your GitHub account. Please use the go to the integrations page and link your GitHub account.");
+  if (!githubIntegration || !githubIntegration.accessToken) {
+    throw new Error("To use GitHub services, you need to link your GitHub account. Please go to the integrations page and link your GitHub account.");
   }
 
-  return { session, githubAccount };
+  return { session, githubAccount: githubIntegration };
 }
 
 /**
