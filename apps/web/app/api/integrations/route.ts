@@ -13,52 +13,50 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get all connected accounts for the user
-    const accounts = await prisma.account.findMany({
+    // Get all integrations for the user
+    const integrationsRaw = await prisma.integration.findMany({
       where: {
         userId: session.user.id
       },
       select: {
         id: true,
-        providerId: true,
+        name: true, // provider name, e.g. "google", "github"
+        email: true,
         accessToken: true,
         refreshToken: true,
-        accessTokenExpiresAt: true,
+        expiresAt: true,
         createdAt: true,
-        user: {
-          select: {
-            name: true,
-            email: true
-          }
-        }
       }
     });
 
-    // Group accounts by provider
-    const accountsByProvider = accounts.reduce((acc, account) => {
-      if (!acc[account.providerId]) {
-        acc[account.providerId] = [];
-      }
-      acc[account.providerId]!.push(account);
+    // Group integrations by provider name
+    const byProvider = integrationsRaw.reduce((acc, integ) => {
+      const key = integ.name;
+      if (!acc[key]) acc[key] = [] as typeof integrationsRaw;
+      acc[key]!.push(integ);
       return acc;
-    }, {} as Record<string, typeof accounts>);
+    }, {} as Record<string, typeof integrationsRaw>);
 
-    // Transform into integration format
-    const integrations = Object.entries(accountsByProvider).map(([providerId, accounts]) => ({
-      id: providerId,
-      name: getProviderName(providerId),
-      connected: true,
-      accountCount: accounts.length,
-      lastConnected: accounts[0]?.createdAt.toISOString(),
-      status: accounts.some(acc => acc.accessToken) ? 'connected' : 'disconnected',
-      accounts: accounts.map(account => ({
-        id: account.id,
-        email: account.user.email || 'Unknown',
-        name: account.user.name || 'Unknown',
-        connectedAt: account.createdAt.toISOString(),
-        status: account.accessToken ? 'active' : 'expired'
-      }))
-    }));
+    // Transform into UI-friendly integration format
+    const integrations = Object.entries(byProvider).map(([providerId, records]) => {
+      const accountItems = records.map((r) => ({
+        id: r.id,
+        email: r.email || 'Unknown',
+        name: r.email || 'Unknown',
+        connectedAt: r.createdAt.toISOString(),
+        status: r.accessToken ? 'active' : 'expired'
+      }));
+
+      return {
+        id: providerId,
+        name: getProviderName(providerId),
+        connected: accountItems.length > 0,
+        accountCount: accountItems.length,
+        lastConnected: records[0]?.createdAt.toISOString(),
+        status: accountItems.some(a => a.status === 'active') ? 'connected' : 'disconnected',
+        accounts: accountItems,
+      };
+    });
 
     return NextResponse.json({
       success: true,
