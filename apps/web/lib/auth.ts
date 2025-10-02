@@ -23,26 +23,10 @@ export const auth = betterAuth({
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      scope: [
-        "user",
-        "repo",
-        "user:email",
-      ],
     },
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      scope: [
-        "openid",
-        "email", 
-        "profile",
-        "https://www.googleapis.com/auth/calendar",
-        "https://www.googleapis.com/auth/calendar.events",
-        "https://www.googleapis.com/auth/gmail.readonly",
-        "https://www.googleapis.com/auth/gmail.send"
-      ],
-      accessType: "offline",
-      prompt: "consent"
     },
   },
   plugins: [
@@ -53,7 +37,7 @@ export const auth = betterAuth({
         checkout({
           products: [
             {
-              productId: "pdt_fAe6bSikOk5lUcnEAEvFY",
+              productId: process.env.DODO_PAYMENTS_PRO_PLAN_ID as string,
               slug: "pro-plan",
             },
           ],
