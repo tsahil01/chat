@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { authClient } from '@/lib/auth-client';
+import { integrationAuthClient } from '@/lib/auth-client';
 import { User } from 'better-auth';
 import { IntegrationList } from '@/components/integrations/IntegrationList';
 import { SuccessMessage } from '@/components/integrations/SuccessMessage';
@@ -24,7 +24,7 @@ export default function IntegrationsPage() {
   useEffect(() => {
     async function getSession() {
       try {
-        const { data: session } = await authClient.getSession();
+        const { data: session } = await integrationAuthClient.getSession();
         setUser(session?.user || null);
       } catch (error) {
         console.error('Error getting session:', error);

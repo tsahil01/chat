@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { authClient } from '@/lib/auth-client';
+import { integrationAuthClient } from '@/lib/auth-client';
 
 interface Integration {
   id: string;
@@ -44,7 +44,7 @@ export function useIntegrations() {
   const linkAccount = async (provider: string) => {
     setConnectingProvider(provider);
     try {
-      await authClient.linkSocial({
+      await integrationAuthClient.linkSocial({
         provider, 
         callbackURL: `/integrations?linked=success&provider=${provider}`
       });
