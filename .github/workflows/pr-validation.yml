@@ -44,3 +44,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          EXASEARCH_API_KEY: ${{ secrets.EXASEARCH_API_KEY }}
