@@ -7,7 +7,7 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@workspace/ui/components/avatar";
-import { MdCheck, MdUpgrade, MdLogout } from "react-icons/md";
+import { MdCheck, MdUpgrade, MdLogout, MdManageAccounts } from "react-icons/md";
 import { PopoverContent } from "@workspace/ui/components/popover";
 import { MenuSection } from "./user-menu/MenuSection";
 import { UsageBar } from "./user-menu/UsageBar";
@@ -15,6 +15,7 @@ import { settingsItems, helpItems } from "./user-menu/config";
 import { useUserPlan } from "@/hooks/useUserPlan";
 import { useUserUsage } from "@/hooks/useUserUsage";
 import { UpgradeDialog } from "./upgrade-dialog";
+import { redirectToCustomerPortal } from "@/lib/payments/client";
 
 export function UserMenu({
   user,
@@ -81,11 +82,19 @@ export function UserMenu({
                 }
               />
               <button
-                onClick={() => setUpgradeDialogOpen(true)}
+                onClick={() =>
+                  isPro
+                    ? redirectToCustomerPortal()
+                    : setUpgradeDialogOpen(true)
+                }
                 className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 my-1 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
               >
-                <MdUpgrade className="h-4 w-4" />
-                <span>Upgrade plan</span>
+                {isPro ? (
+                  <MdManageAccounts className="h-4 w-4" />
+                ) : (
+                  <MdUpgrade className="h-4 w-4" />
+                )}
+                <span>{isPro ? "Manage plan" : "Upgrade plan"}</span>
               </button>
               <MenuSection items={settingsItems} />
             </div>
