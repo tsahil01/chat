@@ -18,7 +18,7 @@ export async function POST(
 
     const { integrationId } = await params;
 
-    let integration = await prisma.integration.findUnique({
+    const integration = await prisma.integration.findUnique({
       where: { id: integrationId },
     });
 
