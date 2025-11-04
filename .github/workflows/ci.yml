@@ -46,6 +46,16 @@ jobs:
       - name: Lint & Fix
         run: pnpm lint -- --fix
 
+      - name: Commit and push changes
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-format code with prettier and lint"
+          file_pattern: "*.ts *.tsx *.md"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          push_options: '--force'
+
       - name: Type Check
         run: pnpm turbo run check-types
 
@@ -95,13 +105,3 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db  # ggignore
           EXASEARCH_API_KEY: dummy_key_for_ci  # ggignore
           FIRECRAWL_API_KEY: dummy_key_for_ci  # ggignore
-
-      - name: Commit and push changes
-        if: always()
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-format code with prettier and lint"
-          file_pattern: "*.ts *.tsx *.md"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-          push_options: '--force'
