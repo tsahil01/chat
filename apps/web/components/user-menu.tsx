@@ -21,7 +21,7 @@ export function UserMenu({ user, onLogout }: { user: User; onLogout: () => void 
       <>
         <Popover>
           <PopoverTrigger asChild>
-            <SidebarMenuButton className="w-full hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+            <SidebarMenuButton className="w-full hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
               <Avatar className="h-6 w-6">
                 <AvatarImage src={user?.image || ""} />
                 <AvatarFallback className="text-xs">{user?.name?.charAt(0)}</AvatarFallback>
@@ -60,7 +60,7 @@ export function UserMenu({ user, onLogout }: { user: User; onLogout: () => void 
                 />
                 <button
                   onClick={() => setUpgradeDialogOpen(true)}
-                  className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 my-1 text-sm hover:bg-accent hover:text-accent-foreground"
+                  className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 my-1 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 >
                   <MdUpgrade className="h-4 w-4" />
                   <span>Upgrade plan</span>
@@ -75,7 +75,7 @@ export function UserMenu({ user, onLogout }: { user: User; onLogout: () => void 
               <div className="border-t py-2">
                 <button
                   onClick={onLogout}
-                  className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                  className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 >
                   <MdLogout className="h-4 w-4" />
                   <span>Log out</span>

@@ -23,7 +23,7 @@ export function AuthDialog({
       <Dialog open={open} onOpenChange={onOpenChange}>
         {showTrigger && (
           <DialogTrigger asChild>
-            <Button variant="ghost" className="w-full justify-start">
+            <Button variant="ghost" className="w-full justify-start cursor-pointer">
               <MdLogin className="h-4 w-4" />
               <span>Login</span>
             </Button>

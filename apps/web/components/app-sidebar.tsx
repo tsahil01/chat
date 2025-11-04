@@ -23,6 +23,7 @@ import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FiMessageCircle } from "react-icons/fi";
 import { PiPlusBold } from "react-icons/pi";
 import { LuWorkflow } from "react-icons/lu";
+import Link from "next/link";
 
 
 export function AppSidebar() {
@@ -143,9 +144,11 @@ export function AppSidebar() {
     <Sidebar variant="floating">
       <SidebarContent className="overflow-hidden">
         {/* Header */}
-        <div className="p-3 border-b border-sidebar-border">
-          <h1 className="text-base font-semibold">AI Chat</h1>
-        </div>
+        <Link href="/">
+          <div className="p-3 border-b border-sidebar-border">
+            <h1 className="text-base font-semibold">AI Chat</h1>
+          </div>
+        </Link>
         <div>
           <SidebarGroup>
             <SidebarGroupContent>
@@ -246,7 +249,7 @@ export function AppSidebar() {
               </div>
               <button
                 aria-label="Toggle theme"
-                className="shrink-0 rounded p-2 text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                className="shrink-0 rounded p-2 text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
                 {theme === "dark" ? (
