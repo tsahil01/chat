@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 3600; // 1 hour
 
 export async function GET(req: NextRequest) {
@@ -9,11 +9,14 @@ export async function GET(req: NextRequest) {
     const lat = searchParams.get("lat");
     const lon = searchParams.get("lon");
     if (!lat || !lon) {
-      return new Response(JSON.stringify({ error: "lat and lon are required" }), { status: 400 });
+      return new Response(
+        JSON.stringify({ error: "lat and lon are required" }),
+        { status: 400 },
+      );
     }
 
     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(
-      lat
+      lat,
     )}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`;
 
     const res = await fetch(url, {
@@ -25,23 +28,36 @@ export async function GET(req: NextRequest) {
     });
 
     if (!res.ok) {
-      return new Response(JSON.stringify({ error: "lookup_failed" }), { status: 502 });
+      return new Response(JSON.stringify({ error: "lookup_failed" }), {
+        status: 502,
+      });
     }
 
     const data = await res.json();
     const address = data?.address || {};
-    const city = address.city || address.town || address.village || address.hamlet || address.county || "";
+    const city =
+      address.city ||
+      address.town ||
+      address.village ||
+      address.hamlet ||
+      address.county ||
+      "";
     const state = address.state || address.region || "";
     const country = address.country || "";
 
     return new Response(
-      JSON.stringify({ city, state, country, displayName: data?.display_name || "" }),
-      { headers: { "content-type": "application/json" } }
+      JSON.stringify({
+        city,
+        state,
+        country,
+        displayName: data?.display_name || "",
+      }),
+      { headers: { "content-type": "application/json" } },
     );
   } catch (err) {
     console.error("Route location reverse error:", err);
-    return new Response(JSON.stringify({ error: "server_error" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "server_error" }), {
+      status: 500,
+    });
   }
 }
-
-

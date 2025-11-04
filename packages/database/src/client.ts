@@ -1,11 +1,11 @@
 import { PrismaClient } from "../generated/prisma";
-import { withAccelerate } from '@prisma/extension-accelerate';
-import { config } from 'dotenv';
-import { resolve } from 'path';
+import { withAccelerate } from "@prisma/extension-accelerate";
+import { config } from "dotenv";
+import { resolve } from "path";
 
 // Load environment variables from root directory
 // Always load .env in development and build, Vercel will provide env vars in production
-config({ path: resolve(process.cwd(), '../../.env') });
+config({ path: resolve(process.cwd(), "../../.env") });
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 

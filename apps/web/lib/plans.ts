@@ -29,5 +29,5 @@ export const plans: Plan[] = [
 ];
 
 export const getPlanById = (id: string): Plan | undefined => {
-  return plans.find(plan => plan.id === id);
+  return plans.find((plan) => plan.id === id);
 };

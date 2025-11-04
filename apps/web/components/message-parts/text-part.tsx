@@ -14,8 +14,8 @@ export function TextPart({ text, messageId, partIndex }: TextPartProps) {
   return (
     <div key={`${messageId}-${partIndex}`} className="max-w-none">
       {parts.map((part, index) => {
-        if (part.type === 'code') {
-          const language = part.language || 'text';
+        if (part.type === "code") {
+          const language = part.language || "text";
           const filename = `code.${language}`;
 
           return (

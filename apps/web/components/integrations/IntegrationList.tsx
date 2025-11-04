@@ -1,14 +1,19 @@
-'use client';
+"use client";
 
-import { IntegrationCard } from './IntegrationCard';
-import { FiCalendar, FiGithub, FiMessageSquare, FiFileText } from 'react-icons/fi';
+import { IntegrationCard } from "./IntegrationCard";
+import {
+  FiCalendar,
+  FiGithub,
+  FiMessageSquare,
+  FiFileText,
+} from "react-icons/fi";
 
 interface Integration {
   id: string;
   name: string;
   connected: boolean;
   accountCount?: number;
-  status: 'connected' | 'disconnected';
+  status: "connected" | "disconnected";
 }
 
 interface IntegrationListProps {
@@ -20,41 +25,50 @@ interface IntegrationListProps {
 
 const INTEGRATION_CONFIG = {
   google: {
-    name: 'Google',
-    description: 'Create, view, and manage your Emails, Google Calendar events, and more',
-    icon: <FiCalendar className="h-5 w-5" />
+    name: "Google",
+    description:
+      "Create, view, and manage your Emails, Google Calendar events, and more",
+    icon: <FiCalendar className="h-5 w-5" />,
   },
   github: {
-    name: 'GitHub',
-    description: 'Access GitHub repositories, manage issues, pull requests, and more',
-    icon: <FiGithub className="h-5 w-5" />
+    name: "GitHub",
+    description:
+      "Access GitHub repositories, manage issues, pull requests, and more",
+    icon: <FiGithub className="h-5 w-5" />,
   },
   slack: {
-    name: 'Slack',
-    description: 'Send messages and manage your Slack workspace',
-    icon: <FiMessageSquare className="h-5 w-5" />
+    name: "Slack",
+    description: "Send messages and manage your Slack workspace",
+    icon: <FiMessageSquare className="h-5 w-5" />,
   },
   notion: {
-    name: 'Notion',
-    description: 'Sync your Notion pages and databases',
-    icon: <FiFileText className="h-5 w-5" />
-  }
+    name: "Notion",
+    description: "Sync your Notion pages and databases",
+    icon: <FiFileText className="h-5 w-5" />,
+  },
 };
 
-export function IntegrationList({ integrations, connectingProvider, onConnect, onDisconnect }: IntegrationListProps) {
-  const availableIntegrations = Object.entries(INTEGRATION_CONFIG).map(([id, config]) => {
-    const integration = integrations.find(i => i.id === id) || {
-      id,
-      name: config.name,
-      connected: false,
-      status: 'disconnected' as const
-    };
+export function IntegrationList({
+  integrations,
+  connectingProvider,
+  onConnect,
+  onDisconnect,
+}: IntegrationListProps) {
+  const availableIntegrations = Object.entries(INTEGRATION_CONFIG).map(
+    ([id, config]) => {
+      const integration = integrations.find((i) => i.id === id) || {
+        id,
+        name: config.name,
+        connected: false,
+        status: "disconnected" as const,
+      };
 
-    return {
-      ...integration,
-      isComingSoon: !['google', 'github'].includes(id) // Only Google and GitHub are currently available
-    };
-  });
+      return {
+        ...integration,
+        isComingSoon: !["google", "github"].includes(id), // Only Google and GitHub are currently available
+      };
+    },
+  );
 
   return (
     <div className="space-y-4">
@@ -64,8 +78,16 @@ export function IntegrationList({ integrations, connectingProvider, onConnect, o
           <IntegrationCard
             key={integration.id}
             integration={integration}
-            icon={INTEGRATION_CONFIG[integration.id as keyof typeof INTEGRATION_CONFIG]?.icon}
-            description={INTEGRATION_CONFIG[integration.id as keyof typeof INTEGRATION_CONFIG]?.description || ''}
+            icon={
+              INTEGRATION_CONFIG[
+                integration.id as keyof typeof INTEGRATION_CONFIG
+              ]?.icon
+            }
+            description={
+              INTEGRATION_CONFIG[
+                integration.id as keyof typeof INTEGRATION_CONFIG
+              ]?.description || ""
+            }
             connectingProvider={connectingProvider}
             onConnect={onConnect}
             onDisconnect={onDisconnect}

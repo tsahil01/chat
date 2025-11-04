@@ -1,13 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { SidebarProvider, SidebarTrigger } from "@workspace/ui/components/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { getChatTitle } from "@/lib/chat"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
-
+import * as React from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import {
+  SidebarProvider,
+  SidebarTrigger,
+} from "@workspace/ui/components/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { getChatTitle } from "@/lib/chat";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const params = useParams();
@@ -61,11 +63,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <main className="flex-1">
           <div className="flex flex-row items-center gap-2 p-4">
             <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
-            <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">{displayedTitle || title}</h1>
+            <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
+              {displayedTitle || title}
+            </h1>
           </div>
           {children}
         </main>
       </SidebarProvider>
     </NextThemesProvider>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
-import { Button } from '@workspace/ui/components/button';
-import { X } from 'lucide-react';
+import Image from "next/image";
+import { Spinner } from "@workspace/ui/components/ui/shadcn-io/spinner";
+import { Button } from "@workspace/ui/components/button";
+import { X } from "lucide-react";
 
 export default function ImageSquarePreview({
   src,
@@ -50,5 +50,3 @@ export default function ImageSquarePreview({
     </div>
   );
 }
-
-

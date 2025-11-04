@@ -1,29 +1,30 @@
-import { Geist, Geist_Mono } from "next/font/google"
-import { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google";
+import { Metadata } from "next";
 
-import "@workspace/ui/globals.css"
-import { Providers } from "@/components/providers"
-import { Analytics } from "@vercel/analytics/next"
+import "@workspace/ui/globals.css";
+import { Providers } from "@/components/providers";
+import { Analytics } from "@vercel/analytics/next";
 
 const fontSans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
-})
+});
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-})
+});
 
 const metadata: Metadata = {
   title: "AI Chat",
-  description: "AI Chat is a chatbot that can answer questions and help with tasks.",
-}
+  description:
+    "AI Chat is a chatbot that can answer questions and help with tasks.",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -38,5 +39,5 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  )
+  );
 }

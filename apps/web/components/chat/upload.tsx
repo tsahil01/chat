@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { upload } from '@vercel/blob/client';
-import { Button } from '@workspace/ui/components/button';
-import { FileUIPart } from 'ai';
-import { Paperclip } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { upload } from "@vercel/blob/client";
+import { Button } from "@workspace/ui/components/button";
+import { FileUIPart } from "ai";
+import { Paperclip } from "lucide-react";
+import { useRef, useState } from "react";
 
 export default function Upload({
   fileParts,
@@ -20,7 +20,9 @@ export default function Upload({
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -31,19 +33,27 @@ export default function Upload({
 
     try {
       const blob = await upload(file.name, file, {
-        access: 'public',
-        handleUploadUrl: '/api/upload',
+        access: "public",
+        handleUploadUrl: "/api/upload",
       });
 
-      setFileParts([...(fileParts || []), { url: blob.url, type: 'file', mediaType: blob.contentType, filename: file.name }]);
+      setFileParts([
+        ...(fileParts || []),
+        {
+          url: blob.url,
+          type: "file",
+          mediaType: blob.contentType,
+          filename: file.name,
+        },
+      ]);
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error("Upload failed:", error);
     } finally {
       setIsUploading(false);
       setUploadingPreview(null);
       if (objectUrl) URL.revokeObjectURL(objectUrl);
       // reset input to allow same file re-upload
-      if (inputFileRef.current) inputFileRef.current.value = '';
+      if (inputFileRef.current) inputFileRef.current.value = "";
     }
   };
 

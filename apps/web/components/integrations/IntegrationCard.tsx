@@ -1,14 +1,20 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
-import { Button } from '@workspace/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
+import { Button } from "@workspace/ui/components/button";
 
 interface Integration {
   id: string;
   name: string;
   connected: boolean;
   accountCount?: number;
-  status: 'connected' | 'disconnected';
+  status: "connected" | "disconnected";
 }
 
 interface IntegrationCardProps {
@@ -28,7 +34,7 @@ export function IntegrationCard({
   connectingProvider,
   onConnect,
   onDisconnect,
-  isComingSoon = false
+  isComingSoon = false,
 }: IntegrationCardProps) {
   const isConnecting = connectingProvider === integration.id;
   return (
@@ -38,32 +44,32 @@ export function IntegrationCard({
           {icon}
           {integration.name}
         </CardTitle>
-        <CardDescription>
-          {description}
-        </CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Button
+              className="cursor-pointer"
               variant={integration.connected ? "outline" : "default"}
               size="sm"
               onClick={() => onConnect(integration.id)}
               disabled={isConnecting || isComingSoon}
             >
-               {integration.connected ? 'Re-link' : 'Connect'}
+              {integration.connected ? "Re-link" : "Connect"}
             </Button>
-          {integration.connected && !isComingSoon && (
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => onDisconnect(integration.id)}
-              >
-                Disconnect
-              </Button>
-            </div>
-          )}
+            {integration.connected && !isComingSoon && (
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <Button
+                  className="cursor-pointer"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => onDisconnect(integration.id)}
+                >
+                  Disconnect
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

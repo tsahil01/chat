@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { UIDataTypes, UIMessage, UITools } from 'ai';
-import { RefObject } from 'react';
-import { MessageItem } from '@/components/chat/MessageItem';
+import { UIDataTypes, UIMessage, UITools } from "ai";
+import { RefObject } from "react";
+import { MessageItem } from "@/components/chat/MessageItem";
 
 type MessageListProps = {
   messages: UIMessage<unknown, UIDataTypes, UITools>[];
@@ -12,8 +12,16 @@ type MessageListProps = {
   chatEndRef: RefObject<HTMLDivElement | null>;
 };
 
-export function MessageList({ messages, isReasoningCollapsed, onToggleReasoning, onRetry, chatEndRef }: MessageListProps) {
-  const lastAssistantId = [...messages].reverse().find((m) => m.role === 'assistant')?.id;
+export function MessageList({
+  messages,
+  isReasoningCollapsed,
+  onToggleReasoning,
+  onRetry,
+  chatEndRef,
+}: MessageListProps) {
+  const lastAssistantId = [...messages]
+    .reverse()
+    .find((m) => m.role === "assistant")?.id;
 
   return (
     <div className="space-y-6">
@@ -24,12 +32,12 @@ export function MessageList({ messages, isReasoningCollapsed, onToggleReasoning,
           isReasoningCollapsed={isReasoningCollapsed}
           onToggleReasoning={onToggleReasoning}
           onRetry={onRetry}
-          isLastAssistant={message.role === 'assistant' && message.id === lastAssistantId}
+          isLastAssistant={
+            message.role === "assistant" && message.id === lastAssistantId
+          }
         />
       ))}
       <div ref={chatEndRef} />
     </div>
   );
 }
-
-

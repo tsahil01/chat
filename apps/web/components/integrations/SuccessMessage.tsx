@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { FiCheck } from 'react-icons/fi';
+import { FiCheck } from "react-icons/fi";
 
 interface SuccessMessageProps {
   show: boolean;

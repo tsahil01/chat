@@ -1,35 +1,35 @@
 import { ToolSet } from "ai";
 import { exaWebSearch } from "./web-search";
-import { 
-  createCalendarEvent, 
+import {
+  createCalendarEvent,
   deleteCalendarEvent,
-  listCalendarEvents, 
+  listCalendarEvents,
   checkCalendarAvailability,
   listEmails,
   getEmail,
   searchEmails,
-  sendEmail
+  sendEmail,
 } from "./google";
 
-import { 
-  listGitHubRepos, 
-  createGitHubRepo, 
+import {
+  listGitHubRepos,
+  createGitHubRepo,
   getGitHubRepoInfo,
-  listGitHubIssues, 
-  createGitHubIssue, 
+  listGitHubIssues,
+  createGitHubIssue,
   getGitHubIssue,
   getGitHubUserInfo,
   listGitHubFollowers,
   listGitHubPullRequests,
   createGitHubPullRequest,
   getGitHubPullRequest,
-  viewCodeDiff
+  viewCodeDiff,
 } from "./github";
 
 const tools: ToolSet = {
   // Web search
   exaWebSearch,
-  
+
   // Google Calendar
   createCalendarEvent,
   deleteCalendarEvent,
@@ -41,26 +41,26 @@ const tools: ToolSet = {
   // getEmail,
   // searchEmails,
   // sendEmail,
-  
+
   // GitHub Repositories
   listGitHubRepos,
   createGitHubRepo,
   getGitHubRepoInfo,
-  
+
   // GitHub Issues
   listGitHubIssues,
   createGitHubIssue,
   getGitHubIssue,
-  
+
   // GitHub Users
   getGitHubUserInfo,
   listGitHubFollowers,
-  
+
   // GitHub Pull Requests
   listGitHubPullRequests,
   createGitHubPullRequest,
   getGitHubPullRequest,
-  viewCodeDiff
+  viewCodeDiff,
 };
 
 export default tools;

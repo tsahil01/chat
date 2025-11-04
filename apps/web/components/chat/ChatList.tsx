@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Card, CardContent } from '@workspace/ui/components/card';
-import { Button } from '@workspace/ui/components/button';
-import { Skeleton } from '@workspace/ui/components/skeleton';
-import { Badge } from '@workspace/ui/components/badge';
+import { Card, CardContent } from "@workspace/ui/components/card";
+import { Button } from "@workspace/ui/components/button";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Badge } from "@workspace/ui/components/badge";
 
 interface Chat {
   id: string;
   title: string;
   createdAt: string;
-  visibility: 'PUBLIC' | 'PRIVATE';
+  visibility: "PUBLIC" | "PRIVATE";
 }
 
 interface ChatListProps {
@@ -31,19 +31,26 @@ export function ChatList({
   onNewChat,
   onRetry,
   emptyMessage = "No conversations yet. Start a new chat to get going!",
-  emptyActionText = "Start Your First Chat"
+  emptyActionText = "Start Your First Chat",
 }: ChatListProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-    
+
     if (diffInHours < 24) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } else if (diffInHours < 24 * 7) {
-      return date.toLocaleDateString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleDateString([], {
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } else {
-      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString([], { month: "short", day: "numeric" });
     }
   };
 
@@ -98,8 +105,8 @@ export function ChatList({
   return (
     <div className="space-y-2">
       {chats.map((chat) => (
-        <Card 
-          key={chat.id} 
+        <Card
+          key={chat.id}
           className="cursor-pointer hover:bg-muted/50 transition-colors"
           onClick={() => onChatClick(chat.id)}
         >

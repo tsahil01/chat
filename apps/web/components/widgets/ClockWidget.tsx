@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
 import { SlidingNumber } from "@workspace/ui/components/sliding-number";
 
 function formatTime(date: Date, timeZone?: string) {
@@ -19,7 +24,10 @@ function formatTime(date: Date, timeZone?: string) {
 }
 
 export function ClockWidget({ className }: { className?: string }) {
-  const browserTimeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+  const browserTimeZone = useMemo(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
+    [],
+  );
   const [now, setNow] = useState<Date>(new Date());
   const [city, setCity] = useState<string>("");
   const regionFallback = useMemo(() => {
@@ -38,20 +46,24 @@ export function ClockWidget({ className }: { className?: string }) {
       async (pos) => {
         const { latitude, longitude } = pos.coords;
         try {
-          const res = await fetch(`/api/location/reverse?lat=${latitude}&lon=${longitude}`, { cache: "no-store" });
+          const res = await fetch(
+            `/api/location/reverse?lat=${latitude}&lon=${longitude}`,
+            { cache: "no-store" },
+          );
           if (res.ok) {
             const json = await res.json();
             setCity(json.city || json.state || json.country || "");
           }
-        } catch { }
+        } catch {}
       },
       () => {},
-      { enableHighAccuracy: false, timeout: 3000 }
+      { enableHighAccuracy: false, timeout: 3000 },
     );
   }, []);
 
   const timeText = formatTime(now, browserTimeZone);
-  const [hourStr = "00", minuteStr = "00", secondStr = "00"] = timeText.split(":");
+  const [hourStr = "00", minuteStr = "00", secondStr = "00"] =
+    timeText.split(":");
   const hour = parseInt(hourStr, 10) || 0;
   const minute = parseInt(minuteStr, 10) || 0;
   const second = parseInt(secondStr, 10) || 0;
@@ -74,7 +86,9 @@ export function ClockWidget({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-sm text-muted-foreground">{city || regionFallback}</div>
+          <div className="text-sm text-muted-foreground">
+            {city || regionFallback}
+          </div>
           <div className="text-2xl sm:text-3xl font-semibold tabular-nums flex items-center gap-1">
             <SlidingNumber value={hour} padStart />
             <span>:</span>
@@ -82,7 +96,9 @@ export function ClockWidget({ className }: { className?: string }) {
             <span>:</span>
             <SlidingNumber value={second} padStart />
           </div>
-          <div className="text-xs sm:text-sm text-muted-foreground">{dayDate}</div>
+          <div className="text-xs sm:text-sm text-muted-foreground">
+            {dayDate}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -90,5 +106,3 @@ export function ClockWidget({ className }: { className?: string }) {
 }
 
 export default ClockWidget;
-
-
