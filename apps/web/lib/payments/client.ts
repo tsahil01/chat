@@ -38,7 +38,7 @@ async function redirectToCustomerPortal() {
     if (error) {
       console.error("Error fetching customer portal:", error);
     }
-                 if (customerPortal&&customerPortal.url) {
+    if (customerPortal && customerPortal.url) {
       // redirect to customer portal in new tab
       window.open(customerPortal.url, "_blank");
     }
