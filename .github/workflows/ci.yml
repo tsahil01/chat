@@ -5,13 +5,9 @@ on:
     branches:
       - main
       - develop
-  push:
-    branches:
-      - main
-      - develop
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 permissions:
@@ -19,70 +15,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  lint-and-typecheck:
-    name: Lint & Type Check
+  ci:
+    name: Lint, Type Check & Build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      changes_detected: ${{ steps.auto_commit.outputs.changes_detected }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10.4.1
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Format with Prettier
-        run: pnpm format
-
-      - name: Lint & Fix
-        run: pnpm lint -- --fix
-
-      - name: Commit and push changes
-        id: auto_commit
-        if: always()
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-format code with prettier and lint"
-          file_pattern: "*.ts *.tsx *.md"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Trigger workflow on new commit
-        if: steps.auto_commit.outputs.changes_detected == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'ci.yml',
-              ref: context.ref
-            })
-
-      - name: Type Check
-        run: pnpm turbo run check-types
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: lint-and-typecheck
-    if: needs.lint-and-typecheck.outputs.changes_detected != 'true'
+    timeout-minutes: 30
 
     services:
       postgres:
@@ -118,9 +54,27 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Format with Prettier
+        run: pnpm format
+
+      - name: Lint & Fix
+        run: pnpm lint -- --fix
+
+      - name: Type Check
+        run: pnpm turbo run check-types
+
       - name: Build
         run: pnpm build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db  # ggignore
           EXASEARCH_API_KEY: dummy_key_for_ci  # ggignore
           FIRECRAWL_API_KEY: dummy_key_for_ci  # ggignore
+
+      - name: Commit and push changes
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-format code with prettier and lint"
+          file_pattern: "*.ts *.tsx *.md"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
