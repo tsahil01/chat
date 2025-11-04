@@ -5,9 +5,13 @@ on:
     branches:
       - main
       - develop
+  push:
+    branches:
+      - main
+      - develop
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -19,6 +23,8 @@ jobs:
     name: Lint & Type Check
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      changes_detected: ${{ steps.auto_commit.outputs.changes_detected }}
 
     steps:
       - name: Checkout code
@@ -47,6 +53,7 @@ jobs:
         run: pnpm lint -- --fix
 
       - name: Commit and push changes
+        id: auto_commit
         if: always()
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -54,7 +61,6 @@ jobs:
           file_pattern: "*.ts *.tsx *.md"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-          push_options: '--force'
 
       - name: Type Check
         run: pnpm turbo run check-types
@@ -64,6 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs: lint-and-typecheck
+    if: needs.lint-and-typecheck.outputs.changes_detected != 'true'
 
     services:
       postgres:
