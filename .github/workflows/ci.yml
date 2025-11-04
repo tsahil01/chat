@@ -36,8 +36,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Lint & Fix
+        run: pnpm lint -- --fix
+
+      - name: Commit and push changes
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-fix linting issues"
+          file_pattern: "*.ts *.tsx *.js *.jsx"
 
       - name: Type Check
         run: pnpm turbo run check-types
