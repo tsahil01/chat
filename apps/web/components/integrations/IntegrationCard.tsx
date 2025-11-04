@@ -46,24 +46,26 @@ export function IntegrationCard({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Button
+              className='cursor-pointer'
               variant={integration.connected ? "outline" : "default"}
               size="sm"
               onClick={() => onConnect(integration.id)}
               disabled={isConnecting || isComingSoon}
             >
-               {integration.connected ? 'Re-link' : 'Connect'}
+              {integration.connected ? 'Re-link' : 'Connect'}
             </Button>
-          {integration.connected && !isComingSoon && (
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => onDisconnect(integration.id)}
-              >
-                Disconnect
-              </Button>
-            </div>
-          )}
+            {integration.connected && !isComingSoon && (
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <Button
+                  className='cursor-pointer'
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => onDisconnect(integration.id)}
+                >
+                  Disconnect
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>
