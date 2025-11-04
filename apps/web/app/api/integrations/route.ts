@@ -88,36 +88,30 @@ export async function POST(request: Request) {
       );
     }
 
-    const existing = await prisma.integration.findFirst({
+    const integration = await prisma.integration.upsert({
       where: {
+        name_userId_email: {
+          name: provider,
+          userId: session.user.id,
+          email: email || null,
+        },
+      },
+      create: {
+        id: `${provider}_${Date.now()}`,
         name: provider,
-        userId: session.user.id,
         email: email || null,
+        accessToken,
+        refreshToken: refreshToken || null,
+        expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
+        userId: session.user.id,
+      },
+      update: {
+        accessToken,
+        refreshToken: refreshToken || null,
+        expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
+        updatedAt: new Date(),
       },
     });
-
-    const integration = existing
-      ? await prisma.integration.update({
-        where: { id: existing.id },
-        data: {
-          email: email || null,
-          accessToken,
-          refreshToken: refreshToken || null,
-          expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
-          updatedAt: new Date(),
-        },
-      })
-      : await prisma.integration.create({
-        data: {
-          id: `${provider}_${Date.now()}`,
-          name: provider,
-          email: email || null,
-          accessToken,
-          refreshToken: refreshToken || null,
-          expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
-          userId: session.user.id,
-        },
-      });
 
     return NextResponse.json({
       success: true,
