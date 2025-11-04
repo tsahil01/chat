@@ -83,9 +83,9 @@ model Integration {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt
   userId       String
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([name, userId])
+  @@unique([name, userId, email])
   @@map("integration")
 }
 
