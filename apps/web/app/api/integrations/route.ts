@@ -88,30 +88,40 @@ export async function POST(request: Request) {
       );
     }
 
-    const integration = await prisma.integration.upsert({
+    const existing = await prisma.integration.findFirst({
       where: {
-        name_userId_email: {
-          name: provider,
-          userId: session.user.id,
-          email: email || null,
-        },
-      },
-      create: {
-        id: `${provider}_${Date.now()}`,
         name: provider,
-        email: email || null,
-        accessToken,
-        refreshToken: refreshToken || null,
-        expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
         userId: session.user.id,
-      },
-      update: {
-        accessToken,
-        refreshToken: refreshToken || null,
-        expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
-        updatedAt: new Date(),
+        email: email || null,
       },
     });
+
+    let integration;
+
+    if (existing) {
+      integration = await prisma.integration.update({
+        where: { id: existing.id },
+        data: {
+          email: email || null,
+          accessToken,
+          refreshToken: refreshToken || null,
+          expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
+          updatedAt: new Date(),
+        },
+      })
+    } else {
+      integration = await prisma.integration.create({
+        data: {
+          id: `${provider}_${Date.now()}`,
+          name: provider,
+          email: email || null,
+          accessToken,
+          refreshToken: refreshToken || null,
+          expiresAt: expiresAt ? new Date(expiresAt) : new Date(Date.now() + 3600000),
+          userId: session.user.id,
+        },
+      });
+    }
 
     return NextResponse.json({
       success: true,
