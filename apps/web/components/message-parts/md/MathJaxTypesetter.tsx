@@ -3,7 +3,6 @@
 import { PropsWithChildren, useEffect, useRef } from "react";
 
 declare global {
-   
   interface Window {
     MathJax?: any;
   }

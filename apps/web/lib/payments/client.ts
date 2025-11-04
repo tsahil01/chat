@@ -33,11 +33,12 @@ async function getSubscriptions(): Promise<SubscriptionListResponse[]> {
 
 async function redirectToCustomerPortal() {
   try {
-    const { data: customerPortal, error } = await authClient.dodopayments.customer.portal();
+    const { data: customerPortal, error } =
+      await authClient.dodopayments.customer.portal();
     if (error) {
       console.error("Error fetching customer portal:", error);
     }
-    if (customerPortal&&customerPortal.url) {
+    if (customerPortal && customerPortal.url) {
       // redirect to customer portal in new tab
       window.open(customerPortal.url, "_blank");
     }

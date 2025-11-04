@@ -82,10 +82,18 @@ export function UserMenu({
                 }
               />
               <button
-                onClick={() => isPro ? redirectToCustomerPortal() : setUpgradeDialogOpen(true)}
+                onClick={() =>
+                  isPro
+                    ? redirectToCustomerPortal()
+                    : setUpgradeDialogOpen(true)
+                }
                 className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 my-1 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
               >
-                {isPro ? <MdManageAccounts className="h-4 w-4" /> : <MdUpgrade className="h-4 w-4" />}
+                {isPro ? (
+                  <MdManageAccounts className="h-4 w-4" />
+                ) : (
+                  <MdUpgrade className="h-4 w-4" />
+                )}
                 <span>{isPro ? "Manage plan" : "Upgrade plan"}</span>
               </button>
               <MenuSection items={settingsItems} />
