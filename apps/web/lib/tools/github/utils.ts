@@ -1,6 +1,6 @@
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import { prisma } from '@workspace/db';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { prisma } from "@workspace/db";
 
 /**
  * Get GitHub integration tokens for a user
@@ -9,13 +9,13 @@ export async function getGitHubTokens(userId: string) {
   const integration = await prisma.integration.findFirst({
     where: {
       userId: userId,
-      name: 'github'
+      name: "github",
     },
     select: {
       accessToken: true,
       refreshToken: true,
       expiresAt: true,
-    }
+    },
   });
 
   return integration;
@@ -26,7 +26,7 @@ export async function getGitHubTokens(userId: string) {
  */
 export async function getCurrentSession() {
   const session = await auth.api.getSession({
-    headers: await headers()
+    headers: await headers(),
   });
 
   if (!session) {
@@ -44,7 +44,9 @@ export async function getCurrentUserGitHubAccount() {
   const githubIntegration = await getGitHubTokens(session.user.id);
 
   if (!githubIntegration || !githubIntegration.accessToken) {
-    throw new Error("To use GitHub services, you need to link your GitHub account. Please go to the integrations page and link your GitHub account.");
+    throw new Error(
+      "To use GitHub services, you need to link your GitHub account. Please go to the integrations page and link your GitHub account.",
+    );
   }
 
   return { session, githubAccount: githubIntegration };
@@ -53,18 +55,23 @@ export async function getCurrentUserGitHubAccount() {
 /**
  * Make unauthenticated GitHub API request (for public data)
  */
-export async function makePublicGitHubRequest(endpoint: string, options: RequestInit = {}) {
+export async function makePublicGitHubRequest(
+  endpoint: string,
+  options: RequestInit = {},
+) {
   const response = await fetch(`https://api.github.com${endpoint}`, {
     ...options,
     headers: {
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'YourApp/1.0',
+      Accept: "application/vnd.github.v3+json",
+      "User-Agent": "YourApp/1.0",
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `GitHub API error: ${response.status} ${response.statusText}`,
+    );
   }
 
   return response.json();
@@ -73,13 +80,19 @@ export async function makePublicGitHubRequest(endpoint: string, options: Request
 /**
  * Try authenticated GitHub request first, fallback to public if no auth
  */
-export async function makeGitHubRequestWithFallback(endpoint: string, options: RequestInit = {}) {
+export async function makeGitHubRequestWithFallback(
+  endpoint: string,
+  options: RequestInit = {},
+) {
   try {
     // Try authenticated request first
     return await makeGitHubRequest(endpoint, options);
   } catch (error: any) {
     // If auth fails (user not authenticated or no GitHub account), try public
-    if (error.message.includes('not authenticated') || error.message.includes('link your GitHub account')) {
+    if (
+      error.message.includes("not authenticated") ||
+      error.message.includes("link your GitHub account")
+    ) {
       return await makePublicGitHubRequest(endpoint, options);
     }
     // Re-throw other errors
@@ -90,21 +103,26 @@ export async function makeGitHubRequestWithFallback(endpoint: string, options: R
 /**
  * Make authenticated GitHub API request
  */
-export async function makeGitHubRequest(endpoint: string, options: RequestInit = {}) {
+export async function makeGitHubRequest(
+  endpoint: string,
+  options: RequestInit = {},
+) {
   const { githubAccount } = await getCurrentUserGitHubAccount();
 
   const response = await fetch(`https://api.github.com${endpoint}`, {
     ...options,
     headers: {
-      'Authorization': `Bearer ${githubAccount.accessToken}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'YourApp/1.0',
+      Authorization: `Bearer ${githubAccount.accessToken}`,
+      Accept: "application/vnd.github.v3+json",
+      "User-Agent": "YourApp/1.0",
       ...options.headers,
     },
   });
 
   if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `GitHub API error: ${response.status} ${response.statusText}`,
+    );
   }
 
   return response.json();
@@ -114,10 +132,10 @@ export async function makeGitHubRequest(endpoint: string, options: RequestInit =
  * Handle GitHub API errors with consistent formatting
  */
 export function handleGitHubError(error: any, operation: string): string {
-  if (error.message.includes('not authenticated')) {
+  if (error.message.includes("not authenticated")) {
     return "Error: Please sign in to use GitHub features.";
   }
-  if (error.message.includes('link your GitHub account')) {
+  if (error.message.includes("link your GitHub account")) {
     return error.message;
   }
   console.error(`GitHub ${operation} error:`, error);

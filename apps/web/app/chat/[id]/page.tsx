@@ -1,24 +1,26 @@
-'use client';
+"use client";
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport, FileUIPart, UIMessage } from 'ai';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChatInput } from '@/components/chat/chat-input';
-import { MessageList } from '@/components/chat/MessageList';
-import { TypingIndicator } from '@/components/chat/TypingIndicator';
-import { useAutoScroll } from '@/hooks/use-auto-scroll';
-import { models, Models } from '@/lib/models';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { generateUUID } from '@/lib/utils';
-import { getUIMessages } from '@/lib/chat';
-import { authClient } from '@/lib/auth-client';
-import { AuthDialog } from '@/components/auth-dialog';
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, FileUIPart, UIMessage } from "ai";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChatInput } from "@/components/chat/chat-input";
+import { MessageList } from "@/components/chat/MessageList";
+import { TypingIndicator } from "@/components/chat/TypingIndicator";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
+import { models, Models } from "@/lib/models";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { generateUUID } from "@/lib/utils";
+import { getUIMessages } from "@/lib/chat";
+import { authClient } from "@/lib/auth-client";
+import { AuthDialog } from "@/components/auth-dialog";
 
 export default function Page() {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
-  const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(new Set());
+  const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(
+    new Set(),
+  );
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [chatId, setChatId] = useState<string | null>(null);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
@@ -34,18 +36,17 @@ export default function Page() {
   useEffect(() => {
     if (!session && !isPending) {
       setAuthOpen(true);
-      router.push('/');
+      router.push("/");
     }
   }, [session, isPending]);
 
   useEffect(() => {
-    if (params?.id && typeof params.id === 'string') {
+    if (params?.id && typeof params.id === "string") {
       setChatId(params.id);
     } else {
-      router.replace('/');
+      router.replace("/");
     }
   }, [params?.id]);
-
 
   const chatIdRef = useRef<string | null>(null);
   const selectedModelRef = useRef<Models | null>(null);
@@ -90,13 +91,14 @@ export default function Page() {
       setIsSubmitting(false);
     },
     onError: (error) => {
-      console.error('Chat error:', error);
+      console.error("Chat error:", error);
       setIsSubmitting(false);
-      
+
       // Handle different error types
-      if (error.message?.includes('Monthly message limit exceeded')) {
-        let errorMessage = '⚠️ You have reached your message limit for the month. Please upgrade to a paid plan to continue using the app.';
-        
+      if (error.message?.includes("Monthly message limit exceeded")) {
+        let errorMessage =
+          "⚠️ You have reached your message limit for the month. Please upgrade to a paid plan to continue using the app.";
+
         try {
           const errorData = JSON.parse(error.message);
           if (errorData.currentUsage && errorData.limit) {
@@ -105,27 +107,46 @@ export default function Page() {
         } catch {
           // Use default message if parsing fails
         }
-        
-        setMessages(prev => [...prev, {
-          role: 'system',
-          parts: [{ type: 'text', text: errorMessage }],
-          id: `error-${Date.now()}`,
-          createdAt: new Date(),
-        } as UIMessage]);
-      } else if (error.message?.includes('Failed to generate response')) {
-        setMessages(prev => [...prev, {
-          role: 'system',
-          parts: [{ type: 'text', text: `⚠️ Sorry, there was an error generating the response. Please try again. \nError: ${error.message}` }],
-          id: `error-${Date.now()}`,
-          createdAt: new Date(),
-        } as UIMessage]);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "system",
+            parts: [{ type: "text", text: errorMessage }],
+            id: `error-${Date.now()}`,
+            createdAt: new Date(),
+          } as UIMessage,
+        ]);
+      } else if (error.message?.includes("Failed to generate response")) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "system",
+            parts: [
+              {
+                type: "text",
+                text: `⚠️ Sorry, there was an error generating the response. Please try again. \nError: ${error.message}`,
+              },
+            ],
+            id: `error-${Date.now()}`,
+            createdAt: new Date(),
+          } as UIMessage,
+        ]);
       } else {
-        setMessages(prev => [...prev, {
-          role: 'system',
-          parts: [{ type: 'text', text: `⚠️ An unexpected error occurred. Please try again. \nError: ${error.message}` }],
-          id: `error-${Date.now()}`,
-          createdAt: new Date(),
-        } as UIMessage]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "system",
+            parts: [
+              {
+                type: "text",
+                text: `⚠️ An unexpected error occurred. Please try again. \nError: ${error.message}`,
+              },
+            ],
+            id: `error-${Date.now()}`,
+            createdAt: new Date(),
+          } as UIMessage,
+        ]);
       }
     },
   });
@@ -133,13 +154,16 @@ export default function Page() {
 
   useEffect(() => {
     if (chatId) {
-      const messageFromUrl = searchParams.get('input');
-      const selectedModelNameFromUrl = searchParams.get('selectedModel');
-      const toggleWebSearchFromUrl = searchParams.get('toggleWebSearch');
+      const messageFromUrl = searchParams.get("input");
+      const selectedModelNameFromUrl = searchParams.get("selectedModel");
+      const toggleWebSearchFromUrl = searchParams.get("toggleWebSearch");
       if (selectedModelNameFromUrl) {
-        setSelectedModel(models.find(model => model.model === selectedModelNameFromUrl) || models[0]!);
+        setSelectedModel(
+          models.find((model) => model.model === selectedModelNameFromUrl) ||
+            models[0]!,
+        );
       }
-      if (toggleWebSearchFromUrl === 'true') {
+      if (toggleWebSearchFromUrl === "true") {
         setToggleWebSearch(true);
       }
       if (!messageFromUrl) {
@@ -150,7 +174,7 @@ export default function Page() {
 
   async function getChatsMessages() {
     if (!chatId) return;
-    
+
     setIsLoadingMessages(true);
     try {
       const response = await fetch(`/api/chat/${chatId}/messages`);
@@ -161,7 +185,7 @@ export default function Page() {
         }
         throw new Error(`Failed to fetch messages: ${response.status}`);
       }
-      
+
       const data = await response.json();
       const uiMessages = await getUIMessages(data.messages);
       setMessages(uiMessages);
@@ -174,11 +198,17 @@ export default function Page() {
   }
 
   useEffect(() => {
-    const messageFromUrl = searchParams.get('input');
-    if (messageFromUrl && !hasProcessedUrlInput && !isLoadingMessages && !isSubmitting && chatId) {
+    const messageFromUrl = searchParams.get("input");
+    if (
+      messageFromUrl &&
+      !hasProcessedUrlInput &&
+      !isLoadingMessages &&
+      !isSubmitting &&
+      chatId
+    ) {
       setHasProcessedUrlInput(true);
       let fileParts: FileUIPart[] | null = null;
-      const filePartsFromUrl = searchParams.get('fileParts');
+      const filePartsFromUrl = searchParams.get("fileParts");
       if (filePartsFromUrl) {
         try {
           const decoded = decodeURIComponent(filePartsFromUrl);
@@ -187,14 +217,25 @@ export default function Page() {
             fileParts = parsed;
           }
         } catch (err) {
-          console.error('Failed to parse fileParts from URL', err);
+          console.error("Failed to parse fileParts from URL", err);
         }
       }
       router.replace(`/chat/${chatId}`, { scroll: false });
       setIsSubmitting(true);
-      sendMessage({ text: messageFromUrl, ...(fileParts ? { files: fileParts } : {}) });
+      sendMessage({
+        text: messageFromUrl,
+        ...(fileParts ? { files: fileParts } : {}),
+      });
     }
-  }, [searchParams, hasProcessedUrlInput, isLoadingMessages, isSubmitting, sendMessage, chatId, router]);
+  }, [
+    searchParams,
+    hasProcessedUrlInput,
+    isLoadingMessages,
+    isSubmitting,
+    sendMessage,
+    chatId,
+    router,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -207,17 +248,28 @@ export default function Page() {
         return;
       }
       if (fileParts && !selectedModel?.fileSupport) {
-        setMessages(prev => [...prev, {
-          role: 'system',
-          parts: [{ type: 'text', text: `⚠️ File upload is not supported for this model. Please try again with a different model.` }],
-          id: `error-${Date.now()}`,
-          createdAt: new Date(),
-        } as UIMessage]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "system",
+            parts: [
+              {
+                type: "text",
+                text: `⚠️ File upload is not supported for this model. Please try again with a different model.`,
+              },
+            ],
+            id: `error-${Date.now()}`,
+            createdAt: new Date(),
+          } as UIMessage,
+        ]);
         return;
       }
       const inputToSend = input;
-      setInput('');
-      await sendMessage({ text: inputToSend, ...(fileParts ? { files: fileParts } : {}) });
+      setInput("");
+      await sendMessage({
+        text: inputToSend,
+        ...(fileParts ? { files: fileParts } : {}),
+      });
       setFileParts(null);
     } finally {
       setIsSubmitting(false);
@@ -226,7 +278,7 @@ export default function Page() {
 
   const toggleReasoning = (messageId: string, partIndex: number) => {
     const key = `${messageId}-${partIndex}`;
-    setCollapsedReasoning(prev => {
+    setCollapsedReasoning((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(key)) {
         newSet.delete(key);
@@ -240,7 +292,6 @@ export default function Page() {
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto w-full">
       <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
-
         <MessageList
           messages={messages}
           isReasoningCollapsed={(key) => collapsedReasoning.has(key)}
@@ -268,7 +319,11 @@ export default function Page() {
           setFileParts={setFileParts}
         />
       </div>
-      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} showTrigger={false} />
-    </div >
+      <AuthDialog
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        showTrigger={false}
+      />
+    </div>
   );
 }

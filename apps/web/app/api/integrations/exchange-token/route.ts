@@ -1,19 +1,19 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const PROVIDER_CONFIGS = {
   github: {
-    tokenUrl: 'https://github.com/login/oauth/access_token',
+    tokenUrl: "https://github.com/login/oauth/access_token",
     clientId: process.env.INTEGRATION_GITHUB_CLIENT_ID,
     clientSecret: process.env.INTEGRATION_GITHUB_CLIENT_SECRET,
-    userInfoUrl: 'https://api.github.com/user',
+    userInfoUrl: "https://api.github.com/user",
   },
   google: {
-    tokenUrl: 'https://oauth2.googleapis.com/token',
+    tokenUrl: "https://oauth2.googleapis.com/token",
     clientId: process.env.INTEGRATION_GOOGLE_CLIENT_ID,
     clientSecret: process.env.INTEGRATION_GOOGLE_CLIENT_SECRET,
-    userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
+    userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo",
   },
 };
 
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     });
 
     if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -32,8 +32,8 @@ export async function POST(request: Request) {
 
     if (!provider || !code) {
       return NextResponse.json(
-        { error: 'Missing required fields: provider, code' },
-        { status: 400 }
+        { error: "Missing required fields: provider, code" },
+        { status: 400 },
       );
     }
 
@@ -41,22 +41,22 @@ export async function POST(request: Request) {
     if (!config) {
       return NextResponse.json(
         { error: `Unsupported provider: ${provider}` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Exchange code for access token
     const tokenResponse = await fetch(config.tokenUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         client_id: config.clientId,
         client_secret: config.clientSecret,
         code,
-        redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/integrations/callback`,
+        redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/integrations/callback`,
       }),
     });
 
@@ -70,12 +70,12 @@ export async function POST(request: Request) {
     const userResponse = await fetch(config.userInfoUrl, {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`,
-        Accept: 'application/json',
+        Accept: "application/json",
       },
     });
 
     if (!userResponse.ok) {
-      throw new Error('Failed to fetch user info');
+      throw new Error("Failed to fetch user info");
     }
 
     const userData = await userResponse.json();
@@ -97,12 +97,13 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error('Error exchanging OAuth token:', error);
+    console.error("Error exchanging OAuth token:", error);
     return NextResponse.json(
       {
-        error: error instanceof Error ? error.message : 'Failed to exchange token',
+        error:
+          error instanceof Error ? error.message : "Failed to exchange token",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

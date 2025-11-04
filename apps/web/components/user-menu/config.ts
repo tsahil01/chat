@@ -32,7 +32,8 @@ export const helpItems: MenuItem[] = [
     id: "issues",
     label: "Facing issues?",
     icon: IoBugOutline,
-    action: () => window.open("https://github.com/tsahil01/chat/issues/new", "_blank"),
+    action: () =>
+      window.open("https://github.com/tsahil01/chat/issues/new", "_blank"),
     rightText: "→",
   },
   {
@@ -42,5 +43,3 @@ export const helpItems: MenuItem[] = [
     action: () => window.open("https://github.com/tsahil01/chat", "_blank"),
   },
 ];
-
-

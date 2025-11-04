@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@workspace/ui/components/button';
-import { Skeleton } from '@workspace/ui/components/skeleton';
-import { Separator } from '@workspace/ui/components/separator';
-import { Card, CardContent } from '@workspace/ui/components/card';
-import { Input } from '@workspace/ui/components/input';
-import { ChatList } from '@/components/chat/ChatList';
-import { PaginationControls } from '@/components/chat/PaginationControls';
-import { authClient } from '@/lib/auth-client';
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@workspace/ui/components/button";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Separator } from "@workspace/ui/components/separator";
+import { Card, CardContent } from "@workspace/ui/components/card";
+import { Input } from "@workspace/ui/components/input";
+import { ChatList } from "@/components/chat/ChatList";
+import { PaginationControls } from "@/components/chat/PaginationControls";
+import { authClient } from "@/lib/auth-client";
 
 interface Chat {
   id: string;
   title: string;
   createdAt: string;
-  visibility: 'PUBLIC' | 'PRIVATE';
+  visibility: "PUBLIC" | "PRIVATE";
 }
 
 interface PaginationInfo {
@@ -59,34 +59,34 @@ function ChatsPageContent() {
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const { data: session, isPending } = authClient.useSession();
-  
-  const currentPage = parseInt(searchParams.get('page') || '1');
+
+  const currentPage = parseInt(searchParams.get("page") || "1");
   const limit = 10;
-  
+
   // Debounce search query with 500ms delay
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
     if (isPending) return;
-    
+
     if (!session) {
-      router.push('/');
+      router.push("/");
       return;
     }
 
     // Initialize search query from URL params
-    const urlQuery = searchParams.get('q') || '';
+    const urlQuery = searchParams.get("q") || "";
     setSearchQuery(urlQuery);
   }, [session, isPending, router, searchParams]);
 
   useEffect(() => {
     if (isPending || !session) return;
-    
+
     if (debouncedSearchQuery.trim()) {
       searchChats();
     } else {
@@ -99,17 +99,19 @@ function ChatsPageContent() {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`/api/chat/conversations?page=${currentPage}&limit=${limit}`);
-      
+      const response = await fetch(
+        `/api/chat/conversations?page=${currentPage}&limit=${limit}`,
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch chats');
+        throw new Error("Failed to fetch chats");
       }
-      
+
       const data: ChatsResponse = await response.json();
       setChats(data.chats);
       setPagination(data.pagination);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -117,24 +119,24 @@ function ChatsPageContent() {
 
   const searchChats = useCallback(async () => {
     if (!debouncedSearchQuery.trim()) return;
-    
+
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch(
-        `/api/chat/search?q=${encodeURIComponent(debouncedSearchQuery)}&page=${currentPage}&limit=${limit}`
+        `/api/chat/search?q=${encodeURIComponent(debouncedSearchQuery)}&page=${currentPage}&limit=${limit}`,
       );
-      
+
       if (!response.ok) {
-        throw new Error('Failed to search chats');
+        throw new Error("Failed to search chats");
       }
-      
+
       const data: SearchResponse = await response.json();
       setChats(data.chats);
       setPagination(data.pagination);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -143,26 +145,24 @@ function ChatsPageContent() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
-    
+
     // Update URL with search query
     const params = new URLSearchParams(searchParams);
     if (value.trim()) {
-      params.set('q', value);
-      params.set('page', '1'); // Reset to first page on new search
+      params.set("q", value);
+      params.set("page", "1"); // Reset to first page on new search
     } else {
-      params.delete('q');
-      params.delete('page');
+      params.delete("q");
+      params.delete("page");
     }
-    
-    const newUrl = params.toString() ? `?${params.toString()}` : '/chats';
+
+    const newUrl = params.toString() ? `?${params.toString()}` : "/chats";
     router.replace(newUrl, { scroll: false });
   };
 
   const handleChatClick = (chatId: string) => {
     router.push(`/chat/${chatId}`);
   };
-
-
 
   if (isPending) {
     return (
@@ -198,29 +198,23 @@ function ChatsPageContent() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">
-              {debouncedSearchQuery.trim() ? 'Search Results' : 'Your Chats'}
+              {debouncedSearchQuery.trim() ? "Search Results" : "Your Chats"}
             </h1>
             <p className="text-sm text-muted-foreground">
-              {debouncedSearchQuery.trim() ? (
-                pagination ? (
-                  `Found ${pagination.totalCount} result${pagination.totalCount !== 1 ? 's' : ''} for "${debouncedSearchQuery}"`
-                ) : (
-                  'Search through your conversations'
-                )
-              ) : (
-                pagination ? (
-                  `Showing ${((currentPage - 1) * limit) + 1}-${Math.min(currentPage * limit, pagination.totalCount)} of ${pagination.totalCount} conversations`
-                ) : (
-                  `${chats.length} conversation${chats.length !== 1 ? 's' : ''}`
-                )
-              )}
+              {debouncedSearchQuery.trim()
+                ? pagination
+                  ? `Found ${pagination.totalCount} result${pagination.totalCount !== 1 ? "s" : ""} for "${debouncedSearchQuery}"`
+                  : "Search through your conversations"
+                : pagination
+                  ? `Showing ${(currentPage - 1) * limit + 1}-${Math.min(currentPage * limit, pagination.totalCount)} of ${pagination.totalCount} conversations`
+                  : `${chats.length} conversation${chats.length !== 1 ? "s" : ""}`}
             </p>
           </div>
-          <Button onClick={() => router.push('/')} className="shrink-0">
+          <Button onClick={() => router.push("/")} className="shrink-0">
             New Chat
           </Button>
         </div>
-        
+
         {/* Search Input */}
         <div className="relative">
           <Input
@@ -236,7 +230,7 @@ function ChatsPageContent() {
             </div>
           )}
         </div>
-        
+
         <Separator />
 
         {/* Chats List */}
@@ -245,17 +239,15 @@ function ChatsPageContent() {
           loading={loading}
           error={error}
           onChatClick={handleChatClick}
-          onNewChat={() => router.push('/')}
+          onNewChat={() => router.push("/")}
           onRetry={debouncedSearchQuery.trim() ? searchChats : fetchChats}
           emptyMessage={
-            debouncedSearchQuery.trim() 
+            debouncedSearchQuery.trim()
               ? `No conversations found for "${debouncedSearchQuery}"`
               : undefined
           }
           emptyActionText={
-            debouncedSearchQuery.trim() 
-              ? "Start a New Chat"
-              : undefined
+            debouncedSearchQuery.trim() ? "Start a New Chat" : undefined
           }
         />
 
@@ -263,8 +255,8 @@ function ChatsPageContent() {
         <PaginationControls
           pagination={pagination}
           currentPage={currentPage}
-          buildPageUrl={(page) => 
-            debouncedSearchQuery.trim() 
+          buildPageUrl={(page) =>
+            debouncedSearchQuery.trim()
               ? `?q=${encodeURIComponent(debouncedSearchQuery)}&page=${page}`
               : `?page=${page}`
           }
@@ -276,30 +268,32 @@ function ChatsPageContent() {
 
 export default function ChatsPage() {
   return (
-    <Suspense fallback={
-      <div className="flex flex-col max-w-4xl mx-auto p-4">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-8 w-32" />
-            <Skeleton className="h-10 w-24" />
-          </div>
-          <Skeleton className="h-10 w-full" />
-          <Separator />
-          <div className="space-y-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Card key={i}>
-                <CardContent className="p-4">
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-3/4" />
-                    <Skeleton className="h-3 w-1/4" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+    <Suspense
+      fallback={
+        <div className="flex flex-col max-w-4xl mx-auto p-4">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-8 w-32" />
+              <Skeleton className="h-10 w-24" />
+            </div>
+            <Skeleton className="h-10 w-full" />
+            <Separator />
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Card key={i}>
+                  <CardContent className="p-4">
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/4" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <ChatsPageContent />
     </Suspense>
   );

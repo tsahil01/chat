@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
+import { Spinner } from "@workspace/ui/components/ui/shadcn-io/spinner";
 
 export function LoadingState() {
   return (

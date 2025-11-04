@@ -41,23 +41,29 @@ pnpm dev
 ## Details
 
 ### Local Postgres with Docker
+
 ```bash
 docker run --name chat-postgres -e POSTGRES_PASSWORD=mysecretpassword \
   -p 5432:5432 -d postgres:latest
 ```
+
 Connection URL to use in both env files:
+
 ```bash
 DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/postgres
 ```
 
 ### Prisma
+
 ```bash
 pnpm db:generate
 pnpm db:migrate
 ```
+
 Re-run after schema changes.
 
 ### Env files
+
 - Root: `.env.example` → copy to `.env`
 - Database: `packages/database/.env.example` → copy to `packages/database/.env`
 - Keep `DATABASE_URL` the same in both for local development.

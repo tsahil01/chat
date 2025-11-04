@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { Chat } from "@workspace/db";
@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
-} from "@workspace/ui/components/sidebar"
+} from "@workspace/ui/components/sidebar";
 import { authClient } from "@/lib/auth-client";
 import { User } from "better-auth";
 import { AuthDialog } from "./auth-dialog";
@@ -24,7 +24,6 @@ import { FiMessageCircle } from "react-icons/fi";
 import { PiPlusBold } from "react-icons/pi";
 import { LuWorkflow } from "react-icons/lu";
 import Link from "next/link";
-
 
 export function AppSidebar() {
   const [recentChats, setRecentChats] = useState<Chat[]>([]);
@@ -66,7 +65,7 @@ export function AppSidebar() {
   async function getRecentChats(pageNum = 1, append = false) {
     try {
       if (!user) return;
-      
+
       if (pageNum === 1 && !hasFetchedOnce.current) {
         setIsLoading(true);
       } else if (append) {
@@ -75,16 +74,16 @@ export function AppSidebar() {
 
       const response = await fetch(`/api/chat/recent?page=${pageNum}&limit=20`);
       const data = await response.json();
-      
+
       if (!data || !Array.isArray(data.chats)) {
         console.error("API response is not valid:", data);
         return;
       }
 
       const { chats, hasMore: moreAvailable } = data;
-      
+
       if (append) {
-        setRecentChats(prev => [...prev, ...chats]);
+        setRecentChats((prev) => [...prev, ...chats]);
       } else {
         const newSignature = computeChatsSignature(chats);
         if (newSignature !== lastChatsSignature.current) {
@@ -92,7 +91,7 @@ export function AppSidebar() {
           setRecentChats(chats);
         }
       }
-      
+
       setHasMore(moreAvailable);
       setPage(pageNum);
     } catch (error) {
@@ -118,7 +117,7 @@ export function AppSidebar() {
   function handleScroll(e: React.UIEvent<HTMLDivElement>) {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
-    
+
     if (isNearBottom && hasMore && !isLoadingMore) {
       loadMoreChats();
     }
@@ -182,7 +181,7 @@ export function AppSidebar() {
           </SidebarGroup>
         </div>
         {/* Recent Chats - scrollable only */}
-        <div 
+        <div
           ref={sidebarRef}
           className="min-h-0 flex-1 overflow-auto"
           onScroll={handleScroll}
@@ -218,7 +217,9 @@ export function AppSidebar() {
                     {!hasMore && recentChats.length > 20 && (
                       <SidebarMenuItem>
                         <SidebarMenuButton disabled>
-                          <span className="text-xs text-muted-foreground">No more chats</span>
+                          <span className="text-xs text-muted-foreground">
+                            No more chats
+                          </span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     )}
@@ -263,5 +264,5 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

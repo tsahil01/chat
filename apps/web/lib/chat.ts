@@ -11,7 +11,7 @@ export async function generateTitleFromUserMessage({
 }) {
   try {
     const { text: title } = await generateText({
-      model: moonshot('kimi-k2-0905-preview'),
+      model: moonshot("kimi-k2-0905-preview"),
       system: `\n
       - you will generate a short title based on the first message a user begins a conversation with
       - ensure it is not more than 80 characters long
@@ -33,10 +33,12 @@ export async function getChatTitle(chatId: string) {
   return chat.title;
 }
 
-export async function getUIMessages(messages?: Message[] | null): Promise<UIMessage[]> {
+export async function getUIMessages(
+  messages?: Message[] | null,
+): Promise<UIMessage[]> {
   if (!Array.isArray(messages) || messages.length === 0) return [];
   return messages.map((message: Message) => ({
-    role: message.role as 'system' | 'user' | 'assistant',
+    role: message.role as "system" | "user" | "assistant",
     parts: JSON.parse(JSON.stringify(message.parts)),
     id: message.id,
     createdAt: message.createdAt,

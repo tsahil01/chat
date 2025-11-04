@@ -1,7 +1,7 @@
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import { prisma } from '@workspace/db';
-import { google } from 'googleapis';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { prisma } from "@workspace/db";
+import { google } from "googleapis";
 
 /**
  * Get Google integration tokens for a user
@@ -10,13 +10,13 @@ export async function getGoogleTokens(userId: string) {
   const integration = await prisma.integration.findFirst({
     where: {
       userId: userId,
-      name: 'google'
+      name: "google",
     },
     select: {
       accessToken: true,
       refreshToken: true,
       expiresAt: true,
-    }
+    },
   });
 
   return integration;
@@ -27,7 +27,7 @@ export async function getGoogleTokens(userId: string) {
  */
 export async function getCurrentSession() {
   const session = await auth.api.getSession({
-    headers: await headers()
+    headers: await headers(),
   });
 
   if (!session) {
@@ -45,7 +45,9 @@ export async function getCurrentUserGoogleAccount() {
   const googleIntegration = await getGoogleTokens(session.user.id);
 
   if (!googleIntegration) {
-    throw new Error("To use Google services, you need to link your Google account. Please go to the integrations page and link your Google account.");
+    throw new Error(
+      "To use Google services, you need to link your Google account. Please go to the integrations page and link your Google account.",
+    );
   }
 
   return { session, googleAccount: googleIntegration };
@@ -54,14 +56,17 @@ export async function getCurrentUserGoogleAccount() {
 /**
  * Create and configure a Google OAuth2 client
  */
-export function createGoogleOAuth2Client(googleIntegration: { accessToken: string | null; refreshToken: string | null }): any {
+export function createGoogleOAuth2Client(googleIntegration: {
+  accessToken: string | null;
+  refreshToken: string | null;
+}): any {
   if (!googleIntegration.accessToken || !googleIntegration.refreshToken) {
     throw new Error("Invalid Google integration credentials");
   }
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.INTEGRATION_GOOGLE_CLIENT_ID,
-    process.env.INTEGRATION_GOOGLE_CLIENT_SECRET
+    process.env.INTEGRATION_GOOGLE_CLIENT_SECRET,
   );
 
   oauth2Client.setCredentials({
@@ -75,9 +80,12 @@ export function createGoogleOAuth2Client(googleIntegration: { accessToken: strin
 /**
  * Create a Google Calendar client
  */
-export function createGoogleCalendarClient(googleIntegration: { accessToken: string | null; refreshToken: string | null }) {
+export function createGoogleCalendarClient(googleIntegration: {
+  accessToken: string | null;
+  refreshToken: string | null;
+}) {
   const oauth2Client = createGoogleOAuth2Client(googleIntegration);
-  return google.calendar({ version: 'v3', auth: oauth2Client });
+  return google.calendar({ version: "v3", auth: oauth2Client });
 }
 
 /**
@@ -88,11 +96,13 @@ export function handleGoogleError(error: any, operation: string): string {
   return `❌ Failed to ${operation}: ${error.message}`;
 }
 
-
 /**
  * Create a Google Gmail client
  */
-export function createGoogleGmailClient(googleIntegration: { accessToken: string | null; refreshToken: string | null }) {
+export function createGoogleGmailClient(googleIntegration: {
+  accessToken: string | null;
+  refreshToken: string | null;
+}) {
   const oauth2Client = createGoogleOAuth2Client(googleIntegration);
-  return google.gmail({ version: 'v1', auth: oauth2Client });
+  return google.gmail({ version: "v1", auth: oauth2Client });
 }

@@ -1,6 +1,11 @@
-'use client';
+"use client";
 
-import { Card, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
 
 export function AuthRequired() {
   return (

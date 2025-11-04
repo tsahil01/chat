@@ -1,4 +1,4 @@
-import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
+import { Spinner } from "@workspace/ui/components/ui/shadcn-io/spinner";
 
 interface ToolPartProps {
   toolName: string;
@@ -10,7 +10,12 @@ interface ToolPartProps {
   partIndex: number;
 }
 
-export function ToolPart({ toolName, part, messageId, partIndex }: ToolPartProps) {
+export function ToolPart({
+  toolName,
+  part,
+  messageId,
+  partIndex,
+}: ToolPartProps) {
   return (
     <div
       key={`${messageId}-${partIndex}`}
@@ -18,7 +23,7 @@ export function ToolPart({ toolName, part, messageId, partIndex }: ToolPartProps
     >
       <div className="flex items-center gap-2">
         <span>Tool: {toolName}</span>
-        {part.state !== 'output-available' && (
+        {part.state !== "output-available" && (
           <Spinner variant="ring" size={16} />
         )}
       </div>

@@ -1,14 +1,18 @@
-'use client';
+"use client";
 
-import { FileUIPart } from 'ai';
-import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
-import { TextPart } from '@/components/message-parts/text-part';
-import { ToolPart } from '@/components/message-parts/tool-part';
-import { ReasoningPart } from '@/components/message-parts/reasoning-part';
-import { FilePart } from '@/components/message-parts/file-part';
-import { AssistantActions } from '@/components/chat/AssistantActions';
-import { authClient } from '@/lib/auth-client';
-import { UIMessage } from '@/lib/types';
+import { FileUIPart } from "ai";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar";
+import { TextPart } from "@/components/message-parts/text-part";
+import { ToolPart } from "@/components/message-parts/tool-part";
+import { ReasoningPart } from "@/components/message-parts/reasoning-part";
+import { FilePart } from "@/components/message-parts/file-part";
+import { AssistantActions } from "@/components/chat/AssistantActions";
+import { authClient } from "@/lib/auth-client";
+import { UIMessage } from "@/lib/types";
 
 type MessageItemProps = {
   message: UIMessage;
@@ -18,134 +22,286 @@ type MessageItemProps = {
   isLastAssistant?: boolean;
 };
 
-export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, onRetry, isLastAssistant }: MessageItemProps) {
+export function MessageItem({
+  message,
+  isReasoningCollapsed,
+  onToggleReasoning,
+  onRetry,
+  isLastAssistant,
+}: MessageItemProps) {
   const { data } = authClient.useSession();
 
   return (
     <div className="flex flex-col gap-2">
       {(() => {
-        const attachments = message.attachments && message.attachments.length > 0
-          ? message.attachments
-          : message.parts.filter(part => part.type === 'file');
+        const attachments =
+          message.attachments && message.attachments.length > 0
+            ? message.attachments
+            : message.parts.filter((part) => part.type === "file");
         return attachments.map((attachment: FileUIPart, i: number) => {
           return (
-            <FilePart key={`${message.id}-${i}`} attachment={attachment} messageId={message.id} partIndex={i} />
+            <FilePart
+              key={`${message.id}-${i}`}
+              attachment={attachment}
+              messageId={message.id}
+              partIndex={i}
+            />
           );
         });
       })()}
       <div className="flex gap-2 sm:gap-3 items-start">
-        {message.role === 'user' && (
+        {message.role === "user" && (
           <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
             <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
-              <AvatarImage src={data?.user?.image || ''} />
-              <AvatarFallback className="text-xs">{data?.user?.name?.charAt(0) || 'U'}</AvatarFallback>
+              <AvatarImage src={data?.user?.image || ""} />
+              <AvatarFallback className="text-xs">
+                {data?.user?.name?.charAt(0) || "U"}
+              </AvatarFallback>
             </Avatar>
           </div>
         )}
 
-        <div className={`space-y-2 ${message.role === 'user' ? 'w-auto max-w-[85%] sm:max-w-xl' : 'w-full'}`}>
-          <div className={`rounded-xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm ${message.role === 'user' ? 'bg-muted text-foreground w-auto rounded-tl-sm' : 'text-foreground'}`}>
+        <div
+          className={`space-y-2 ${message.role === "user" ? "w-auto max-w-[85%] sm:max-w-xl" : "w-full"}`}
+        >
+          <div
+            className={`rounded-xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm ${message.role === "user" ? "bg-muted text-foreground w-auto rounded-tl-sm" : "text-foreground"}`}
+          >
             <div className="space-y-2 sm:space-y-3">
               {message.parts.map((part, i: number) => {
                 switch (part.type) {
-                  case 'text':
+                  case "text":
                     // Render user messages as plain text, assistant messages as markdown
-                    if (message.role === 'user') {
+                    if (message.role === "user") {
                       return (
-                        <div key={`${message.id}-${i}`} className="whitespace-pre-wrap max-h-90 overflow-y-auto">
+                        <div
+                          key={`${message.id}-${i}`}
+                          className="whitespace-pre-wrap max-h-90 overflow-y-auto"
+                        >
                           {part.text}
                         </div>
                       );
                     } else {
                       return (
-                        <TextPart key={`${message.id}-${i}`} text={part.text} messageId={message.id} partIndex={i} />
+                        <TextPart
+                          key={`${message.id}-${i}`}
+                          text={part.text}
+                          messageId={message.id}
+                          partIndex={i}
+                        />
                       );
                     }
-                  case 'tool-exaWebSearch':
+                  case "tool-exaWebSearch":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Web Search" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Web Search"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-createCalendarEvent':
+                  case "tool-createCalendarEvent":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Create Calendar Event" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Create Calendar Event"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-listCalendarEvents':
+                  case "tool-listCalendarEvents":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="List Calendar Events" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="List Calendar Events"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-checkCalendarAvailability':
+                  case "tool-checkCalendarAvailability":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Check Calendar Availability" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Check Calendar Availability"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-deleteCalendarEvent':
+                  case "tool-deleteCalendarEvent":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Delete Calendar Event" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Delete Calendar Event"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-listGitHubRepos':
+                  case "tool-listGitHubRepos":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Repos" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="List GitHub Repos"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-createGitHubRepo':
+                  case "tool-createGitHubRepo":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Create GitHub Repo" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Create GitHub Repo"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-getGitHubRepoInfo':
+                  case "tool-getGitHubRepoInfo":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub Repo Info" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Get GitHub Repo Info"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-listGitHubIssues':
+                  case "tool-listGitHubIssues":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Issues" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="List GitHub Issues"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-createGitHubIssue':
+                  case "tool-createGitHubIssue":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Create GitHub Issue" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Create GitHub Issue"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-getGitHubIssue':
+                  case "tool-getGitHubIssue":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub Issue" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Get GitHub Issue"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-getGitHubUserInfo':
+                  case "tool-getGitHubUserInfo":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub User Info" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Get GitHub User Info"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-listGitHubFollowers':
+                  case "tool-listGitHubFollowers":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Followers" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="List GitHub Followers"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-listGitHubPullRequests':
+                  case "tool-listGitHubPullRequests":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="List GitHub Pull Requests" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="List GitHub Pull Requests"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-createGitHubPullRequest':
+                  case "tool-createGitHubPullRequest":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Create GitHub Pull Request" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Create GitHub Pull Request"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-getGitHubPullRequest':
+                  case "tool-getGitHubPullRequest":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Get GitHub Pull Request" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Get GitHub Pull Request"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-viewCodeDiff':
+                  case "tool-viewCodeDiff":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="View Code Diff" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="View Code Diff"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-listEmails':
+                  case "tool-listEmails":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="List Emails" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="List Emails"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-getEmail':
+                  case "tool-getEmail":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Get Email" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Get Email"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-searchEmails':
+                  case "tool-searchEmails":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Search Emails" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Search Emails"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'tool-sendEmail':
+                  case "tool-sendEmail":
                     return (
-                      <ToolPart key={`${message.id}-${i}`} toolName="Send Email" part={part} messageId={message.id} partIndex={i} />
+                      <ToolPart
+                        key={`${message.id}-${i}`}
+                        toolName="Send Email"
+                        part={part}
+                        messageId={message.id}
+                        partIndex={i}
+                      />
                     );
-                  case 'reasoning': {
+                  case "reasoning": {
                     const reasoningKey = `${message.id}-${i}`;
                     const collapsed = isReasoningCollapsed(reasoningKey);
                     return (
@@ -166,11 +322,13 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
             </div>
           </div>
 
-          {message.role === 'assistant' && (
+          {message.role === "assistant" && (
             <>
               <AssistantActions message={message} onRetry={onRetry} />
               {isLastAssistant && (
-                <p className="text-xs text-muted-foreground text-end px-1">AI can make mistakes. Please double-check responses.</p>
+                <p className="text-xs text-muted-foreground text-end px-1">
+                  AI can make mistakes. Please double-check responses.
+                </p>
               )}
             </>
           )}
@@ -179,5 +337,3 @@ export function MessageItem({ message, isReasoningCollapsed, onToggleReasoning, 
     </div>
   );
 }
-
-

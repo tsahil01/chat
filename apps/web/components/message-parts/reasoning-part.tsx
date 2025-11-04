@@ -1,6 +1,6 @@
-import { Button } from '@workspace/ui/components/button';
-import { Spinner } from '@workspace/ui/components/ui/shadcn-io/spinner';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from "@workspace/ui/components/button";
+import { Spinner } from "@workspace/ui/components/ui/shadcn-io/spinner";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface ReasoningPartProps {
   part: {
@@ -14,12 +14,12 @@ interface ReasoningPartProps {
   onToggle: (messageId: string, partIndex: number) => void;
 }
 
-export function ReasoningPart({ 
-  part, 
-  messageId, 
-  partIndex, 
-  isCollapsed, 
-  onToggle 
+export function ReasoningPart({
+  part,
+  messageId,
+  partIndex,
+  isCollapsed,
+  onToggle,
 }: ReasoningPartProps) {
   return (
     <div
@@ -34,7 +34,7 @@ export function ReasoningPart({
       >
         <div className="flex items-center gap-2">
           <span>Reasoning</span>
-          {part.state && part.state !== 'done' && (
+          {part.state && part.state !== "done" && (
             <Spinner variant="default" size={16} />
           )}
         </div>

@@ -1,19 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import { prisma } from '@workspace/db';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { prisma } from "@workspace/db";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ integrationId: string }> }
+  { params }: { params: Promise<{ integrationId: string }> },
 ) {
   try {
     const session = await auth.api.getSession({
-      headers: await headers()
+      headers: await headers(),
     });
 
     if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { integrationId } = await params;
@@ -32,8 +32,8 @@ export async function POST(
 
       if (integrations.length === 0) {
         return NextResponse.json(
-          { error: 'Integration not found' },
-          { status: 404 }
+          { error: "Integration not found" },
+          { status: 404 },
         );
       }
 
@@ -46,14 +46,14 @@ export async function POST(
 
       return NextResponse.json({
         success: true,
-        message: `All ${integrationId} integrations disconnected successfully`
+        message: `All ${integrationId} integrations disconnected successfully`,
       });
     }
 
     if (integration.userId !== session.user.id) {
       return NextResponse.json(
-        { error: 'Not authorized to disconnect this integration' },
-        { status: 403 }
+        { error: "Not authorized to disconnect this integration" },
+        { status: 403 },
       );
     }
 
@@ -63,13 +63,13 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: `${integration.name} integration disconnected successfully`
+      message: `${integration.name} integration disconnected successfully`,
     });
   } catch (error) {
-    console.error('Error disconnecting integration:', error);
+    console.error("Error disconnecting integration:", error);
     return NextResponse.json(
-      { error: 'Failed to disconnect integration' },
-      { status: 500 }
+      { error: "Failed to disconnect integration" },
+      { status: 500 },
     );
   }
 }

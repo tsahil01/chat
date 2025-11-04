@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 60; // 1 minute cache on the server
 
 function mapWeatherCodeToText(code: number): string {
@@ -40,16 +40,21 @@ export async function GET(req: NextRequest) {
     const lat = searchParams.get("lat");
     const lon = searchParams.get("lon");
     if (!lat || !lon) {
-      return new Response(JSON.stringify({ error: "lat and lon are required" }), { status: 400 });
+      return new Response(
+        JSON.stringify({ error: "lat and lon are required" }),
+        { status: 400 },
+      );
     }
 
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(
-      lat
+      lat,
     )}&longitude=${encodeURIComponent(lon)}&current=temperature_2m,weather_code,apparent_temperature,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
 
     const res = await fetch(url, { next: { revalidate } });
     if (!res.ok) {
-      return new Response(JSON.stringify({ error: "weather_fetch_failed" }), { status: 502 });
+      return new Response(JSON.stringify({ error: "weather_fetch_failed" }), {
+        status: 502,
+      });
     }
     const data = await res.json();
     const current = data?.current || {};
@@ -61,17 +66,20 @@ export async function GET(req: NextRequest) {
       JSON.stringify({
         temperatureC: current.temperature_2m ?? null,
         apparentC: current.apparent_temperature ?? null,
-        windKph: typeof current.wind_speed_10m === "number" ? current.wind_speed_10m * 1.0 : null,
+        windKph:
+          typeof current.wind_speed_10m === "number"
+            ? current.wind_speed_10m * 1.0
+            : null,
         condition,
         highC: daily.temperature_2m_max?.[0] ?? null,
         lowC: daily.temperature_2m_min?.[0] ?? null,
       }),
-      { headers: { "content-type": "application/json" } }
+      { headers: { "content-type": "application/json" } },
     );
   } catch (err) {
     console.error("Route weather error:", err);
-    return new Response(JSON.stringify({ error: "server_error" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "server_error" }), {
+      status: 500,
+    });
   }
 }
-
-

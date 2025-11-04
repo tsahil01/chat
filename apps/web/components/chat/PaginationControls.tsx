@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Separator } from '@workspace/ui/components/separator';
+import { Separator } from "@workspace/ui/components/separator";
 import {
   Pagination,
   PaginationContent,
@@ -9,7 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
   PaginationEllipsis,
-} from '@workspace/ui/components/pagination';
+} from "@workspace/ui/components/pagination";
 
 interface PaginationInfo {
   page: number;
@@ -29,7 +29,7 @@ interface PaginationControlsProps {
 export function PaginationControls({
   pagination,
   currentPage,
-  buildPageUrl
+  buildPageUrl,
 }: PaginationControlsProps) {
   if (!pagination || pagination.totalPages <= 1) {
     return null;
@@ -42,12 +42,20 @@ export function PaginationControls({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious 
-                href={pagination.hasPrevPage ? buildPageUrl(currentPage - 1) : undefined}
-                className={!pagination.hasPrevPage ? 'pointer-events-none opacity-50' : ''}
+              <PaginationPrevious
+                href={
+                  pagination.hasPrevPage
+                    ? buildPageUrl(currentPage - 1)
+                    : undefined
+                }
+                className={
+                  !pagination.hasPrevPage
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
               />
             </PaginationItem>
-            
+
             {/* Show first page */}
             {currentPage > 3 && (
               <>
@@ -61,32 +69,35 @@ export function PaginationControls({
                 )}
               </>
             )}
-            
+
             {/* Show pages around current page */}
-            {Array.from({ length: Math.min(3, pagination.totalPages) }, (_, i) => {
-              let pageNum;
-              if (currentPage <= 2) {
-                pageNum = i + 1;
-              } else if (currentPage >= pagination.totalPages - 1) {
-                pageNum = pagination.totalPages - 2 + i;
-              } else {
-                pageNum = currentPage - 1 + i;
-              }
-              
-              if (pageNum < 1 || pageNum > pagination.totalPages) return null;
-              
-              return (
-                <PaginationItem key={pageNum}>
-                  <PaginationLink 
-                    href={buildPageUrl(pageNum)}
-                    isActive={currentPage === pageNum}
-                  >
-                    {pageNum}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            })}
-            
+            {Array.from(
+              { length: Math.min(3, pagination.totalPages) },
+              (_, i) => {
+                let pageNum;
+                if (currentPage <= 2) {
+                  pageNum = i + 1;
+                } else if (currentPage >= pagination.totalPages - 1) {
+                  pageNum = pagination.totalPages - 2 + i;
+                } else {
+                  pageNum = currentPage - 1 + i;
+                }
+
+                if (pageNum < 1 || pageNum > pagination.totalPages) return null;
+
+                return (
+                  <PaginationItem key={pageNum}>
+                    <PaginationLink
+                      href={buildPageUrl(pageNum)}
+                      isActive={currentPage === pageNum}
+                    >
+                      {pageNum}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              },
+            )}
+
             {/* Show last page */}
             {currentPage < pagination.totalPages - 2 && (
               <>
@@ -102,11 +113,19 @@ export function PaginationControls({
                 </PaginationItem>
               </>
             )}
-            
+
             <PaginationItem>
-              <PaginationNext 
-                href={pagination.hasNextPage ? buildPageUrl(currentPage + 1) : undefined}
-                className={!pagination.hasNextPage ? 'pointer-events-none opacity-50' : ''}
+              <PaginationNext
+                href={
+                  pagination.hasNextPage
+                    ? buildPageUrl(currentPage + 1)
+                    : undefined
+                }
+                className={
+                  !pagination.hasNextPage
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
               />
             </PaginationItem>
           </PaginationContent>

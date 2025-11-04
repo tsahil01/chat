@@ -22,7 +22,7 @@ export function parseOAuthCallbackUrl(url: string) {
 export async function exchangeOAuthCode(
   provider: string,
   code: string,
-  codeVerifier?: string
+  codeVerifier?: string,
 ) {
   try {
     const response = await fetch("/api/integrations/exchange-token", {
