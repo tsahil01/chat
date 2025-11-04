@@ -11,10 +11,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
-    name: Lint, Type Check, Build
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.4.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type Check
+        run: pnpm turbo run check-types
+
+  build:
+    name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: lint-and-typecheck
 
     services:
       postgres:
@@ -49,12 +81,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Type Check
-        run: pnpm turbo run check-types
 
       - name: Build
         run: pnpm build
