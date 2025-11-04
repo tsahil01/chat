@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Format with Prettier
+        run: pnpm format
+
       - name: Lint & Fix
         run: pnpm lint -- --fix
 
@@ -43,8 +46,8 @@ jobs:
         if: always()
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-fix linting issues"
-          file_pattern: "*.ts *.tsx *.js *.jsx"
+          commit_message: "chore: auto-format code with prettier and lint"
+          file_pattern: "*.ts *.tsx *.js *.jsx *.md"
 
       - name: Type Check
         run: pnpm turbo run check-types
