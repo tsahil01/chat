@@ -31,6 +31,21 @@ async function getSubscriptions(): Promise<SubscriptionListResponse[]> {
   }
 }
 
+async function redirectToCustomerPortal() {
+  try {
+    const { data: customerPortal, error } = await authClient.dodopayments.customer.portal();
+    if (error) {
+      console.error("Error fetching customer portal:", error);
+    }
+    if (customerPortal && customerPortal.url) {
+      // redirect to customer portal in new tab
+      window.open(customerPortal.url, "_blank");
+    }
+  } catch (error) {
+    console.error("Error fetching customer portal:", error);
+  }
+}
+
 async function isProUser(): Promise<boolean> {
   try {
     const subscriptions = await getSubscriptions();
@@ -43,4 +58,4 @@ async function isProUser(): Promise<boolean> {
   }
 }
 
-export { getSubscriptions, isProUser };
+export { getSubscriptions, isProUser, redirectToCustomerPortal };
