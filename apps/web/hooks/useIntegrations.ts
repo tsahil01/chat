@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { integrationAuthClient } from '@/lib/auth-client';
+import { buildOAuthUrl } from '@/lib/integrations';
 
 interface Integration {
   id: string;
@@ -25,6 +25,7 @@ export function useIntegrations() {
   const [connectingProvider, setConnectingProvider] = useState<string | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [disconnectingId, setDisconnectingId] = useState<string | null>(null);
 
   const fetchIntegrations = async () => {
     try {
@@ -44,28 +45,32 @@ export function useIntegrations() {
   const linkAccount = async (provider: string) => {
     setConnectingProvider(provider);
     try {
-      await integrationAuthClient.linkSocial({
-        provider, 
-        callbackURL: `/integrations?linked=success&provider=${provider}`
-      });
+      const oauthUrl = buildOAuthUrl(provider as 'github' | 'google');
+      window.location.href = oauthUrl;
     } catch (error) {
       console.error(`Failed to link ${provider} account:`, error);
-    } finally {
       setConnectingProvider(null);
     }
   };
 
   const disconnectIntegration = async (integrationId: string) => {
+    setDisconnectingId(integrationId);
     try {
       const response = await fetch(`/api/integrations/${integrationId}/disconnect`, {
         method: 'POST',
       });
-      
+
+      const data = await response.json();
+
       if (response.ok) {
         await fetchIntegrations();
+      } else {
+        console.error('Disconnect error:', data.error);
       }
     } catch (error) {
       console.error('Error disconnecting integration:', error);
+    } finally {
+      setDisconnectingId(null);
     }
   };
 
@@ -111,6 +116,7 @@ export function useIntegrations() {
     successMessage,
     linkAccount,
     disconnectIntegration,
+    disconnectingId,
     refetch: fetchIntegrations
   };
 }

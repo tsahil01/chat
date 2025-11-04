@@ -15,7 +15,11 @@ export const integrationAuth = betterAuth({
       clientSecret: process.env.INTEGRATION_GOOGLE_CLIENT_SECRET as string,
     },
   },
-  account: { accountLinking: { enabled: true } },
+  account: { 
+    accountLinking: { 
+      enabled: false
+    } 
+  },
 });
 
 
