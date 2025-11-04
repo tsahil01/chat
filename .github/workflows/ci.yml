@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   lint-and-typecheck:
     name: Lint & Type Check
@@ -48,6 +52,9 @@ jobs:
         with:
           commit_message: "chore: auto-format code with prettier and lint"
           file_pattern: "*.ts *.tsx *.md"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          push_options: '--force'
 
       - name: Type Check
         run: pnpm turbo run check-types
