@@ -290,7 +290,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto w-full">
+    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-5xl mx-auto w-full">
       <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
         <MessageList
           messages={messages}
