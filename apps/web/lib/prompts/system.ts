@@ -1,10 +1,16 @@
 import { personalities, Personality } from "./personality";
 
 function getPersonality(personalityName?: string): Personality | undefined {
-  return personalities.find((p) => p.name.toLowerCase() === personalityName?.toLowerCase());
+  return personalities.find(
+    (p) => p.name.toLowerCase() === personalityName?.toLowerCase(),
+  );
 }
 
-export const system_prompt = (selectedChatModel: string, timezone: string, personalityName?: string) => {
+export const system_prompt = (
+  selectedChatModel: string,
+  timezone: string,
+  personalityName?: string,
+) => {
   const { userLocalTime, userDate, now } = getTimeContext(timezone);
   const personality = getPersonality(personalityName);
 

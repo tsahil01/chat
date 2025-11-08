@@ -11,7 +11,9 @@ import { incrementMessageUsageAction } from "@/lib/usage/server";
 
 export async function getChat(
   chatId: string,
-): Promise<(Chat & { messages: Message[]; personality: string | null }) | null> {
+): Promise<
+  (Chat & { messages: Message[]; personality: string | null }) | null
+> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),

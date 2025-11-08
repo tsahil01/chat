@@ -66,8 +66,8 @@ export async function POST(req: Request) {
   const needsChatCreation = !chat;
   const needsMessageCleanup = Boolean(
     chat &&
-    lastIncoming?.role === "user" &&
-    chat.messages.some((m) => m.id === lastIncoming.id),
+      lastIncoming?.role === "user" &&
+      chat.messages.some((m) => m.id === lastIncoming.id),
   );
 
   system += system_prompt(selectedChatModel, timezone, personality);
