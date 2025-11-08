@@ -1,0 +1,51 @@
+name: Auto Fix
+
+on:
+  pull_request:
+permissions:
+  contents: write
+
+jobs:
+  autofix:
+    name: Lint & Fix, Type Check & Commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.4.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format with Prettier
+        run: pnpm format
+
+      - name: Lint & Fix
+        run: pnpm lint -- --fix
+
+      - name: Type Check
+        run: pnpm turbo run check-types
+
+      - name: Commit and push changes
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-format code with prettier and lint"
+          file_pattern: "*.ts *.tsx *.md *.json *.js *.mjs"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+
