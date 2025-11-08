@@ -10,6 +10,8 @@ import Upload from "./upload";
 import { useState } from "react";
 import ImageSquarePreview from "./ImageSquarePreview";
 import { FileUIPart } from "ai";
+import { SelectPersonality } from "../select-personality";
+import { personalities } from "@/lib/prompts/personality";
 
 interface ChatInputProps {
   input: string;
@@ -22,6 +24,9 @@ interface ChatInputProps {
   onSubmit: (e: React.FormEvent) => void;
   fileParts: FileUIPart[] | null;
   setFileParts: (parts: FileUIPart[] | null) => void;
+  personality?: string | null;
+  setPersonality?: (personality: string | null) => void;
+  disablePersonality?: boolean;
 }
 
 export function ChatInput({
@@ -35,6 +40,9 @@ export function ChatInput({
   onSubmit,
   fileParts,
   setFileParts,
+  disablePersonality,
+  personality,
+  setPersonality,
 }: ChatInputProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadingPreview, setUploadingPreview] = useState<string | null>(null);
@@ -100,12 +108,20 @@ export function ChatInput({
               setUploadingPreview={setUploadingPreview}
             />
           </div>
-          <div className="flex-shrink-0 flex flex-row gap-2 my-auto">
-            <SelectModel
-              models={models}
-              selectedModel={selectedModel!}
-              setSelectedModel={setSelectedModel}
-            />
+          <div className="flex-shrink-0 flex flex-row gap-2 my-auto flex-wrap">
+            <div className="flex flex-row gap-1 sm:gap-2 flex-wrap">
+              <SelectPersonality
+                disabled={disablePersonality}
+                personalities={personalities}
+                selectedPersonality={personalities.find(p => p.name === personality)!}
+                setSelectedPersonality={(personality) => setPersonality?.(personality.name)}
+              />
+              <SelectModel
+                models={models}
+                selectedModel={selectedModel!}
+                setSelectedModel={setSelectedModel}
+              />
+            </div>
             <Button
               className="hover:cursor-pointer my-auto"
               size="sm"
