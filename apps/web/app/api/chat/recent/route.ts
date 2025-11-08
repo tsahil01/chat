@@ -39,6 +39,7 @@ export async function GET(request: Request) {
         visibility: true,
         userId: true,
         lastContext: true,
+        personality: true,
       },
     });
 
