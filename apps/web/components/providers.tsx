@@ -72,15 +72,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <div className="flex flex-row items-center gap-2 p-4">
             <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
             <div className="flex flex-row gap-2 items-center w-full justify-between">
-            <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
-              {displayedTitle || title}
-            </h1>
-            {personality && (
-            <span className="flex flex-row items-center gap-2 text-sm text-muted-foreground font-medium my-auto">
-                {/* <LuBrain className="w-4 h-4 flex-shrink-0" /> */}
-                {personality?.charAt(0).toUpperCase() + personality?.slice(1) || "Default"}
-              </span>
-            )}
+              <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
+                {displayedTitle || title}
+              </h1>
+              {personality && (
+                <span className="flex flex-row items-center gap-2 text-sm text-muted-foreground font-medium my-auto">
+                  {/* <LuBrain className="w-4 h-4 flex-shrink-0" /> */}
+                  {personality?.charAt(0).toUpperCase() +
+                    personality?.slice(1) || "Default"}
+                </span>
+              )}
             </div>
           </div>
           {children}

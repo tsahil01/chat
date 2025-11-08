@@ -113,8 +113,12 @@ export function ChatInput({
               <SelectPersonality
                 disabled={disablePersonality}
                 personalities={personalities}
-                selectedPersonality={personalities.find(p => p.name === personality)!}
-                setSelectedPersonality={(personality) => setPersonality?.(personality.name)}
+                selectedPersonality={
+                  personalities.find((p) => p.name === personality)!
+                }
+                setSelectedPersonality={(personality) =>
+                  setPersonality?.(personality.name)
+                }
               />
               <SelectModel
                 models={models}

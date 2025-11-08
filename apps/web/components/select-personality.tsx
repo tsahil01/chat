@@ -14,7 +14,7 @@ export function SelectPersonality({
   personalities,
   selectedPersonality,
   setSelectedPersonality,
-  disabled
+  disabled,
 }: {
   personalities: Personality[];
   selectedPersonality: Personality;
@@ -39,7 +39,8 @@ export function SelectPersonality({
           <div className="flex items-center gap-1 sm:gap-2 truncate">
             <LuBrain className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
             <span className="truncate text-xs">
-              {selectedPersonality?.name.charAt(0).toUpperCase() + selectedPersonality?.name.slice(1) || "Default"}
+              {selectedPersonality?.name.charAt(0).toUpperCase() +
+                selectedPersonality?.name.slice(1) || "Default"}
             </span>
           </div>
           <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
@@ -55,7 +56,9 @@ export function SelectPersonality({
               <Button
                 key={index}
                 variant={
-                  selectedPersonality?.name === personality.name ? "secondary" : "ghost"
+                  selectedPersonality?.name === personality.name
+                    ? "secondary"
+                    : "ghost"
                 }
                 className="w-full justify-start h-auto p-2 sm:p-3"
                 onClick={() => handlePersonalitySelect(personality)}
@@ -63,7 +66,8 @@ export function SelectPersonality({
                 <div className="flex flex-col justify-between gap-1 w-full">
                   <div className="flex flex-row justify-between items-start gap-1">
                     <div className="font-medium text-sm sm:text-base truncate">
-                      {personality.name.charAt(0).toUpperCase() + personality.name.slice(1)}
+                      {personality.name.charAt(0).toUpperCase() +
+                        personality.name.slice(1)}
                     </div>
                   </div>
                   <div className="text-xs text-start text-muted-foreground truncate">
