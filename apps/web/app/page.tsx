@@ -18,6 +18,7 @@ export default function Chat() {
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [fileParts, setFileParts] = useState<FileUIPart[] | null>(null);
+  const [personalityName, setPersonalityName] = useState<string | null>(null);
 
   const { data: session, isPending } = authClient.useSession();
 
@@ -38,6 +39,7 @@ export default function Chat() {
       const encodedInput = `?input=${encodeURIComponent(input)}`;
       const encodedSelectedModel = `&selectedModel=${encodeURIComponent(selectedModel?.model || "")}`;
       const encodedToggleWebSearch = `&toggleWebSearch=${encodeURIComponent(toggleWebSearch)}`;
+      const encodedPersonality = `&personality=${encodeURIComponent(personalityName || "")}`;
       const encodedFileParts = fileParts
         ? `&fileParts=${encodeURIComponent(JSON.stringify(fileParts))}`
         : "";
@@ -46,6 +48,9 @@ export default function Chat() {
       }
       if (encodedSelectedModel) {
         url += encodedSelectedModel;
+      }
+      if (encodedPersonality) {
+        url += encodedPersonality;
       }
       if (encodedToggleWebSearch) {
         url += encodedToggleWebSearch;
@@ -85,6 +90,8 @@ export default function Chat() {
         onSubmit={handleSubmit}
         fileParts={fileParts}
         setFileParts={setFileParts}
+        personality={personalityName}
+        setPersonality={setPersonalityName}
       />
       <AuthDialog
         open={authOpen}

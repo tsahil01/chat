@@ -7,23 +7,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@workspace/ui/components/popover";
-import { LuCpu, LuChevronDown } from "react-icons/lu";
-import { Models } from "@/lib/models";
-import { Badge } from "@workspace/ui/components/badge";
+import { LuBrain, LuChevronDown } from "react-icons/lu";
+import { Personality } from "@/lib/prompts/personality";
 
-export function SelectModel({
-  models,
-  selectedModel,
-  setSelectedModel,
+export function SelectPersonality({
+  personalities,
+  selectedPersonality,
+  setSelectedPersonality,
+  disabled,
 }: {
-  models: Models[];
-  selectedModel: Models;
-  setSelectedModel: (model: Models) => void;
+  personalities: Personality[];
+  selectedPersonality: Personality;
+  setSelectedPersonality: (personality: Personality) => void;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
-  const handleModelSelect = (model: Models) => {
-    setSelectedModel(model);
+  const handlePersonalitySelect = (personality: Personality) => {
+    setSelectedPersonality(personality);
     setOpen(false);
   };
 
@@ -31,13 +32,15 @@ export function SelectModel({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant="ghost"
           className="justify-between min-w-[80px] max-w-[120px] sm:min-w-[100px] sm:max-w-[150px]"
         >
           <div className="flex items-center gap-1 sm:gap-2 truncate">
-            <LuCpu className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
+            <LuBrain className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
             <span className="truncate text-xs">
-              {selectedModel?.displayName || "Model"}
+              {selectedPersonality?.name.charAt(0).toUpperCase() +
+                selectedPersonality?.name.slice(1) || "Default"}
             </span>
           </div>
           <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
@@ -46,29 +49,29 @@ export function SelectModel({
       <PopoverContent className="w-72 sm:w-80 p-0" align="start">
         <div className="p-2">
           <div className="text-xs sm:text-sm font-medium text-muted-foreground mb-2 px-2">
-            Select Model
+            Select Personality
           </div>
           <div className="space-y-1">
-            {models.map((model, index) => (
+            {personalities.map((personality, index) => (
               <Button
                 key={index}
                 variant={
-                  selectedModel?.model === model.model ? "secondary" : "ghost"
+                  selectedPersonality?.name === personality.name
+                    ? "secondary"
+                    : "ghost"
                 }
                 className="w-full justify-start h-auto p-2 sm:p-3"
-                onClick={() => handleModelSelect(model)}
+                onClick={() => handlePersonalitySelect(personality)}
               >
                 <div className="flex flex-col justify-between gap-1 w-full">
                   <div className="flex flex-row justify-between items-start gap-1">
-                    <div className="font-medium text-sm sm:text-base">
-                      {model.displayName}
+                    <div className="font-medium text-sm sm:text-base truncate">
+                      {personality.name.charAt(0).toUpperCase() +
+                        personality.name.slice(1)}
                     </div>
-                    {model.fileSupport && (
-                      <Badge className="text-xs">File Upload</Badge>
-                    )}
                   </div>
                   <div className="text-xs text-start text-muted-foreground truncate">
-                    Provider: {model.provider}
+                    {personality.description}
                   </div>
                 </div>
               </Button>
