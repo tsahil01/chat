@@ -96,7 +96,7 @@ model Chat {
   userId      String
   visibility  Visibility @default(PRIVATE)
   lastContext Json? // LanguageModelV2Usage
-
+  personality String?
   // Relations
   user     User      @relation(fields: [userId], references: [id])
   messages Message[]

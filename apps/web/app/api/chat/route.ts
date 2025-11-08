@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     selectedChatProvider,
     toggleWebSearch,
     timezone = "UTC",
+    personality,
   }: {
     chatId: string;
     messages: UIMessage[];
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
     selectedChatProvider: string;
     toggleWebSearch: boolean;
     timezone: string;
+    personality?: string;
   } = await req.json();
 
   const session = await auth.api.getSession({
@@ -64,11 +66,11 @@ export async function POST(req: Request) {
   const needsChatCreation = !chat;
   const needsMessageCleanup = Boolean(
     chat &&
-      lastIncoming?.role === "user" &&
-      chat.messages.some((m) => m.id === lastIncoming.id),
+    lastIncoming?.role === "user" &&
+    chat.messages.some((m) => m.id === lastIncoming.id),
   );
 
-  system += system_prompt(selectedChatModel, timezone);
+  system += system_prompt(selectedChatModel, timezone, personality);
 
   if (toggleWebSearch) {
     system += `- You need to use the exaWebSearch tool for next user message. It does not matter what the user asks, you need to use the exaWebSearch tool.\n`;
@@ -106,6 +108,7 @@ export async function POST(req: Request) {
         needsChatCreation,
         needsMessageCleanup,
         assistantMessage,
+        personality,
       });
 
       if (!success) {
