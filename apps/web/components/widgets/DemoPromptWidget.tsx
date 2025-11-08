@@ -25,11 +25,16 @@ export function DemoPromptWidget({ className }: { className?: string }) {
 
   function handleClick() {
     const encodedInput = encodeURIComponent(prompt.prompt);
-    const encodedPersonality = encodeURIComponent((prompt.personality?.toLowerCase() ?? "") || "");
+    const encodedPersonality = encodeURIComponent(
+      (prompt.personality?.toLowerCase() ?? "") || "",
+    );
     const newChatId = generateUUID();
-    router.replace(`/chat/${newChatId}?input=${encodedInput}&personality=${encodedPersonality}`, {
-      scroll: false,
-    });
+    router.replace(
+      `/chat/${newChatId}?input=${encodedInput}&personality=${encodedPersonality}`,
+      {
+        scroll: false,
+      },
+    );
   }
 
   return (

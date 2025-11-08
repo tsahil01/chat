@@ -306,7 +306,11 @@ export default function Page() {
       className="flex flex-col h-[calc(100vh-4rem)]     
      max-w-5xl mx-auto w-full"
     >
-      {<div className="text-sm text-gray-500">Personality: {personalityName}</div>}
+      {
+        <div className="text-sm text-gray-500">
+          Personality: {personalityName}
+        </div>
+      }
       <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
         <MessageList
           messages={messages}
