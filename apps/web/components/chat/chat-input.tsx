@@ -2,15 +2,20 @@
 import { Button } from "@workspace/ui/components/button";
 import { Textarea } from "@workspace/ui/components/textarea";
 import { Toggle } from "@workspace/ui/components/toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip";
 import { CiGlobe } from "react-icons/ci";
 import { FaArrowUp } from "react-icons/fa6";
 import { SelectModel } from "@/components/select-model";
 import { models, Models } from "@/lib/models";
-import Upload from "./upload";
+import Upload from "@/components/chat/upload";
 import { useState } from "react";
-import ImageSquarePreview from "./ImageSquarePreview";
+import ImageSquarePreview from "@/components/chat/ImageSquarePreview";
 import { FileUIPart } from "ai";
-import { SelectPersonality } from "../select-personality";
+import { SelectPersonality } from "@/components/select-personality";
 import { personalities } from "@/lib/prompts/personality";
 
 interface ChatInputProps {
@@ -94,13 +99,20 @@ export function ChatInput({
         </div>
         <div className="flex flex-row justify-between items-center gap-2 p-2 my-auto">
           <div className="flex flex-row gap-1 sm:gap-2 flex-wrap">
-            <Toggle
-              pressed={toggleWebSearch}
-              onPressedChange={setToggleWebSearch}
-              size="sm"
-            >
-              <CiGlobe className="w-4 h-4" />
-            </Toggle>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Toggle
+                  pressed={toggleWebSearch}
+                  onPressedChange={setToggleWebSearch}
+                  size="sm"
+                >
+                  <CiGlobe className="w-4 h-4" />
+                </Toggle>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Web Search</p>
+              </TooltipContent>
+            </Tooltip>
             <Upload
               fileParts={fileParts}
               setFileParts={setFileParts}
@@ -126,14 +138,21 @@ export function ChatInput({
                 setSelectedModel={setSelectedModel}
               />
             </div>
-            <Button
-              className="hover:cursor-pointer my-auto"
-              size="sm"
-              onClick={onSubmit}
-              disabled={isSubmitting || isUploading}
-            >
-              <FaArrowUp className="my-auto" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="hover:cursor-pointer my-auto"
+                  size="sm"
+                  onClick={onSubmit}
+                  disabled={isSubmitting || isUploading}
+                >
+                  <FaArrowUp className="my-auto" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Send message</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>
