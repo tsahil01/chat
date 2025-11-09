@@ -6,6 +6,8 @@ export interface Models {
   model: string;
   displayName: string;
   provider: string;
+  thinking: boolean;
+  tags?: string[];
   fileSupport: boolean;
 }
 
@@ -14,30 +16,36 @@ export const models: Models[] = [
     model: "kimi-k2-turbo-preview",
     displayName: "kimi k2 turbo",
     provider: "moonshot",
+    thinking: false,
+    tags: ["Fast"],
+    fileSupport: false,
+  },
+  {
+    model: "moonshotai/kimi-k2-thinking",
+    displayName: "kimi k2 thinking",
+    provider: "openrouter",
+    thinking: true,
     fileSupport: false,
   },
   {
     model: "nvidia/nemotron-nano-9b-v2:free",
     displayName: "nvidia nemotron nano",
     provider: "openrouter",
+    thinking: true,
     fileSupport: false,
   },
   {
     model: "z-ai/glm-4.5-air:free",
     displayName: "z-ai glm 4.5 air",
     provider: "openrouter",
-    fileSupport: false,
-  },
-  {
-    model: "moonshotai/kimi-k2:free",
-    displayName: "kimi k2",
-    provider: "openrouter",
+    thinking: true,
     fileSupport: false,
   },
   {
     model: "google/gemini-2.5-flash",
     displayName: "gemini 2.5 flash",
     provider: "openrouter",
+    thinking: false,
     fileSupport: true,
   },
 ];

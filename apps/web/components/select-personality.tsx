@@ -7,6 +7,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@workspace/ui/components/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip";
 import { LuBrain, LuChevronDown } from "react-icons/lu";
 import { Personality } from "@/lib/prompts/personality";
 
@@ -30,22 +35,29 @@ export function SelectPersonality({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          disabled={disabled}
-          variant="ghost"
-          className="justify-between min-w-[80px] max-w-[120px] sm:min-w-[100px] sm:max-w-[150px]"
-        >
-          <div className="flex items-center gap-1 sm:gap-2 truncate">
-            <LuBrain className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
-            <span className="truncate text-xs">
-              {selectedPersonality?.name.charAt(0).toUpperCase() +
-                selectedPersonality?.name.slice(1) || "Default"}
-            </span>
-          </div>
-          <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
-        </Button>
-      </PopoverTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PopoverTrigger asChild>
+            <Button
+              disabled={disabled}
+              variant="ghost"
+              className="justify-between min-w-[80px] max-w-[120px] sm:min-w-[100px] sm:max-w-[150px]"
+            >
+              <div className="flex items-center gap-1 sm:gap-2 truncate">
+                <LuBrain className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
+                <span className="truncate text-xs">
+                  {selectedPersonality?.name.charAt(0).toUpperCase() +
+                    selectedPersonality?.name.slice(1) || "Default"}
+                </span>
+              </div>
+              <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
+            </Button>
+          </PopoverTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{selectedPersonality?.description || "Default personality"}</p>
+        </TooltipContent>
+      </Tooltip>
       <PopoverContent className="w-72 sm:w-80 p-0" align="start">
         <div className="p-2">
           <div className="text-xs sm:text-sm font-medium text-muted-foreground mb-2 px-2">

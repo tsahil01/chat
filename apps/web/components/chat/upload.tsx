@@ -2,6 +2,11 @@
 
 import { upload } from "@vercel/blob/client";
 import { Button } from "@workspace/ui/components/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@workspace/ui/components/tooltip";
 import { FileUIPart } from "ai";
 import { Paperclip } from "lucide-react";
 import { useRef, useState } from "react";
@@ -66,13 +71,20 @@ export default function Upload({
         accept="image/jpeg,image/png,image/webp,application/pdf"
         onChange={handleFileChange}
       />
-      <Button
-        onClick={() => inputFileRef.current?.click()}
-        variant="ghost"
-        size="icon"
-      >
-        <Paperclip className="h-4 w-4" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => inputFileRef.current?.click()}
+            variant="ghost"
+            size="icon"
+          >
+            <Paperclip className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Upload file</p>
+        </TooltipContent>
+      </Tooltip>
     </>
   );
 }
