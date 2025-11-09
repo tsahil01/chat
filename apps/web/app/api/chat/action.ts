@@ -11,7 +11,9 @@ import { incrementMessageUsageAction } from "@/lib/usage/server";
 
 export async function getChat(
   chatId: string,
-): Promise<(Chat & { messages: Message[] }) | null> {
+): Promise<
+  (Chat & { messages: Message[]; personality: string | null }) | null
+> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -94,10 +96,12 @@ export async function createChat({
   chatId,
   title,
   visibility,
+  personality,
 }: {
   chatId: string;
   title: string;
   visibility: Visibility;
+  personality?: string;
 }): Promise<Chat | null> {
   try {
     const session = await auth.api.getSession({
@@ -114,6 +118,7 @@ export async function createChat({
         title,
         userId: session.user.id,
         visibility,
+        personality,
       },
     });
 
@@ -209,12 +214,14 @@ export async function handleChatCompletion({
   needsChatCreation,
   needsMessageCleanup,
   assistantMessage,
+  personality,
 }: {
   chatId: string;
   lastIncoming: UIMessage;
   needsChatCreation: boolean;
   needsMessageCleanup: boolean;
   assistantMessage: UIMessage;
+  personality?: string;
 }): Promise<{ success: boolean; errors: string[] }> {
   const errors: string[] = [];
 
@@ -225,6 +232,7 @@ export async function handleChatCompletion({
           chatId,
           title: "New Chat",
           visibility: Visibility.PRIVATE,
+          personality: personality,
         });
 
         setImmediate(async () => {

@@ -27,10 +27,13 @@ export async function generateTitleFromUserMessage({
   }
 }
 
-export async function getChatTitle(chatId: string) {
+export async function getChatInfo(chatId: string) {
   const chat = await getChat(chatId);
-  if (!chat) return "New Chat";
-  return chat.title;
+  if (!chat) return null;
+  return {
+    title: chat.title || "New Chat",
+    personality: chat.personality || null,
+  };
 }
 
 export async function getUIMessages(

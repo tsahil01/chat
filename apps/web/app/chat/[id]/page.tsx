@@ -25,6 +25,7 @@ export default function Page() {
   const [chatId, setChatId] = useState<string | null>(null);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [hasProcessedUrlInput, setHasProcessedUrlInput] = useState(false);
+  const [personalityName, setPersonalityName] = useState<string | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [fileParts, setFileParts] = useState<FileUIPart[] | null>(null);
   const { data: session, isPending } = authClient.useSession();
@@ -51,6 +52,7 @@ export default function Page() {
   const chatIdRef = useRef<string | null>(null);
   const selectedModelRef = useRef<Models | null>(null);
   const toggleWebSearchRef = useRef<boolean>(false);
+  const personalityNameRef = useRef<string | null>(null);
 
   useEffect(() => {
     chatIdRef.current = chatId;
@@ -63,6 +65,10 @@ export default function Page() {
   useEffect(() => {
     toggleWebSearchRef.current = toggleWebSearch;
   }, [toggleWebSearch]);
+
+  useEffect(() => {
+    personalityNameRef.current = personalityName;
+  }, [personalityName]);
 
   const transport = useMemo(() => {
     return new DefaultChatTransport({
@@ -78,6 +84,7 @@ export default function Page() {
             selectedChatProvider: effectiveModel?.provider,
             toggleWebSearch: effectiveToggle,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            personality: personalityNameRef.current,
           },
         };
       },
@@ -157,6 +164,7 @@ export default function Page() {
       const messageFromUrl = searchParams.get("input");
       const selectedModelNameFromUrl = searchParams.get("selectedModel");
       const toggleWebSearchFromUrl = searchParams.get("toggleWebSearch");
+      const personalityNameFromUrl = searchParams.get("personality");
       if (selectedModelNameFromUrl) {
         setSelectedModel(
           models.find((model) => model.model === selectedModelNameFromUrl) ||
@@ -165,6 +173,9 @@ export default function Page() {
       }
       if (toggleWebSearchFromUrl === "true") {
         setToggleWebSearch(true);
+      }
+      if (personalityNameFromUrl) {
+        setPersonalityName(personalityNameFromUrl);
       }
       if (!messageFromUrl) {
         getChatsMessages();
@@ -187,6 +198,7 @@ export default function Page() {
       }
 
       const data = await response.json();
+      setPersonalityName(data.personality || null);
       const uiMessages = await getUIMessages(data.messages);
       setMessages(uiMessages);
     } catch (error) {
@@ -290,10 +302,7 @@ export default function Page() {
   };
 
   return (
-    <div
-      className="flex flex-col h-[calc(100vh-4rem)]     
-     max-w-5xl mx-auto w-full"
-    >
+    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-5xl mx-auto w-full">
       <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
         <MessageList
           messages={messages}
@@ -310,6 +319,7 @@ export default function Page() {
 
       <div className="flex-shrink-0 p-2">
         <ChatInput
+          disablePersonality={true}
           input={input}
           setInput={setInput}
           isSubmitting={isSubmitting}
@@ -320,6 +330,8 @@ export default function Page() {
           onSubmit={handleSubmit}
           fileParts={fileParts}
           setFileParts={setFileParts}
+          personality={personalityName}
+          setPersonality={setPersonalityName}
         />
       </div>
       <AuthDialog
