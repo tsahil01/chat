@@ -2,7 +2,6 @@ import {
   streamText,
   UIMessage,
   convertToModelMessages,
-  stepCountIs,
   StepResult,
   ToolSet,
 } from "ai";
@@ -92,7 +91,6 @@ export async function POST(req: Request) {
     })!,
     messages: convertToModelMessages(messages),
     tools: tools,
-    stopWhen: stepCountIs(5),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {
       const assistantMessage = {
