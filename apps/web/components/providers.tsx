@@ -10,7 +10,11 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { getChatInfo } from "@/lib/chat";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LuBrain } from "react-icons/lu";
+import { Toaster } from "@workspace/ui/components/sonner";
+import {
+  showAnnouncementToast,
+  type AnnouncementToastOptions,
+} from "@workspace/ui/components/announcement-toast";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const params = useParams();
@@ -18,6 +22,42 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [personality, setPersonality] = useState<string | null>(null);
   const [displayedTitle, setDisplayedTitle] = useState("");
   const [typingIndex, setTypingIndex] = useState(0);
+  const hasShownAnnouncementRef = React.useRef(false);
+
+  useEffect(() => {
+    if (hasShownAnnouncementRef.current) return;
+
+    let isMounted = true;
+
+    const loadAnnouncements = async () => {
+      try {
+        const response = await fetch("/announcements.json", {
+          cache: "no-cache",
+        });
+        if (!response.ok) {
+          console.warn("Failed to fetch announcements.json");
+          return;
+        }
+
+        const data: { announcements?: AnnouncementToastOptions[] } =
+          await response.json();
+        const [announcement] = data.announcements ?? [];
+
+        if (!isMounted || !announcement) return;
+
+        showAnnouncementToast(announcement);
+        hasShownAnnouncementRef.current = true;
+      } catch (error) {
+        console.warn("Unable to load announcements", error);
+      }
+    };
+
+    loadAnnouncements();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   async function getTitle() {
     const chatId = params.id as string;
@@ -87,6 +127,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </SidebarProvider>
+      <Toaster />
     </NextThemesProvider>
   );
 }

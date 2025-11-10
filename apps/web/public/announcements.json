@@ -1,0 +1,40 @@
+{
+  "announcements": [
+    {
+      "id": "launch-2-2025",
+      "title": "Welcome to AI Chat 🔥",
+      "description": "Your intelligent assistant powered by cutting-edge AI models.",
+      "delay": 2500,
+      "action": { "label": "Start chatting", "href": "/" },
+      "extendedTitle": "Meet your AI assistant",
+      "extendedContent": "Multiple AI personalities, real-time web search, and powerful integrations.",
+      "highlights": [
+        {
+          "title": "10 AI personalities",
+          "description": "Wellness, finance, career, research, productivity, and more."
+        },
+        {
+          "title": "Multiple AI models",
+          "description": "Gemini, Kimi, Nemotron, and more at your fingertips."
+        },
+        {
+          "title": "Real-time web search",
+          "description": "Get the latest information instantly."
+        },
+        {
+          "title": "GitHub & Google integrations",
+          "description": "Manage repos, issues, calendar, and emails from chat."
+        },
+        {
+          "title": "File upload support",
+          "description": "Upload files for AI-powered analysis."
+        },
+        {
+          "title": "Smart widgets dashboard",
+          "description": "Weather, crypto, news, and more in one place."
+        }
+      ],
+      "dismissLabel": "Close"
+    }
+  ]
+}
