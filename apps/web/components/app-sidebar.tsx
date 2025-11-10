@@ -145,10 +145,10 @@ export function AppSidebar() {
       <SidebarContent className="overflow-hidden">
         {/* Header */}
         <div className="flex justify-between p-3 border-b border-sidebar-border">
-        <Link href="/">
+          <Link href="/">
             <h1 className="text-base font-semibold my-auto">AI Chat</h1>
-        </Link>
-        <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer my-auto" />
+          </Link>
+          <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer my-auto" />
         </div>
         <div>
           <SidebarGroup>

@@ -76,8 +76,8 @@ function HeaderContent() {
         {personality && (
           <span className="flex flex-row items-center gap-2 text-sm text-muted-foreground font-medium my-auto">
             {/* <LuBrain className="w-4 h-4 flex-shrink-0" /> */}
-            {personality?.charAt(0).toUpperCase() +
-              personality?.slice(1) || "Default"}
+            {personality?.charAt(0).toUpperCase() + personality?.slice(1) ||
+              "Default"}
           </span>
         )}
       </div>
@@ -87,7 +87,7 @@ function HeaderContent() {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hasShownAnnouncementRef = React.useRef(false);
-  
+
   useEffect(() => {
     if (hasShownAnnouncementRef.current) return;
 
