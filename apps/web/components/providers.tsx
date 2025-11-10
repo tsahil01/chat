@@ -65,7 +65,7 @@ function HeaderContent() {
   }, [title, typingIndex]);
 
   return (
-    <div className="flex flex-row items-center gap-2 p-3 border-b border-border">
+    <div className="flex flex-row items-center gap-2 p-3">
       {(!open || isMobile) && (
         <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
       )}
