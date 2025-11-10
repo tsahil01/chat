@@ -11,7 +11,7 @@ import { SlidingNumber } from "@workspace/ui/components/sliding-number";
 
 function formatTime(date: Date, timeZone?: string) {
   try {
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -28,6 +28,7 @@ export function ClockWidget({ className }: { className?: string }) {
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
     [],
   );
+  const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState<Date>(new Date());
   const [city, setCity] = useState<string>("");
   const regionFallback = useMemo(() => {
@@ -38,6 +39,9 @@ export function ClockWidget({ className }: { className?: string }) {
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
+  }, []);
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -69,7 +73,7 @@ export function ClockWidget({ className }: { className?: string }) {
   const second = parseInt(secondStr, 10) || 0;
   const dayDate = useMemo(() => {
     try {
-      return new Intl.DateTimeFormat(undefined, {
+      return new Intl.DateTimeFormat("en-US", {
         weekday: "long",
         month: "short",
         day: "2-digit",
@@ -86,18 +90,33 @@ export function ClockWidget({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-sm text-muted-foreground">
-            {city || regionFallback}
+          <div
+            className="text-sm text-muted-foreground"
+            suppressHydrationWarning
+          >
+            {mounted ? city || regionFallback : ""}
           </div>
-          <div className="text-2xl sm:text-3xl font-semibold tabular-nums flex items-center gap-1">
-            <SlidingNumber value={hour} padStart />
-            <span>:</span>
-            <SlidingNumber value={minute} padStart />
-            <span>:</span>
-            <SlidingNumber value={second} padStart />
+          <div
+            className="text-2xl sm:text-3xl font-semibold tabular-nums flex items-center gap-1"
+            suppressHydrationWarning
+          >
+            {mounted ? (
+              <>
+                <SlidingNumber value={hour} padStart />
+                <span>:</span>
+                <SlidingNumber value={minute} padStart />
+                <span>:</span>
+                <SlidingNumber value={second} padStart />
+              </>
+            ) : (
+              ""
+            )}
           </div>
-          <div className="text-xs sm:text-sm text-muted-foreground">
-            {dayDate}
+          <div
+            className="text-xs sm:text-sm text-muted-foreground"
+            suppressHydrationWarning
+          >
+            {mounted ? dayDate : ""}
           </div>
         </div>
       </CardContent>
