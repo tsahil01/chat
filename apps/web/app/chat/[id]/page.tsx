@@ -317,21 +317,21 @@ export default function Page() {
         {isSubmitting && <TypingIndicator />}
       </div>
 
-        <ChatInput
-          disablePersonality={true}
-          input={input}
-          setInput={setInput}
-          isSubmitting={isSubmitting}
-          toggleWebSearch={toggleWebSearch}
-          setToggleWebSearch={setToggleWebSearch}
-          selectedModel={selectedModel}
-          setSelectedModel={setSelectedModel}
-          onSubmit={handleSubmit}
-          fileParts={fileParts}
-          setFileParts={setFileParts}
-          personality={personalityName}
-          setPersonality={setPersonalityName}
-        />
+      <ChatInput
+        disablePersonality={true}
+        input={input}
+        setInput={setInput}
+        isSubmitting={isSubmitting}
+        toggleWebSearch={toggleWebSearch}
+        setToggleWebSearch={setToggleWebSearch}
+        selectedModel={selectedModel}
+        setSelectedModel={setSelectedModel}
+        onSubmit={handleSubmit}
+        fileParts={fileParts}
+        setFileParts={setFileParts}
+        personality={personalityName}
+        setPersonality={setPersonalityName}
+      />
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}
