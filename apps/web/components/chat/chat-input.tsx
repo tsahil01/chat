@@ -62,7 +62,7 @@ export function ChatInput({
 
   return (
     <>
-      <div className="bg-muted/30 rounded-lg flex flex-col border border-border">
+      <div className="bg-muted/30 rounded-lg flex flex-col border border-border m-2">
         <div className="w-full">
           {(uploadingPreview || fileParts) && (
             <div className="rounded-lg mb-3 flex flex-row gap-2 flex-wrap">
