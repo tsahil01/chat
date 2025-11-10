@@ -52,9 +52,7 @@ export function SelectModel({
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent>
-          <p>
-            {selectedModel?.displayName}
-          </p>
+          <p>{selectedModel?.displayName}</p>
         </TooltipContent>
       </Tooltip>
       <PopoverContent className="w-72 sm:w-80 p-0" align="start">
@@ -84,7 +82,11 @@ export function SelectModel({
                       <Badge className="text-xs">Reasoning</Badge>
                     )}
                     {model.tags?.map((tag) => (
-                      <Badge key={tag} variant={"secondary"} className="text-xs">
+                      <Badge
+                        key={tag}
+                        variant={"secondary"}
+                        className="text-xs"
+                      >
                         {tag}
                       </Badge>
                     ))}
