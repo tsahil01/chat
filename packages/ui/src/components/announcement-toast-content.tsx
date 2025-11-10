@@ -135,35 +135,34 @@ export function AnnouncementToastContent({
       </CardHeader>
       <CardContent className="space-y-4">
         {extendedTitle && extendedContent && (
-            <div className="rounded-lg border bg-muted/40 p-3">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            {extendedTitle}
-          </p>
-          <p className="mt-1 text-sm text-foreground">
-            {extendedContent}
-          </p>
-        </div>
+          <div className="rounded-lg border bg-muted/40 p-3">
+            <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+              {extendedTitle}
+            </p>
+            <p className="mt-1 text-sm text-foreground">{extendedContent}</p>
+          </div>
         )}
         <div className="space-y-3">
           <h4 className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Highlights
           </h4>
           <div className="grid gap-3">
-            {highlights && highlights.map((item, index) => (
-              <div key={index} className="flex gap-3">
-                <div className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-foreground">
-                    {item.title}
-                  </p>
-                  {item.description ? (
-                    <p className="text-sm text-muted-foreground hidden md:block">
-                      {item.description}
+            {highlights &&
+              highlights.map((item, index) => (
+                <div key={index} className="flex gap-3">
+                  <div className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-foreground">
+                      {item.title}
                     </p>
-                  ) : null}
+                    {item.description ? (
+                      <p className="text-sm text-muted-foreground hidden md:block">
+                        {item.description}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </CardContent>

@@ -90,8 +90,11 @@ export function ClockWidget({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-sm text-muted-foreground" suppressHydrationWarning>
-            {mounted ? (city || regionFallback) : ""}
+          <div
+            className="text-sm text-muted-foreground"
+            suppressHydrationWarning
+          >
+            {mounted ? city || regionFallback : ""}
           </div>
           <div
             className="text-2xl sm:text-3xl font-semibold tabular-nums flex items-center gap-1"
