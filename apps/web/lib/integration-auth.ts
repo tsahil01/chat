@@ -14,7 +14,7 @@ export const integrationAuth = betterAuth({
           clientId: config.clientId as string,
           clientSecret: config.clientSecret as string,
         },
-      ])
+      ]),
     ),
   },
   account: {

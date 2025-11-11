@@ -109,7 +109,7 @@ export async function POST(req: Request) {
     ...(getModelDetails(selectedChatModel)?.toolSupport
       ? { tools: getTools(integrations) }
       : {}),
-      stopWhen: stepCountIs(100),
+    stopWhen: stepCountIs(100),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {
       const assistantMessage = {

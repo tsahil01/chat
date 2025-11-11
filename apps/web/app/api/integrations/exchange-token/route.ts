@@ -23,7 +23,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const config = INTEGRATION_CONFIG.find((config) => config.name === provider);
+    const config = INTEGRATION_CONFIG.find(
+      (config) => config.name === provider,
+    );
     if (!config) {
       return NextResponse.json(
         { error: `Unsupported provider: ${provider}` },

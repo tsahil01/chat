@@ -4,7 +4,9 @@ export function buildOAuthUrl(
   provider: (typeof INTEGRATION_CONFIG)[number]["name"],
   options?: { state?: string },
 ) {
-  const baseUrl = INTEGRATION_CONFIG.find((config) => config.name === provider)?.OAUTH_ENDPOINTS;
+  const baseUrl = INTEGRATION_CONFIG.find(
+    (config) => config.name === provider,
+  )?.OAUTH_ENDPOINTS;
   if (!baseUrl) {
     throw new Error(`Unsupported provider: ${provider}`);
   }

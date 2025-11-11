@@ -153,5 +153,8 @@ export async function POST(request: Request) {
 }
 
 function getProviderName(providerId: string): string {
-  return INTEGRATION_CONFIG.find((config) => config.name === providerId)?.displayName || providerId.charAt(0).toUpperCase() + providerId.slice(1);
+  return (
+    INTEGRATION_CONFIG.find((config) => config.name === providerId)
+      ?.displayName || providerId.charAt(0).toUpperCase() + providerId.slice(1)
+  );
 }
