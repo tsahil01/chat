@@ -12,7 +12,7 @@ import {
   handleChatCompletion,
   handleStreamingError,
 } from "./action";
-import { getSelectedModel } from "@/lib/models";
+import { getSelectedModel, Models, models } from "@/lib/models";
 import { system_prompt } from "@/lib/prompts/system";
 
 export const maxDuration = 30;
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
         limit: usage?.limit || 150,
         currentUsage: usage?.currentUsage || 0,
       },
-      { status: 429 },
+      { status: 429 }
     );
   }
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
   const needsMessageCleanup = Boolean(
     chat &&
       lastIncoming?.role === "user" &&
-      chat.messages.some((m) => m.id === lastIncoming.id),
+      chat.messages.some((m) => m.id === lastIncoming.id)
   );
 
   system += system_prompt(selectedChatModel, timezone, personality);
@@ -86,13 +86,20 @@ export async function POST(req: Request) {
     } as UIMessage);
   }
 
+  const getModelDetails = (modelName: string): Models | undefined => {
+    return models.find((model) => model.model === modelName);
+  };
+
   const result = streamText({
     model: getSelectedModel({
       model: selectedChatModel,
       provider: selectedChatProvider,
     })!,
     messages: convertToModelMessages(messages),
-    tools: tools,
+    maxOutputTokens: 3000,
+    ...(getModelDetails(selectedChatModel)?.toolSupport
+      ? { tools: tools }
+      : {}),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {
       const assistantMessage = {

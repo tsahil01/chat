@@ -9,6 +9,7 @@ export interface Models {
   thinking: boolean;
   tags?: string[];
   fileSupport: boolean;
+  toolSupport: boolean;
 }
 
 export const models: Models[] = [
@@ -19,6 +20,7 @@ export const models: Models[] = [
     thinking: false,
     tags: ["Fast"],
     fileSupport: false,
+    toolSupport: true,
   },
   {
     model: "moonshotai/kimi-k2-thinking",
@@ -26,6 +28,7 @@ export const models: Models[] = [
     provider: "openrouter",
     thinking: true,
     fileSupport: false,
+    toolSupport: true,
   },
   {
     model: "nvidia/nemotron-nano-9b-v2:free",
@@ -33,6 +36,7 @@ export const models: Models[] = [
     provider: "openrouter",
     thinking: true,
     fileSupport: false,
+    toolSupport: true,
   },
   {
     model: "z-ai/glm-4.5-air:free",
@@ -40,6 +44,7 @@ export const models: Models[] = [
     provider: "openrouter",
     thinking: true,
     fileSupport: false,
+    toolSupport: true,
   },
   {
     model: "google/gemini-2.5-flash",
@@ -47,7 +52,16 @@ export const models: Models[] = [
     provider: "openrouter",
     thinking: false,
     fileSupport: true,
+    toolSupport: true,
   },
+  {
+    model: "google/gemini-2.5-flash-image",
+    displayName: "gemini 2.5 flash image",
+    provider: "openrouter",
+    thinking: false,
+    fileSupport: true,
+    toolSupport: false,
+  }
 ];
 
 export function getSelectedModel({
