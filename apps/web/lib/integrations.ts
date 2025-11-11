@@ -1,29 +1,22 @@
-const OAUTH_ENDPOINTS = {
-  github: "https://github.com/login/oauth/authorize",
-  google: "https://accounts.google.com/o/oauth2/v2/auth",
-};
-
-const SCOPES = {
-  github: ["user:email", "repo", "read:user"],
-  google: ["openid", "email", "profile"],
-};
+import { INTEGRATION_CONFIG } from "@/lib/integration-config";
 
 export function buildOAuthUrl(
-  provider: "github" | "google",
+  provider: (typeof INTEGRATION_CONFIG)[number]["name"],
   options?: { state?: string },
 ) {
-  const baseUrl = OAUTH_ENDPOINTS[provider];
+  const baseUrl = INTEGRATION_CONFIG.find(
+    (config) => config.name === provider,
+  )?.OAUTH_ENDPOINTS;
   if (!baseUrl) {
     throw new Error(`Unsupported provider: ${provider}`);
   }
 
-  let clientId: string | undefined;
-
-  if (provider === "github") {
-    clientId = process.env.NEXT_PUBLIC_INTEGRATION_GITHUB_CLIENT_ID;
-  } else if (provider === "google") {
-    clientId = process.env.NEXT_PUBLIC_INTEGRATION_GOOGLE_CLIENT_ID;
+  const config = INTEGRATION_CONFIG.find((config) => config.name === provider);
+  if (!config) {
+    throw new Error(`Unsupported provider: ${provider}`);
   }
+
+  const clientId = config.clientId;
 
   if (!clientId) {
     throw new Error(`Missing client ID for ${provider}`);
@@ -38,10 +31,10 @@ export function buildOAuthUrl(
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    scope: SCOPES[provider].join(" "),
+    scope: config.SCOPES.join(" "),
     response_type: "code",
     state: options?.state || `${provider}:${Date.now()}`,
-    ...(provider === "github" && { allow_signup: "true" }),
+    ...(config.name === "github" && { allow_signup: "true" }),
   });
 
   return `${baseUrl}?${params.toString()}`;

@@ -1,21 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-
-const PROVIDER_CONFIGS = {
-  github: {
-    tokenUrl: "https://github.com/login/oauth/access_token",
-    clientId: process.env.INTEGRATION_GITHUB_CLIENT_ID,
-    clientSecret: process.env.INTEGRATION_GITHUB_CLIENT_SECRET,
-    userInfoUrl: "https://api.github.com/user",
-  },
-  google: {
-    tokenUrl: "https://oauth2.googleapis.com/token",
-    clientId: process.env.INTEGRATION_GOOGLE_CLIENT_ID,
-    clientSecret: process.env.INTEGRATION_GOOGLE_CLIENT_SECRET,
-    userInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo",
-  },
-};
+import { INTEGRATION_CONFIG } from "@/lib/integration-config";
 
 export async function POST(request: Request) {
   try {
@@ -37,7 +23,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const config = PROVIDER_CONFIGS[provider as keyof typeof PROVIDER_CONFIGS];
+    const config = INTEGRATION_CONFIG.find(
+      (config) => config.name === provider,
+    );
     if (!config) {
       return NextResponse.json(
         { error: `Unsupported provider: ${provider}` },

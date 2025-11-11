@@ -4,6 +4,7 @@ import {
   convertToModelMessages,
   StepResult,
   ToolSet,
+  stepCountIs,
 } from "ai";
 import { getTools } from "@/lib/tools";
 import { auth } from "@/lib/auth";
@@ -105,10 +106,10 @@ export async function POST(req: Request) {
       provider: selectedChatProvider,
     })!,
     messages: convertToModelMessages(messages),
-    maxOutputTokens: 3000,
     ...(getModelDetails(selectedChatModel)?.toolSupport
       ? { tools: getTools(integrations) }
       : {}),
+    stopWhen: stepCountIs(100),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {
       const assistantMessage = {
