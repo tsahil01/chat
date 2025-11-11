@@ -11,7 +11,7 @@ interface CustomFileUIPart {
     type: "file";
     mediaType: string;
     base64Data: string;
-  }
+  };
 }
 
 interface FilePartProps {
@@ -21,8 +21,12 @@ interface FilePartProps {
 }
 
 export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
-  const isImage = (attachment as FileUIPart).mediaType?.startsWith("image/") || (attachment as CustomFileUIPart).file?.mediaType?.startsWith("image/");
-  const isPdf = (attachment as FileUIPart).mediaType === "application/pdf" || (attachment as CustomFileUIPart).file?.mediaType === "application/pdf";
+  const isImage =
+    (attachment as FileUIPart).mediaType?.startsWith("image/") ||
+    (attachment as CustomFileUIPart).file?.mediaType?.startsWith("image/");
+  const isPdf =
+    (attachment as FileUIPart).mediaType === "application/pdf" ||
+    (attachment as CustomFileUIPart).file?.mediaType === "application/pdf";
 
   const getFileIcon = () => {
     if (isImage) return <ImageIcon className="h-4 w-4" />;
@@ -48,7 +52,10 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
       <div key={`${messageId}-${partIndex}`} className="max-w-md">
         <div className="relative group">
           <img
-            src={(attachment as FileUIPart).url || `data:${(attachment as CustomFileUIPart).file?.mediaType};base64,${(attachment as CustomFileUIPart).file?.base64Data}`}
+            src={
+              (attachment as FileUIPart).url ||
+              `data:${(attachment as CustomFileUIPart).file?.mediaType};base64,${(attachment as CustomFileUIPart).file?.base64Data}`
+            }
             alt={getFileName()}
             className="rounded-lg shadow-sm border max-w-full w-auto h-auto max-h-80"
             loading="lazy"
@@ -70,7 +77,9 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{getFileName()}</p>
           <p className="text-xs text-muted-foreground">
-            {(attachment as FileUIPart).mediaType || (attachment as CustomFileUIPart)?.file?.mediaType || "Unknown type"}
+            {(attachment as FileUIPart).mediaType ||
+              (attachment as CustomFileUIPart)?.file?.mediaType ||
+              "Unknown type"}
           </p>
         </div>
         <div className="flex gap-1">

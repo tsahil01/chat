@@ -61,7 +61,7 @@ export const models: Models[] = [
     thinking: false,
     fileSupport: true,
     toolSupport: false,
-  }
+  },
 ];
 
 export function getSelectedModel({
