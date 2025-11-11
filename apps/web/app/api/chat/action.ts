@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { Chat, Message, prisma, Visibility } from "@workspace/db";
+import { Chat, Integration, Message, prisma, Visibility } from "@workspace/db";
 import { FileUIPart, UIMessage } from "ai";
 import { headers } from "next/headers";
 import { isProUserAction } from "@/lib/payments/server";
@@ -10,7 +10,7 @@ import { generateTitleFromUserMessage } from "@/lib/chat";
 import { incrementMessageUsageAction } from "@/lib/usage/server";
 
 export async function getChat(
-  chatId: string,
+  chatId: string
 ): Promise<
   (Chat & { messages: Message[]; personality: string | null }) | null
 > {
@@ -46,7 +46,7 @@ export async function getChat(
 
 export async function getUsage(
   userId: string,
-  type: "message" | "image",
+  type: "message" | "image"
 ): Promise<{
   currentUsage: number;
   limit: number;
@@ -83,7 +83,7 @@ export async function getUsage(
 
 export async function getChatWithUsage(
   chatId: string,
-  userId: string,
+  userId: string
 ): Promise<{
   chat: (Chat & { messages: Message[] }) | null;
   usage: { currentUsage: number; limit: number; remaining: number } | null;
@@ -126,6 +126,20 @@ export async function getChatWithUsage(
   } catch (error) {
     console.error("Error getting chat with usage:", error);
     return { chat: null, usage: null };
+  }
+}
+
+export async function getIntegrations(userId: string) : Promise<Integration[]> {
+  try {
+    const integrations = await prisma.integration.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return integrations;
+  } catch (error) {
+    console.error("Error getting integrations:", error);
+    return [];
   }
 }
 
@@ -190,9 +204,9 @@ export async function addMessage({
         attachments: JSON.parse(
           JSON.stringify(
             message.parts.filter(
-              (part): part is FileUIPart => part.type === "file",
-            ),
-          ),
+              (part): part is FileUIPart => part.type === "file"
+            )
+          )
         ),
       },
     });
@@ -206,7 +220,7 @@ export async function addMessage({
 
 export async function deleteAllMessagesAfter(
   chatId: string,
-  messageId: string,
+  messageId: string
 ): Promise<boolean> {
   try {
     const session = await auth.api.getSession({
