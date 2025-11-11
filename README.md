@@ -11,6 +11,14 @@ A modern chat application built with Next.js, shadcn/ui, and PostgreSQL.
 - **Auth**: Better Auth
 - **Monorepo**: Turborepo with pnpm workspaces
 
+## Project Structure
+
+- `apps/web` - Next.js application with API routes and frontend
+- `packages/ui` - Shared UI components built with shadcn/ui
+- `packages/database` - Prisma schema and database client
+- `packages/eslint-config` - Shared ESLint configuration
+- `packages/typescript-config` - Shared TypeScript configuration
+
 ## Quickstart
 
 ```bash
