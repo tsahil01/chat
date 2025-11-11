@@ -25,23 +25,9 @@ import {
   getGitHubPullRequest,
   viewCodeDiff,
 } from "./github";
+import { Integration } from "@workspace/db";
 
-const tools: ToolSet = {
-  // Web search
-  exaWebSearch,
-
-  // Google Calendar
-  createCalendarEvent,
-  deleteCalendarEvent,
-  listCalendarEvents,
-  checkCalendarAvailability,
-
-  // Google Email
-  // listEmails,
-  // getEmail,
-  // searchEmails,
-  // sendEmail,
-
+const githubTools: ToolSet = {
   // GitHub Repositories
   listGitHubRepos,
   createGitHubRepo,
@@ -63,4 +49,45 @@ const tools: ToolSet = {
   viewCodeDiff,
 };
 
-export default tools;
+const googleTools: ToolSet = {
+  // Google Calendar
+  createCalendarEvent,
+  deleteCalendarEvent,
+  listCalendarEvents,
+  checkCalendarAvailability,
+
+  // Google Email
+  // listEmails,
+  // getEmail,
+  // searchEmails,
+  // sendEmail,
+};
+
+export const getTools = (integrations: Integration[]) => {
+  let tools: ToolSet = {
+    exaWebSearch,
+  };
+
+  if (
+    integrations.some(
+      (integration: Integration) => integration.name === "github",
+    )
+  ) {
+    tools = {
+      ...tools,
+      ...githubTools,
+    };
+  }
+
+  if (
+    integrations.some(
+      (integration: Integration) => integration.name === "google",
+    )
+  ) {
+    tools = {
+      ...tools,
+      ...googleTools,
+    };
+  }
+  return tools;
+};

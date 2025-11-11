@@ -5,15 +5,17 @@ import {
   StepResult,
   ToolSet,
 } from "ai";
-import tools from "@/lib/tools";
+import { getTools } from "@/lib/tools";
 import { auth } from "@/lib/auth";
 import {
   getChatWithUsage,
+  getIntegrations,
   handleChatCompletion,
   handleStreamingError,
 } from "./action";
 import { getSelectedModel, Models, models } from "@/lib/models";
 import { system_prompt } from "@/lib/prompts/system";
+import { Integration } from "@workspace/db";
 
 export const maxDuration = 30;
 
@@ -71,7 +73,14 @@ export async function POST(req: Request) {
       chat.messages.some((m) => m.id === lastIncoming.id),
   );
 
-  system += system_prompt(selectedChatModel, timezone, personality);
+  const integrations: Integration[] = await getIntegrations(session.user.id);
+
+  system += system_prompt(
+    selectedChatModel,
+    timezone,
+    personality,
+    integrations,
+  );
 
   if (toggleWebSearch) {
     system += `- You need to use the exaWebSearch tool for next user message. It does not matter what the user asks, you need to use the exaWebSearch tool.\n`;
@@ -98,7 +107,7 @@ export async function POST(req: Request) {
     messages: convertToModelMessages(messages),
     maxOutputTokens: 3000,
     ...(getModelDetails(selectedChatModel)?.toolSupport
-      ? { tools: tools }
+      ? { tools: getTools(integrations) }
       : {}),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {

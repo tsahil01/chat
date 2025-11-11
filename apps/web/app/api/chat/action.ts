@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { Chat, Message, prisma, Visibility } from "@workspace/db";
+import { Chat, Integration, Message, prisma, Visibility } from "@workspace/db";
 import { FileUIPart, UIMessage } from "ai";
 import { headers } from "next/headers";
 import { isProUserAction } from "@/lib/payments/server";
@@ -126,6 +126,20 @@ export async function getChatWithUsage(
   } catch (error) {
     console.error("Error getting chat with usage:", error);
     return { chat: null, usage: null };
+  }
+}
+
+export async function getIntegrations(userId: string): Promise<Integration[]> {
+  try {
+    const integrations = await prisma.integration.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return integrations;
+  } catch (error) {
+    console.error("Error getting integrations:", error);
+    return [];
   }
 }
 
