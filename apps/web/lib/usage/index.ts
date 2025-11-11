@@ -1,4 +1,4 @@
-export const FREE_LIMIT = 150;
+export const FREE_LIMIT = 30;
 export const PRO_LIMIT = 1000;
 
 export interface UsageData {

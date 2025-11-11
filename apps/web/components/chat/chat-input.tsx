@@ -100,7 +100,7 @@ export function ChatInput({
         <div className="flex flex-row justify-between items-center gap-2 p-2 my-auto">
           <div className="flex flex-row gap-1 sm:gap-2 flex-wrap">
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger>
                 <Toggle
                   pressed={toggleWebSearch}
                   onPressedChange={setToggleWebSearch}
