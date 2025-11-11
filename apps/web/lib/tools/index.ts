@@ -70,7 +70,7 @@ export const getTools = (integrations: Integration[]) => {
 
   if (
     integrations.some(
-      (integration: Integration) => integration.name === "github"
+      (integration: Integration) => integration.name === "github",
     )
   ) {
     tools = {
@@ -81,7 +81,7 @@ export const getTools = (integrations: Integration[]) => {
 
   if (
     integrations.some(
-      (integration: Integration) => integration.name === "google"
+      (integration: Integration) => integration.name === "google",
     )
   ) {
     tools = {

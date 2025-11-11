@@ -3,7 +3,7 @@ import { Integration } from "@workspace/db";
 
 function getPersonality(personalityName?: string): Personality | undefined {
   return personalities.find(
-    (p) => p.name.toLowerCase() === personalityName?.toLowerCase()
+    (p) => p.name.toLowerCase() === personalityName?.toLowerCase(),
   );
 }
 
@@ -26,7 +26,7 @@ export const system_prompt = (
   selectedChatModel: string,
   timezone: string,
   personalityName?: string,
-  integrations: Integration[] = []
+  integrations: Integration[] = [],
 ) => {
   const { userLocalTime, userDate, now } = getTimeContext(timezone);
   const personality = getPersonality(personalityName);

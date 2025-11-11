@@ -75,7 +75,12 @@ export async function POST(req: Request) {
 
   const integrations: Integration[] = await getIntegrations(session.user.id);
 
-  system += system_prompt(selectedChatModel, timezone, personality, integrations);
+  system += system_prompt(
+    selectedChatModel,
+    timezone,
+    personality,
+    integrations,
+  );
 
   if (toggleWebSearch) {
     system += `- You need to use the exaWebSearch tool for next user message. It does not matter what the user asks, you need to use the exaWebSearch tool.\n`;
