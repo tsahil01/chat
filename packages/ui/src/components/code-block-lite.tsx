@@ -212,8 +212,8 @@ export function LightCodeBlock({
 
   return (
     <div className={containerClass}>
-      <div className="flex items-center justify-between border-b bg-secondary px-3 py-1">
-        <div className="text-xs text-muted-foreground truncate">
+      <div className="flex items-center justify-between border-b bg-accent px-3 py-1">
+        <div className="text-xs text-accent-foreground truncate">
           {filename ?? `code.${language}`}
         </div>
         <Button

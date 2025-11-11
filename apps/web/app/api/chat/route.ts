@@ -17,6 +17,16 @@ import { system_prompt } from "@/lib/prompts/system";
 
 export const maxDuration = 30;
 
+export interface ChatRequest {
+  chatId: string;
+  messages: UIMessage[];
+  selectedChatModel: string;
+  selectedChatProvider: string;
+  toggleWebSearch: boolean;
+  timezone: string;
+  personality?: string;
+}
+
 export async function POST(req: Request) {
   let system = ``;
 
@@ -28,15 +38,7 @@ export async function POST(req: Request) {
     toggleWebSearch,
     timezone = "UTC",
     personality,
-  }: {
-    chatId: string;
-    messages: UIMessage[];
-    selectedChatModel: string;
-    selectedChatProvider: string;
-    toggleWebSearch: boolean;
-    timezone: string;
-    personality?: string;
-  } = await req.json();
+  }: ChatRequest = await req.json();
 
   const session = await auth.api.getSession({
     headers: req.headers,
