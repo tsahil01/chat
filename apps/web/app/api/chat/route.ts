@@ -59,7 +59,7 @@ export async function POST(req: Request) {
         limit: usage?.limit || 150,
         currentUsage: usage?.currentUsage || 0,
       },
-      { status: 429 }
+      { status: 429 },
     );
   }
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
   const needsMessageCleanup = Boolean(
     chat &&
       lastIncoming?.role === "user" &&
-      chat.messages.some((m) => m.id === lastIncoming.id)
+      chat.messages.some((m) => m.id === lastIncoming.id),
   );
 
   system += system_prompt(selectedChatModel, timezone, personality);
