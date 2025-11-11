@@ -3,8 +3,10 @@
 import { UIDataTypes, UIMessage, UITools } from "ai";
 import { RefObject } from "react";
 import { MessageItem } from "@/components/chat/MessageItem";
+import { cn } from "@workspace/ui/lib/utils";
 
 type MessageListProps = {
+  className?: string;
   messages: UIMessage<unknown, UIDataTypes, UITools>[];
   isReasoningCollapsed: (key: string) => boolean;
   onToggleReasoning: (messageId: string, partIndex: number) => void;
@@ -13,6 +15,7 @@ type MessageListProps = {
 };
 
 export function MessageList({
+  className,
   messages,
   isReasoningCollapsed,
   onToggleReasoning,
@@ -24,7 +27,7 @@ export function MessageList({
     .find((m) => m.role === "assistant")?.id;
 
   return (
-    <div className="space-y-6">
+    <div className={cn("space-y-6", className)}>
       {messages.map((message: UIMessage<unknown, UIDataTypes, UITools>) => (
         <MessageItem
           key={message.id}

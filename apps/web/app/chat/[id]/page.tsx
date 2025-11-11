@@ -302,9 +302,10 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4.5rem)] max-w-5xl mx-auto">
+    <div className="flex flex-col h-[calc(100vh-4.5rem)] w-full mx-auto p-2">
       <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
         <MessageList
+          className="w-full md:max-w-5xl mx-auto"
           messages={messages}
           isReasoningCollapsed={(key) => collapsedReasoning.has(key)}
           onToggleReasoning={toggleReasoning}
@@ -318,6 +319,7 @@ export default function Page() {
       </div>
 
       <ChatInput
+        className="w-full md:max-w-5xl mx-auto"
         disablePersonality={true}
         input={input}
         setInput={setInput}
