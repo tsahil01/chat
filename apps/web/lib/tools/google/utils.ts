@@ -65,7 +65,7 @@ export function createGoogleOAuth2Client(googleIntegration: {
   }
 
   const oauth2Client = new google.auth.OAuth2(
-    process.env.INTEGRATION_GOOGLE_CLIENT_ID,
+    process.env.NEXT_PUBLIC_INTEGRATION_GOOGLE_CLIENT_ID,
     process.env.INTEGRATION_GOOGLE_CLIENT_SECRET,
   );
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@workspace/db";
+import { INTEGRATION_CONFIG } from "@/lib/integration-config";
 
 export async function GET() {
   try {
@@ -152,14 +153,5 @@ export async function POST(request: Request) {
 }
 
 function getProviderName(providerId: string): string {
-  switch (providerId) {
-    case "google":
-      return "Google Calendar";
-    case "github":
-      return "GitHub";
-    case "slack":
-      return "Slack";
-    default:
-      return providerId.charAt(0).toUpperCase() + providerId.slice(1);
-  }
+  return INTEGRATION_CONFIG.find((config) => config.name === providerId)?.displayName || providerId.charAt(0).toUpperCase() + providerId.slice(1);
 }
