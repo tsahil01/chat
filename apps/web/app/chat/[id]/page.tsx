@@ -19,7 +19,7 @@ export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Models | null>(models[0]!);
   const [collapsedReasoning, setCollapsedReasoning] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [toggleWebSearch, setToggleWebSearch] = useState(false);
   const [chatId, setChatId] = useState<string | null>(null);
@@ -168,7 +168,7 @@ export default function Page() {
       if (selectedModelNameFromUrl) {
         setSelectedModel(
           models.find((model) => model.model === selectedModelNameFromUrl) ||
-            models[0]!
+            models[0]!,
         );
       }
       if (toggleWebSearchFromUrl === "true") {
