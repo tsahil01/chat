@@ -71,7 +71,6 @@ export async function getSharedChat(
   }
 }
 
-
 export async function getUsage(
   userId: string,
   type: "message" | "image",

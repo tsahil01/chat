@@ -13,4 +13,3 @@ export function PersonalityBadge({ personality }: PersonalityBadgeProps) {
     </span>
   );
 }
-

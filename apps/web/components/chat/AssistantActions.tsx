@@ -9,7 +9,11 @@ type AssistantActionsProps = {
   showRetry?: boolean;
 };
 
-export function AssistantActions({ message, onRetry, showRetry }: AssistantActionsProps) {
+export function AssistantActions({
+  message,
+  onRetry,
+  showRetry,
+}: AssistantActionsProps) {
   return (
     <MessageActions
       onCopy={() => {

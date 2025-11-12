@@ -21,7 +21,7 @@ type MessageItemProps = {
   onRetry: (messageId: string) => void;
   isLastAssistant?: boolean;
   showRetry?: boolean;
-}
+};
 
 export function MessageItem({
   message,
@@ -326,7 +326,11 @@ export function MessageItem({
 
           {message.role === "assistant" && (
             <>
-              <AssistantActions message={message} onRetry={onRetry} showRetry={showRetry} />
+              <AssistantActions
+                message={message}
+                onRetry={onRetry}
+                showRetry={showRetry}
+              />
               {isLastAssistant && (
                 <p className="text-xs text-muted-foreground text-end px-1">
                   AI can make mistakes. Please double-check responses.

@@ -2,9 +2,7 @@
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import {
-  SidebarProvider,
-} from "@workspace/ui/components/sidebar";
+import { SidebarProvider } from "@workspace/ui/components/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { useEffect } from "react";
 import {
