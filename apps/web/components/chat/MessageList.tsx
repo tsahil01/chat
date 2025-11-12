@@ -12,6 +12,7 @@ type MessageListProps = {
   onToggleReasoning: (messageId: string, partIndex: number) => void;
   onRetry: (messageId: string) => void;
   chatEndRef: RefObject<HTMLDivElement | null>;
+  showRetry?: boolean;
 };
 
 export function MessageList({
@@ -21,6 +22,7 @@ export function MessageList({
   onToggleReasoning,
   onRetry,
   chatEndRef,
+  showRetry = true,
 }: MessageListProps) {
   const lastAssistantId = [...messages]
     .reverse()
@@ -38,6 +40,7 @@ export function MessageList({
           isLastAssistant={
             message.role === "assistant" && message.id === lastAssistantId
           }
+          showRetry={showRetry}
         />
       ))}
       <div ref={chatEndRef} />

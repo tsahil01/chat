@@ -44,6 +44,33 @@ export async function getChat(
   }
 }
 
+export async function getSharedChat(
+  chatId: string,
+): Promise<
+  (Chat & { messages: Message[]; personality: string | null }) | null
+> {
+  try {
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId,
+        visibility: Visibility.PUBLIC,
+      },
+      include: {
+        messages: true,
+      },
+    });
+
+    if (!chat) {
+      return null;
+    }
+
+    return chat;
+  } catch (error) {
+    console.error("Error getting chat:", error);
+    return null;
+  }
+}
+
 export async function getUsage(
   userId: string,
   type: "message" | "image",

@@ -6,9 +6,14 @@ import { UIMessage } from "ai";
 type AssistantActionsProps = {
   message: UIMessage;
   onRetry: (messageId: string) => void;
+  showRetry?: boolean;
 };
 
-export function AssistantActions({ message, onRetry }: AssistantActionsProps) {
+export function AssistantActions({
+  message,
+  onRetry,
+  showRetry,
+}: AssistantActionsProps) {
   return (
     <MessageActions
       onCopy={() => {
@@ -19,6 +24,7 @@ export function AssistantActions({ message, onRetry }: AssistantActionsProps) {
         navigator.clipboard.writeText(textParts);
       }}
       onRetry={() => onRetry(message.id)}
+      showRetry={showRetry}
     />
   );
 }

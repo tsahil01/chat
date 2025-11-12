@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { Message } from "@workspace/db";
 import { moonshot } from "./providers/moonshot";
-import { getChat } from "@/app/api/chat/action";
+import { getChat, getSharedChat } from "@/app/api/chat/action";
 import { UIMessage } from "./types";
 
 export async function generateTitleFromUserMessage({
@@ -29,6 +29,15 @@ export async function generateTitleFromUserMessage({
 
 export async function getChatInfo(chatId: string) {
   const chat = await getChat(chatId);
+  if (!chat) return null;
+  return {
+    title: chat.title || "New Chat",
+    personality: chat.personality || null,
+  };
+}
+
+export async function getSharedChatInfo(chatId: string) {
+  const chat = await getSharedChat(chatId);
   if (!chat) return null;
   return {
     title: chat.title || "New Chat",
