@@ -65,8 +65,8 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(94vh)] max-w-5xl mx-auto">
-      <div className="flex-1 overflow-y-auto space-y-4 p-4">
+    <div className="flex flex-col h-[calc(99vh)] my-auto max-w-5xl mx-auto">
+      <div className="flex-1 overflow-y-autoitems-center justify-center space-y-4 p-4">
         <WelcomeScreen />
         {isSubmitting && (
           <div className="flex gap-3">
