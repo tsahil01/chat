@@ -9,7 +9,7 @@ interface Chat {
   id: string;
   title: string;
   createdAt: string;
-  visibility: "PUBLIC" | "PRIVATE";
+  visibility: "PUBLIC" | "PRIVATE" | "ARCHIVE";
 }
 
 interface ChatListProps {
@@ -119,8 +119,13 @@ export function ChatList({
                 </p>
               </div>
               <div className="ml-3 shrink-0">
-                <Badge variant="secondary" className="text-xs">
-                  {chat.visibility.toLowerCase()}
+                <Badge
+                  variant={
+                    chat.visibility === "ARCHIVE" ? "destructive" : "secondary"
+                  }
+                  className="text-xs"
+                >
+                  {chat.visibility === "ARCHIVE" ? "Archived" : "Active"}
                 </Badge>
               </div>
             </div>

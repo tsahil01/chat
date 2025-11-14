@@ -12,8 +12,8 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ className = "" }: WelcomeScreenProps) {
   return (
-    <div className={`h-full w-full ${className}`}>
-      <div className="mb-4 sm:mb-6 px-3 sm:px-0">
+    <div className={`h-full w-full flex flex-col justify-center ${className}`}>
+      <div className="mb-4 sm:mb-6 px-3 sm:px-0 text-left">
         <h1 className="text-lg sm:text-xl font-semibold tracking-tight">
           Welcome to Chat
         </h1>

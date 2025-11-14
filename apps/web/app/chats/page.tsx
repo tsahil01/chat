@@ -15,7 +15,7 @@ interface Chat {
   id: string;
   title: string;
   createdAt: string;
-  visibility: "PUBLIC" | "PRIVATE";
+  visibility: "PUBLIC" | "PRIVATE" | "ARCHIVE";
 }
 
 interface PaginationInfo {
@@ -210,9 +210,11 @@ function ChatsPageContent() {
                   : `${chats.length} conversation${chats.length !== 1 ? "s" : ""}`}
             </p>
           </div>
-          <Button onClick={() => router.push("/")} className="shrink-0">
-            New Chat
-          </Button>
+          <div className="flex flex-row items-center gap-2">
+            <Button onClick={() => router.push("/")} className="shrink-0">
+              New Chat
+            </Button>
+          </div>
         </div>
 
         {/* Search Input */}
