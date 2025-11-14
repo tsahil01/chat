@@ -3,6 +3,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getChatInfo, getSharedChatInfo } from "@/lib/chat";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@workspace/ui/components/popover";
+import { Input } from "@workspace/ui/components/input";
+import { Button } from "@workspace/ui/components/button";
+import { ChevronDown } from "lucide-react";
 
 interface ChatTitleProps {
   onTitleChange?: (title: string) => void;
@@ -19,6 +27,9 @@ export function ChatTitle({
   const [title, setTitle] = useState("");
   const [displayedTitle, setDisplayedTitle] = useState("");
   const [typingIndex, setTypingIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   async function getTitle() {
     const chatId = params.id as string;
@@ -42,6 +53,38 @@ export function ChatTitle({
     onTitleChange?.(info.title);
     onPersonalityChange?.(info.personality);
     return true;
+  }
+
+  async function updateTitle() {
+    const chatId = params.id as string;
+    if (!chatId || !editTitle.trim() || isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/chat/${chatId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ title: editTitle.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update title");
+      }
+
+      const updatedChat = await response.json();
+      setTitle(updatedChat.title);
+      onTitleChange?.(updatedChat.title);
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Error updating title:", error);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   useEffect(() => {
@@ -78,9 +121,83 @@ export function ChatTitle({
     return () => clearInterval(intervalId);
   }, [title, typingIndex]);
 
-  return (
+  useEffect(() => {
+    if (isOpen) {
+      setEditTitle(title);
+    }
+  }, [isOpen, title]);
+
+  const titleDisplay = (
     <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
       {displayedTitle || title}
     </h1>
+  );
+
+  if (isShareRoute) {
+    return titleDisplay;
+  }
+
+  const hasTitle = Boolean(title);
+
+  if (!hasTitle) {
+    return (
+      <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
+        {displayedTitle || title || "New Chat"}
+      </h1>
+    );
+  }
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="ghost"
+          className="my-auto"
+        >
+          <span className="truncate">
+            {displayedTitle || title || "New Chat"}
+          </span>
+          <ChevronDown className="h-4 w-4 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80" align="start">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Chat Name</label>
+            <Input
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              placeholder="Enter chat name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  updateTitle();
+                }
+                if (e.key === "Escape") {
+                  setIsOpen(false);
+                }
+              }}
+              autoFocus
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsOpen(false)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              onClick={updateTitle}
+              disabled={isSaving || !editTitle.trim()}
+            >
+              {isSaving ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

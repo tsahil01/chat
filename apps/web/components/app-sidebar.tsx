@@ -83,13 +83,17 @@ export function AppSidebar() {
 
       const { chats, hasMore: moreAvailable } = data;
 
+      const nonArchivedChats = chats.filter(
+        (chat: Chat) => chat.visibility !== "ARCHIVE"
+      );
+
       if (append) {
-        setRecentChats((prev) => [...prev, ...chats]);
+        setRecentChats((prev) => [...prev, ...nonArchivedChats]);
       } else {
-        const newSignature = computeChatsSignature(chats);
+        const newSignature = computeChatsSignature(nonArchivedChats);
         if (newSignature !== lastChatsSignature.current) {
           lastChatsSignature.current = newSignature;
-          setRecentChats(chats);
+          setRecentChats(nonArchivedChats);
         }
       }
 
