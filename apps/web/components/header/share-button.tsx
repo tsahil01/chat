@@ -23,7 +23,7 @@ export function ShareButton({ chatId }: ShareButtonProps) {
   useEffect(() => {
     async function checkShareStatus() {
       try {
-        const response = await fetch(`/api/chat/${chatId}?id=${chatId}`);
+        const response = await fetch(`/api/chat/${chatId}`);
         if (response.ok) {
           const chat = await response.json();
           setIsShared(chat.visibility === "PUBLIC");
@@ -124,9 +124,8 @@ export function ShareButton({ chatId }: ShareButtonProps) {
   return (
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="ghost" size="sm" className="gap-2 my-auto">
           <LuShare2 className="w-4 h-4" />
-          Share
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
