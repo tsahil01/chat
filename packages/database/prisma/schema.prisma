@@ -168,6 +168,7 @@ model Stream {
 enum Visibility {
   PUBLIC
   PRIVATE
+  ARCHIVE
 
   @@map("visibility")
 }
