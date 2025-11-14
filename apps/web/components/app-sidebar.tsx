@@ -84,7 +84,7 @@ export function AppSidebar() {
       const { chats, hasMore: moreAvailable } = data;
 
       const nonArchivedChats = chats.filter(
-        (chat: Chat) => chat.visibility !== "ARCHIVE"
+        (chat: Chat) => chat.visibility !== "ARCHIVE",
       );
 
       if (append) {

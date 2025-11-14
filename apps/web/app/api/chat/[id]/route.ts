@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id: chatId } = await params;
 
@@ -23,7 +23,7 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id: chatId } = await params;
 
@@ -66,7 +66,7 @@ export async function PATCH(
   if (Object.keys(updateData).length === 0) {
     return Response.json(
       { error: "At least one field (title or visibility) is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -80,7 +80,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id: chatId } = await params;
 
@@ -120,7 +120,7 @@ export async function DELETE(
   if (deletedMessages.count === 0) {
     return Response.json(
       { error: "Failed to delete messages" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
