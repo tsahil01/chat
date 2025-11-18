@@ -21,7 +21,13 @@ export function HeaderContent() {
   const chatId = params.id as string;
 
   if (!isChatRoute) {
-    return null;
+    return (
+      <div className={cn("relative")}>
+        {(!open || isMobile) && (
+          <SidebarTrigger className="absolute top-3 left-3" />
+        )}
+      </div>
+    );
   }
 
   return (
