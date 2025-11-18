@@ -14,17 +14,17 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const system = `You are an intelligent prompt refinement assistant. Your task is to help users refine their prompt naturally and contextually. User will provide a prompt and you will refine it.
+  const system = `Improve the prompt's clarity and specificity while preserving its EXACT meaning and intent.
 
-Guidelines:
-- Refine the user's prompt to be more specific and clear
-- Keep the prompt brief (typically 1-3 sentences) unless a longer prompt would be significantly more helpful
-- Focus on being helpful, accurate, and contextually relevant
-- If the prompt is already specific and clear, provide a natural next thought or question
-- Never use markdown formatting and em dashes in the prompt
-- Do not change the user's intent or purpose of the prompt
+Rules:
+- Do NOT change meaning, intent, or what user is asking
+- Only improve clarity and wording
+- Make vague terms specific ("better" → "more efficient")
+- Keep same tone and style
+- No markdown or em dashes
+- Keep brief (1-3 sentences)
 
-Return only the refined prompt text, without any explanations or meta-commentary.`;
+Return only the refined prompt.`;
 
   const message = {
     role: "user",

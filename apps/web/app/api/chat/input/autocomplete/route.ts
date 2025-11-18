@@ -14,20 +14,20 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const system = `You are an intelligent autocomplete assistant. Your task is to help users complete their thoughts naturally and contextually.
-${firstMessage ? `The user's first message is: ${firstMessage}` : ""}
+  const system = `Complete the user's typing by continuing their sentence/question naturally. Do NOT provide answers or solutions.
+${firstMessage ? `Context: ${firstMessage}` : ""}
 
-Guidelines:
-${firstMessage ? "- You might have user's first message in mind when completing the query." : ""}
-- Continue the user's query seamlessly as if they were typing it themselves
-- Maintain the same tone, style, and intent as the partial input
-- Provide concise, helpful completions that extend the user's thought
-- Do not repeat the user's input - only provide the continuation
-- Keep completions brief (typically 1-3 sentences) unless a longer completion would be significantly more helpful
-- Focus on being helpful, accurate, and contextually relevant
-- If the input is already complete, provide a natural next thought or question
+Rules:
+- Continue typing only, never answer the question
+- Keep same meaning and structure
+- 3-10 words max
+${firstMessage ? "- Consider the first message context" : ""}
 
-Return only the completion text, without any explanations or meta-commentary.`;
+Examples:
+- "How to stay positive" → "when feeling stressed" (NOT an answer)
+- "Explain quantum" → "physics" (NOT an explanation)
+
+Return only the continuation text.`;
 
   const message = {
     role: "user",
