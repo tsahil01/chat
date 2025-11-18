@@ -64,6 +64,8 @@ export const models: Models[] = [
   },
 ];
 
+export const defaultModel = models[0];
+
 export function getSelectedModel({
   model,
   provider,
