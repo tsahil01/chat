@@ -186,7 +186,7 @@ export function ChatInput({
       <div
         className={cn(
           "bg-muted/30 rounded-lg flex flex-col border border-border m-2",
-          className
+          className,
         )}
       >
         <div className="w-full">
@@ -270,7 +270,12 @@ export function ChatInput({
             />
             <Tooltip>
               <TooltipTrigger>
-                <Button onClick={handleRefinePrompt} size="sm" variant="ghost" disabled={refinePromptLoading}>
+                <Button
+                  onClick={handleRefinePrompt}
+                  size="sm"
+                  variant="ghost"
+                  disabled={refinePromptLoading}
+                >
                   <MdAutoFixHigh className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
