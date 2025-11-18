@@ -323,6 +323,7 @@ export default function Page() {
       <ChatInput
         className="w-full md:max-w-5xl mx-auto"
         disablePersonality={true}
+        firstMessage={messages[0]?.parts[0]?.type === "text" ? messages[0]?.parts[0]?.text : undefined}
         input={input}
         setInput={setInput}
         isSubmitting={isSubmitting}
