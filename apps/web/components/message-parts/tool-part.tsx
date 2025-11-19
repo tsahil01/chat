@@ -19,7 +19,7 @@ export function ToolPart({
   return (
     <div
       key={`${messageId}-${partIndex}`}
-      className="bg-background/50 border rounded-lg p-2 text-sm font-mono max-w-xl"
+      className="bg-background/50 max-w-xl rounded-lg border p-2 font-mono text-sm"
     >
       <div className="flex items-center gap-2">
         <span>Tool: {toolName}</span>

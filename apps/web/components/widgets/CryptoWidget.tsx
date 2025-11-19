@@ -90,27 +90,27 @@ export function CryptoWidget({ className }: { className?: string }) {
         {loading ? (
           <div className="flex flex-col items-start gap-2 sm:gap-3">
             <Skeleton className="h-3 w-28" />
-            <Skeleton className="h-9 sm:h-10 w-24 sm:w-28" />
+            <Skeleton className="h-9 w-24 sm:h-10 sm:w-28" />
             <Skeleton className="h-3 w-32" />
           </div>
         ) : !data ? (
-          <div className="text-xs sm:text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-xs sm:text-sm">
             Data unavailable right now.
           </div>
         ) : (
           <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-            <div className="text-xs sm:text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-xs sm:text-sm">
               <div className="flex flex-row gap-1">
                 {coins.map((coin, index) => (
                   <button
                     key={coin.key}
-                    className={`hover:cursor-pointer hover:text-primary${selectedCoin === coin.key ? " text-primary" : ""}`}
+                    className={`hover:cursor-pointer hover:text-primary${selectedCoin === coin.key ? "text-primary" : ""}`}
                     onClick={() => {
                       setSelectedCoin(coin.key);
                     }}
                   >
                     {index > 0 && (
-                      <span className="text-xs sm:text-sm text-muted-foreground">
+                      <span className="text-muted-foreground text-xs sm:text-sm">
                         {" "}
                         •{" "}
                       </span>
@@ -120,10 +120,10 @@ export function CryptoWidget({ className }: { className?: string }) {
                 ))}
               </div>
             </div>
-            <div className="text-2xl sm:text-2xl font-semibold tabular-nums">
+            <div className="text-2xl font-semibold tabular-nums sm:text-2xl">
               {formatUsd(data[selectedCoin]?.usd)}
             </div>
-            <div className="text-xs sm:text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-xs sm:text-sm">
               {`24h: ${typeof data[selectedCoin]?.usd_24h_change === "number" ? data[selectedCoin].usd_24h_change.toFixed(2) + "%" : "—"}`}
             </div>
           </div>

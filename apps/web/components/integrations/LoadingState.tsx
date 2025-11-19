@@ -4,7 +4,7 @@ import { Spinner } from "@workspace/ui/components/ui/shadcn-io/spinner";
 
 export function LoadingState() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex min-h-screen items-center justify-center">
       <Spinner variant="circle" size={32} />
     </div>
   );

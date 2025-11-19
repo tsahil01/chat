@@ -8,7 +8,7 @@ export function PersonalityBadge({ personality }: PersonalityBadgeProps) {
   if (!personality) return null;
 
   return (
-    <span className="flex flex-row items-center gap-2 text-sm text-muted-foreground font-medium my-auto">
+    <span className="text-muted-foreground my-auto flex flex-row items-center gap-2 text-sm font-medium">
       {personality.charAt(0).toUpperCase() + personality.slice(1) || "Default"}
     </span>
   );

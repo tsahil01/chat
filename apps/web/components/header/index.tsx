@@ -31,17 +31,17 @@ export function HeaderContent() {
   }
 
   return (
-    <div className={cn("flex flex-row items-center gap-2 p-2 pb-0 mx-auto")}>
+    <div className={cn("mx-auto flex flex-row items-center gap-2 p-2 pb-0")}>
       {(!open || isMobile) && (
         <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer" />
       )}
-      <div className="flex flex-row gap-2 items-center w-full justify-between mx-auto">
+      <div className="mx-auto flex w-full flex-row items-center justify-between gap-2">
         <ChatTitle
           onTitleChange={setTitle}
           onPersonalityChange={setPersonality}
           isShareRoute={isShareRoute}
         />
-        <div className="flex flex-row items-center gap-1 my-auto">
+        <div className="my-auto flex flex-row items-center gap-1">
           <PersonalityBadge personality={personality} />
           {isShareRoute && (
             <Badge variant="outline" className="text-xs">

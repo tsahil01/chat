@@ -13,16 +13,16 @@ export function UsageBar({
   return (
     <div className="px-2 py-2">
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">Usage</span>
-        <span className="text-xs text-muted-foreground">{clamped}%</span>
+        <span className="text-muted-foreground text-xs">Usage</span>
+        <span className="text-muted-foreground text-xs">{clamped}%</span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded bg-muted">
+      <div className="bg-muted h-2 w-full overflow-hidden rounded">
         <div
-          className="h-full rounded bg-primary transition-all"
+          className="bg-primary h-full rounded transition-all"
           style={{ width: `${clamped}%` }}
         />
       </div>
-      {text && <p className="mt-1 text-[10px] text-muted-foreground">{text}</p>}
+      {text && <p className="text-muted-foreground mt-1 text-[10px]">{text}</p>}
     </div>
   );
 }

@@ -93,12 +93,12 @@ export function UpgradeDialog({
 
           <div className="space-y-6">
             {/* Price Display */}
-            <div className="rounded-lg border bg-muted/50 p-4">
+            <div className="bg-muted/50 rounded-lg border p-4">
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-bold">${plan.price}</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-sm">
                 Billed monthly, cancel anytime
               </p>
             </div>
@@ -111,7 +111,7 @@ export function UpgradeDialog({
                   <div className="grid gap-3">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <div className="mt-0.5 h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
+                        <div className="bg-primary mt-0.5 h-1.5 w-1.5 flex-shrink-0 rounded-full" />
                         <span className="text-sm leading-relaxed">
                           {feature.name}
                         </span>
@@ -270,7 +270,7 @@ export function UpgradeDialog({
                             )
                           }
                           placeholder="94103"
-                          className="w-full h-auto"
+                          className="h-auto w-full"
                           required
                         />
                       </div>

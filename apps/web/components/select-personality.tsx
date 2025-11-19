@@ -41,16 +41,16 @@ export function SelectPersonality({
             <Button
               disabled={disabled}
               variant="ghost"
-              className="justify-between min-w-[80px] max-w-[120px] sm:min-w-[100px] sm:max-w-[150px]"
+              className="max-w-[120px] min-w-[80px] justify-between sm:max-w-[150px] sm:min-w-[100px]"
             >
-              <div className="flex items-center gap-1 sm:gap-2 truncate">
-                <LuBrain className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
+              <div className="flex items-center gap-1 truncate sm:gap-2">
+                <LuBrain className="hidden h-3 w-3 flex-shrink-0 sm:block sm:h-4 sm:w-4" />
                 <span className="truncate text-xs">
                   {selectedPersonality?.name.charAt(0).toUpperCase() +
                     selectedPersonality?.name.slice(1) || "Default"}
                 </span>
               </div>
-              <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
+              <LuChevronDown className="h-3 w-3 flex-shrink-0 opacity-50 sm:h-4 sm:w-4" />
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>
@@ -58,9 +58,9 @@ export function SelectPersonality({
           <p>{selectedPersonality?.description || "Default personality"}</p>
         </TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-72 sm:w-80 p-0" align="start">
+      <PopoverContent className="w-72 p-0 sm:w-80" align="start">
         <div className="p-2">
-          <div className="text-xs sm:text-sm font-medium text-muted-foreground mb-2 px-2">
+          <div className="text-muted-foreground mb-2 px-2 text-xs font-medium sm:text-sm">
             Select Personality
           </div>
           <div className="space-y-1">
@@ -72,17 +72,17 @@ export function SelectPersonality({
                     ? "secondary"
                     : "ghost"
                 }
-                className="w-full justify-start h-auto p-2 sm:p-3"
+                className="h-auto w-full justify-start p-2 sm:p-3"
                 onClick={() => handlePersonalitySelect(personality)}
               >
-                <div className="flex flex-col justify-between gap-1 w-full">
-                  <div className="flex flex-row justify-between items-start gap-1">
-                    <div className="font-medium text-sm sm:text-base truncate">
+                <div className="flex w-full flex-col justify-between gap-1">
+                  <div className="flex flex-row items-start justify-between gap-1">
+                    <div className="truncate text-sm font-medium sm:text-base">
                       {personality.name.charAt(0).toUpperCase() +
                         personality.name.slice(1)}
                     </div>
                   </div>
-                  <div className="text-xs text-start text-muted-foreground truncate">
+                  <div className="text-muted-foreground truncate text-start text-xs">
                     {personality.description}
                   </div>
                 </div>

@@ -148,11 +148,11 @@ export function AppSidebar() {
     <Sidebar variant="floating">
       <SidebarContent className="overflow-hidden">
         {/* Header */}
-        <div className="flex justify-between p-3 border-b border-sidebar-border">
+        <div className="border-sidebar-border flex justify-between border-b p-3">
           <Link href="/">
-            <h1 className="text-base font-semibold my-auto">AI Chat</h1>
+            <h1 className="my-auto text-base font-semibold">AI Chat</h1>
           </Link>
-          <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground hover:cursor-pointer my-auto" />
+          <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground my-auto hover:cursor-pointer" />
         </div>
         <div>
           <SidebarGroup>
@@ -223,7 +223,7 @@ export function AppSidebar() {
                     {!hasMore && recentChats.length > 20 && (
                       <SidebarMenuItem>
                         <SidebarMenuButton disabled>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-muted-foreground text-xs">
                             No more chats
                           </span>
                         </SidebarMenuButton>
@@ -243,11 +243,11 @@ export function AppSidebar() {
         </div>
       </SidebarContent>
       {/* Footer: fixed, non-scrollable */}
-      <SidebarFooter className="border-t border-sidebar-border">
+      <SidebarFooter className="border-sidebar-border border-t">
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex w-full flex-row items-center gap-2">
-              <div className="flex-1 min-w-0 overflow-hidden">
+              <div className="min-w-0 flex-1 overflow-hidden">
                 {user ? (
                   <UserMenu user={user} onLogout={handleLogout} />
                 ) : (
@@ -256,7 +256,7 @@ export function AppSidebar() {
               </div>
               <button
                 aria-label="Toggle theme"
-                className="shrink-0 rounded p-2 text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer"
+                className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground shrink-0 cursor-pointer rounded p-2"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
                 {theme === "dark" ? (

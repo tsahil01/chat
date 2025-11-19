@@ -39,15 +39,15 @@ export function SelectModel({
           <PopoverTrigger asChild>
             <Button
               variant="ghost"
-              className="justify-between min-w-[80px] max-w-[120px] sm:min-w-[100px] sm:max-w-[150px]"
+              className="max-w-[120px] min-w-[80px] justify-between sm:max-w-[150px] sm:min-w-[100px]"
             >
-              <div className="flex items-center gap-1 sm:gap-2 truncate">
-                <LuCpu className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 hidden sm:block" />
+              <div className="flex items-center gap-1 truncate sm:gap-2">
+                <LuCpu className="hidden h-3 w-3 flex-shrink-0 sm:block sm:h-4 sm:w-4" />
                 <span className="truncate text-xs">
                   {selectedModel?.displayName || "Model"}
                 </span>
               </div>
-              <LuChevronDown className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
+              <LuChevronDown className="h-3 w-3 flex-shrink-0 opacity-50 sm:h-4 sm:w-4" />
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>
@@ -55,9 +55,9 @@ export function SelectModel({
           <p>{selectedModel?.displayName}</p>
         </TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-72 sm:w-80 p-0" align="start">
+      <PopoverContent className="w-72 p-0 sm:w-80" align="start">
         <div className="p-2">
-          <div className="text-xs sm:text-sm font-medium text-muted-foreground mb-2 px-2">
+          <div className="text-muted-foreground mb-2 px-2 text-xs font-medium sm:text-sm">
             Select Model
           </div>
           <div className="space-y-1">
@@ -67,12 +67,12 @@ export function SelectModel({
                 variant={
                   selectedModel?.model === model.model ? "secondary" : "ghost"
                 }
-                className="w-full justify-start h-auto p-2 sm:p-3"
+                className="h-auto w-full justify-start p-2 sm:p-3"
                 onClick={() => handleModelSelect(model)}
               >
-                <div className="flex flex-col justify-between gap-1 w-full">
-                  <div className="flex flex-row justify-between items-start gap-1">
-                    <div className="font-medium text-sm sm:text-base">
+                <div className="flex w-full flex-col justify-between gap-1">
+                  <div className="flex flex-row items-start justify-between gap-1">
+                    <div className="text-sm font-medium sm:text-base">
                       {model.displayName}
                     </div>
                     {model.fileSupport && (
@@ -82,15 +82,12 @@ export function SelectModel({
                       <Badge className="text-xs">Reasoning</Badge>
                     )}
                     {model.tags?.map((tag) => (
-                      <Badge
-                        key={tag}
-                        className="text-xs"
-                      >
+                      <Badge key={tag} className="text-xs">
                         {tag}
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-xs text-start truncate">
+                  <div className="truncate text-start text-xs">
                     Provider: {model.provider}
                   </div>
                 </div>

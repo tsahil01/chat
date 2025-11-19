@@ -91,13 +91,13 @@ export function ClockWidget({ className }: { className?: string }) {
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
           <div
-            className="text-sm text-muted-foreground"
+            className="text-muted-foreground text-sm"
             suppressHydrationWarning
           >
             {mounted ? city || regionFallback : ""}
           </div>
           <div
-            className="text-2xl sm:text-3xl font-semibold tabular-nums flex items-center gap-1"
+            className="flex items-center gap-1 text-2xl font-semibold tabular-nums sm:text-3xl"
             suppressHydrationWarning
           >
             {mounted ? (
@@ -113,7 +113,7 @@ export function ClockWidget({ className }: { className?: string }) {
             )}
           </div>
           <div
-            className="text-xs sm:text-sm text-muted-foreground"
+            className="text-muted-foreground text-xs sm:text-sm"
             suppressHydrationWarning
           >
             {mounted ? dayDate : ""}

@@ -124,19 +124,19 @@ export function ShareButton({ chatId }: ShareButtonProps) {
   return (
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2 my-auto">
-          <LuShare2 className="w-4 h-4" />
+        <Button variant="ghost" size="sm" className="my-auto gap-2">
+          <LuShare2 className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
         {isShared ? (
           <div className="p-4">
-            <div className="text-sm font-medium mb-2">Share Chat</div>
-            <div className="text-xs text-muted-foreground mb-4">
+            <div className="mb-2 text-sm font-medium">Share Chat</div>
+            <div className="text-muted-foreground mb-4 text-xs">
               Anyone with this link can view this chat in read-only mode.
             </div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex-1 p-2 bg-muted rounded-md text-xs font-mono truncate">
+            <div className="mb-4 flex items-center gap-2">
+              <div className="bg-muted flex-1 truncate rounded-md p-2 font-mono text-xs">
                 {getShareUrl()}
               </div>
               <Button
@@ -147,12 +147,12 @@ export function ShareButton({ chatId }: ShareButtonProps) {
               >
                 {copied ? (
                   <>
-                    <LuCheck className="w-4 h-4 mr-1" />
+                    <LuCheck className="mr-1 h-4 w-4" />
                     Copied
                   </>
                 ) : (
                   <>
-                    <LuCopy className="w-4 h-4 mr-1" />
+                    <LuCopy className="mr-1 h-4 w-4" />
                     Copy
                   </>
                 )}
@@ -165,14 +165,14 @@ export function ShareButton({ chatId }: ShareButtonProps) {
               disabled={isLoadingShare}
               className="w-full"
             >
-              <LuLock className="w-4 h-4 mr-2" />
+              <LuLock className="mr-2 h-4 w-4" />
               Unshare
             </Button>
           </div>
         ) : (
           <div className="p-4">
-            <div className="text-sm font-medium mb-2">Share Chat</div>
-            <div className="text-xs text-muted-foreground mb-4">
+            <div className="mb-2 text-sm font-medium">Share Chat</div>
+            <div className="text-muted-foreground mb-4 text-xs">
               Make this chat shareable so others can view it.
             </div>
             <Button
@@ -182,7 +182,7 @@ export function ShareButton({ chatId }: ShareButtonProps) {
               disabled={isLoadingShare}
               className="w-full"
             >
-              <LuShare2 className="w-4 h-4 mr-2" />
+              <LuShare2 className="mr-2 h-4 w-4" />
               Share Chat
             </Button>
           </div>

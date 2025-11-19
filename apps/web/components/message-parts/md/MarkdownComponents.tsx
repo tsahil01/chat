@@ -3,46 +3,46 @@ import { ReactNode } from "react";
 export const markdownComponents = {
   // Headings
   h1: ({ children }: { children: ReactNode }) => (
-    <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 mt-4 sm:mt-6 selection:bg-primary selection:text-primary-foreground">
+    <h1 className="selection:bg-primary selection:text-primary-foreground mt-4 mb-3 text-xl font-bold sm:mt-6 sm:mb-4 sm:text-2xl">
       {children}
     </h1>
   ),
   h2: ({ children }: { children: ReactNode }) => (
-    <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 mt-3 sm:mt-5 selection:bg-primary selection:text-primary-foreground">
+    <h2 className="selection:bg-primary selection:text-primary-foreground mt-3 mb-2 text-lg font-semibold sm:mt-5 sm:mb-3 sm:text-xl">
       {children}
     </h2>
   ),
   h3: ({ children }: { children: ReactNode }) => (
-    <h3 className="text-base sm:text-lg font-medium mb-2 mt-3 sm:mt-4 selection:bg-primary selection:text-primary-foreground">
+    <h3 className="selection:bg-primary selection:text-primary-foreground mt-3 mb-2 text-base font-medium sm:mt-4 sm:text-lg">
       {children}
     </h3>
   ),
   h4: ({ children }: { children: ReactNode }) => (
-    <h4 className="text-sm sm:text-base font-medium mb-1 sm:mb-2 mt-2 sm:mt-3 selection:bg-primary selection:text-primary-foreground">
+    <h4 className="selection:bg-primary selection:text-primary-foreground mt-2 mb-1 text-sm font-medium sm:mt-3 sm:mb-2 sm:text-base">
       {children}
     </h4>
   ),
 
   // Paragraphs
   p: ({ children }: { children: ReactNode }) => (
-    <p className="text-sm sm:text-base leading-relaxed selection:bg-primary selection:text-primary-foreground">
+    <p className="selection:bg-primary selection:text-primary-foreground text-sm leading-relaxed sm:text-base">
       {children}
     </p>
   ),
 
   // Lists
   ul: ({ children }: { children: ReactNode }) => (
-    <ul className="list-disc list-outside pl-4 sm:pl-6 mb-3 sm:mb-4 space-y-1 selection:bg-primary selection:text-primary-foreground">
+    <ul className="selection:bg-primary selection:text-primary-foreground mb-3 list-outside list-disc space-y-1 pl-4 sm:mb-4 sm:pl-6">
       {children}
     </ul>
   ),
   ol: ({ children }: { children: ReactNode }) => (
-    <ol className="list-decimal list-outside pl-4 sm:pl-6 mb-3 sm:mb-4 space-y-1 selection:bg-primary selection:text-primary-foreground">
+    <ol className="selection:bg-primary selection:text-primary-foreground mb-3 list-outside list-decimal space-y-1 pl-4 sm:mb-4 sm:pl-6">
       {children}
     </ol>
   ),
   li: ({ children }: { children: ReactNode }) => (
-    <li className="m-0 text-sm sm:text-base selection:bg-primary selection:text-primary-foreground">
+    <li className="selection:bg-primary selection:text-primary-foreground m-0 text-sm sm:text-base">
       {children}
     </li>
   ),
@@ -51,7 +51,7 @@ export const markdownComponents = {
   a: ({ href, children }: { href?: string; children: ReactNode }) => (
     <a
       href={href}
-      className="underline underline-offset-4 text-primary hover:text-primary/90 selection:bg-primary selection:text-primary-foreground"
+      className="text-primary hover:text-primary/90 selection:bg-primary selection:text-primary-foreground underline underline-offset-4"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -61,7 +61,7 @@ export const markdownComponents = {
 
   // Code (inline)
   code: ({ children }: { children: ReactNode }) => (
-    <code className="rounded bg-secondary px-1 sm:px-1.5 py-0.5 font-mono text-xs sm:text-sm text-secondary-foreground selection:bg-primary selection:text-primary-foreground">
+    <code className="bg-secondary text-secondary-foreground selection:bg-primary selection:text-primary-foreground rounded px-1 py-0.5 font-mono text-xs sm:px-1.5 sm:text-sm">
       {children}
     </code>
   ),
@@ -75,25 +75,25 @@ export const markdownComponents = {
 
   // hr
   hr: ({ children }: { children: ReactNode }) => (
-    <hr className="my-4 border-t border-border selection:bg-primary selection:text-primary-foreground" />
+    <hr className="border-border selection:bg-primary selection:text-primary-foreground my-4 border-t" />
   ),
   br: ({ children }: { children: ReactNode }) => <br />,
 
   // Keyboard keys
   kbd: ({ children }: { children: ReactNode }) => (
-    <kbd className="inline-flex items-center gap-1 rounded border bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground selection:bg-primary selection:text-primary-foreground">
+    <kbd className="bg-muted text-muted-foreground selection:bg-primary selection:text-primary-foreground inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-xs font-medium">
       {children}
     </kbd>
   ),
 
   // Details/Summary
   details: ({ children }: { children: ReactNode }) => (
-    <details className="my-3 rounded border bg-secondary/30 p-3 selection:bg-primary selection:text-primary-foreground">
+    <details className="bg-secondary/30 selection:bg-primary selection:text-primary-foreground my-3 rounded border p-3">
       {children}
     </details>
   ),
   summary: ({ children }: { children: ReactNode }) => (
-    <summary className="cursor-pointer select-none text-sm font-medium text-primary selection:bg-primary selection:text-primary-foreground">
+    <summary className="text-primary selection:bg-primary selection:text-primary-foreground cursor-pointer text-sm font-medium select-none">
       {children}
     </summary>
   ),
@@ -113,21 +113,21 @@ export const markdownComponents = {
       src={src}
       alt={alt}
       title={title}
-      className="my-2 h-auto max-w/full rounded-lg border selection:bg-primary selection:text-primary-foreground"
+      className="max-w/full selection:bg-primary selection:text-primary-foreground my-2 h-auto rounded-lg border"
     />
   ),
 
   // Blockquotes
   blockquote: ({ children }: { children: ReactNode }) => (
-    <blockquote className="my-3 sm:my-4 border-l-2 border-border pl-3 sm:pl-4 italic text-secondary-foreground selection:bg-primary selection:text-primary-foreground">
+    <blockquote className="border-border text-secondary-foreground selection:bg-primary selection:text-primary-foreground my-3 border-l-2 pl-3 italic sm:my-4 sm:pl-4">
       {children}
     </blockquote>
   ),
 
   // Tables
   table: ({ children }: { children: ReactNode }) => (
-    <div className="overflow-x-auto my-3 sm:my-4 selection:bg-primary selection:text-primary-foreground">
-      <table className="min-w-full border selection:bg-primary selection:text-primary-foreground text-xs sm:text-sm">
+    <div className="selection:bg-primary selection:text-primary-foreground my-3 overflow-x-auto sm:my-4">
+      <table className="selection:bg-primary selection:text-primary-foreground min-w-full border text-xs sm:text-sm">
         {children}
       </table>
     </div>
@@ -143,17 +143,17 @@ export const markdownComponents = {
     </tbody>
   ),
   tr: ({ children }: { children: ReactNode }) => (
-    <tr className="border-b selection:bg-primary selection:text-primary-foreground">
+    <tr className="selection:bg-primary selection:text-primary-foreground border-b">
       {children}
     </tr>
   ),
   th: ({ children }: { children: ReactNode }) => (
-    <th className="px-2 sm:px-4 py-1 sm:py-2 text-left font-medium selection:bg-primary selection:text-primary-foreground">
+    <th className="selection:bg-primary selection:text-primary-foreground px-2 py-1 text-left font-medium sm:px-4 sm:py-2">
       {children}
     </th>
   ),
   td: ({ children }: { children: ReactNode }) => (
-    <td className="px-2 sm:px-4 py-1 sm:py-2 selection:bg-primary selection:text-primary-foreground">
+    <td className="selection:bg-primary selection:text-primary-foreground px-2 py-1 sm:px-4 sm:py-2">
       {children}
     </td>
   ),

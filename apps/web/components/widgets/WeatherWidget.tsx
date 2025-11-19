@@ -94,27 +94,27 @@ export function WeatherWidget({ className }: { className?: string }) {
         {loading ? (
           <div className="flex flex-col items-start gap-2 sm:gap-3">
             <Skeleton className="h-3 w-28" />
-            <Skeleton className="h-9 sm:h-10 w-24 sm:w-28" />
+            <Skeleton className="h-9 w-24 sm:h-10 sm:w-28" />
             <Skeleton className="h-3 w-32" />
           </div>
         ) : data ? (
           <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-            <div className="text-xs sm:text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-xs sm:text-sm">
               {data.condition}
             </div>
-            <div className="text-2xl sm:text-3xl font-semibold tabular-nums">
+            <div className="text-2xl font-semibold tabular-nums sm:text-3xl">
               {data.temperatureC != null
                 ? `${Math.round(data.temperatureC)}°C`
                 : "—"}
             </div>
-            <div className="text-xs sm:text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-xs sm:text-sm">
               {data.highC != null && data.lowC != null
                 ? `H ${Math.round(data.highC)}° / L ${Math.round(data.lowC)}°`
                 : ""}
             </div>
           </div>
         ) : (
-          <div className="text-xs sm:text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-xs sm:text-sm">
             Location permission needed to show local weather.
           </div>
         )}

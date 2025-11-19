@@ -18,7 +18,7 @@ export default function ImageSquarePreview({
 }) {
   return (
     <div
-      className="relative rounded-lg overflow-hidden bg-muted"
+      className="bg-muted relative overflow-hidden rounded-lg"
       style={{ width: size, height: size }}
     >
       {/* Maintain perfect square with object-cover */}
@@ -30,7 +30,7 @@ export default function ImageSquarePreview({
         className="object-cover"
       />
       {loading && (
-        <div className="absolute inset-0 bg-black/30 grid place-items-center">
+        <div className="absolute inset-0 grid place-items-center bg-black/30">
           <Spinner variant="circle-filled" size={28} className="text-white" />
         </div>
       )}

@@ -166,7 +166,7 @@ function ChatsPageContent() {
 
   if (isPending) {
     return (
-      <div className="flex flex-col max-w-4xl mx-auto p-4">
+      <div className="mx-auto flex max-w-4xl flex-col p-4">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <Skeleton className="h-8 w-32" />
@@ -192,7 +192,7 @@ function ChatsPageContent() {
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-5rem)] max-w-4xl mx-auto p-4">
+    <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-4xl flex-col p-4">
       <div className="flex-1 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -200,7 +200,7 @@ function ChatsPageContent() {
             <h1 className="text-2xl font-semibold tracking-tight">
               {debouncedSearchQuery.trim() ? "Search Results" : "Your Chats"}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {debouncedSearchQuery.trim()
                 ? pagination
                   ? `Found ${pagination.totalCount} result${pagination.totalCount !== 1 ? "s" : ""} for "${debouncedSearchQuery}"`
@@ -227,7 +227,7 @@ function ChatsPageContent() {
             className="pr-10"
           />
           {loading && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <div className="absolute top-1/2 right-3 -translate-y-1/2 transform">
               <Skeleton className="h-4 w-4 rounded-full" />
             </div>
           )}
@@ -272,7 +272,7 @@ export default function ChatsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex flex-col max-w-4xl mx-auto p-4">
+        <div className="mx-auto flex max-w-4xl flex-col p-4">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <Skeleton className="h-8 w-32" />
