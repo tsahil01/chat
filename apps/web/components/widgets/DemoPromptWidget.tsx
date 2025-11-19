@@ -44,13 +44,13 @@ export function DemoPromptWidget({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-xs sm:text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-xs sm:text-sm">
             Tap to prefill
           </div>
-          <div className="text-base sm:text-lg font-medium leading-snug line-clamp-3">
+          <div className="line-clamp-3 text-base leading-snug font-medium sm:text-lg">
             {prompt.title}
           </div>
-          <div className="text-xs sm:text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-xs sm:text-sm">
             Ask AI to help you
           </div>
         </div>

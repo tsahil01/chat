@@ -50,7 +50,7 @@ export async function getSharedChatInfo(chatId: string) {
 }
 
 export async function getUIMessages(
-  messages?: Message[] | null
+  messages?: Message[] | null,
 ): Promise<UIMessage[]> {
   if (!Array.isArray(messages) || messages.length === 0) return [];
   return messages.map((message: Message) => ({

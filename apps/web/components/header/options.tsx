@@ -148,7 +148,7 @@ export function HeaderOptions({ chatId }: { chatId: string }) {
             )}
             <Button
               variant="ghost"
-              className="w-full justify-start gap-2 text-destructive hover:text-destructive"
+              className="text-destructive hover:text-destructive w-full justify-start gap-2"
               onClick={() => {
                 setOpen(false);
                 setDeleteDialogOpen(true);

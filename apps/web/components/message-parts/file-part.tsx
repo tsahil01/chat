@@ -50,18 +50,18 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
   if (isImage) {
     return (
       <div key={`${messageId}-${partIndex}`} className="max-w-md">
-        <div className="relative group">
+        <div className="group relative">
           <img
             src={
               (attachment as FileUIPart).url ||
               `data:${(attachment as CustomFileUIPart).file?.mediaType};base64,${(attachment as CustomFileUIPart).file?.base64Data}`
             }
             alt={getFileName()}
-            className="rounded-lg shadow-sm border max-w-full w-auto h-auto max-h-80"
+            className="h-auto max-h-80 w-auto max-w-full rounded-lg border shadow-sm"
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute top-2 right-2 opacity-0 transition-opacity group-hover:opacity-100">
             <div className="flex gap-1"></div>
           </div>
         </div>
@@ -70,13 +70,13 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
   }
 
   return (
-    <Card key={`${messageId}-${partIndex}`} className="p-3 max-w-xs">
+    <Card key={`${messageId}-${partIndex}`} className="max-w-xs p-3">
       {JSON.stringify(attachment)}
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0">{getFileIcon()}</div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{getFileName()}</p>
-          <p className="text-xs text-muted-foreground">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{getFileName()}</p>
+          <p className="text-muted-foreground text-xs">
             {(attachment as FileUIPart).mediaType ||
               (attachment as CustomFileUIPart)?.file?.mediaType ||
               "Unknown type"}

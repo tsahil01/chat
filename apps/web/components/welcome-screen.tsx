@@ -12,22 +12,22 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ className = "" }: WelcomeScreenProps) {
   return (
-    <div className={`h-full w-full flex flex-col justify-center ${className}`}>
-      <div className="mb-4 sm:mb-6 px-3 sm:px-0 text-left">
-        <h1 className="text-lg sm:text-xl font-semibold tracking-tight">
+    <div className={`flex h-full w-full flex-col justify-center ${className}`}>
+      <div className="mb-4 px-3 text-left sm:mb-6 sm:px-0">
+        <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
           Welcome to Chat
         </h1>
-        <p className="text-xs sm:text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-xs sm:text-sm">
           Start a conversation by typing a message below.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-0">
-        <ClockWidget className="sm:col-span-1 bg-muted/30 dark:bg-muted/10" />
+      <div className="grid grid-cols-1 gap-2 px-3 sm:grid-cols-2 sm:gap-3 sm:px-0 lg:grid-cols-4 lg:gap-4">
+        <ClockWidget className="bg-muted/30 dark:bg-muted/10 sm:col-span-1" />
         <WeatherWidget className="sm:col-span-2" />
         <CryptoWidget />
-        <DemoPromptWidget className="sm:col-span-1 bg-muted/30 dark:bg-muted/10" />
-        <NewsWidget className="sm:col-span-2 lg:col-span-3 bg-muted/30 dark:bg-muted/10" />
+        <DemoPromptWidget className="bg-muted/30 dark:bg-muted/10 sm:col-span-1" />
+        <NewsWidget className="bg-muted/30 dark:bg-muted/10 sm:col-span-2 lg:col-span-3" />
       </div>
     </div>
   );

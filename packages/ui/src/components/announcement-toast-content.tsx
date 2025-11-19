@@ -118,7 +118,7 @@ export function AnnouncementToastContent({
   return (
     <Card
       className={cn(
-        "pointer-events-auto sm:max-w-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
+        "focus-visible:ring-ring/30 pointer-events-auto focus-visible:ring-2 focus-visible:outline-none sm:max-w-lg",
       )}
     >
       <CardHeader className="flex flex-row items-start gap-3">
@@ -135,28 +135,28 @@ export function AnnouncementToastContent({
       </CardHeader>
       <CardContent className="space-y-4">
         {extendedTitle && extendedContent && (
-          <div className="rounded-lg border bg-muted/40 p-3">
-            <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <div className="bg-muted/40 rounded-lg border p-3">
+            <p className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
               {extendedTitle}
             </p>
-            <p className="mt-1 text-sm text-foreground">{extendedContent}</p>
+            <p className="text-foreground mt-1 text-sm">{extendedContent}</p>
           </div>
         )}
         <div className="space-y-3">
-          <h4 className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <h4 className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
             Highlights
           </h4>
           <div className="grid gap-3">
             {highlights &&
               highlights.map((item, index) => (
                 <div key={index} className="flex gap-3">
-                  <div className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                  <div className="bg-primary mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full" />
                   <div className="space-y-1">
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-foreground text-sm font-medium">
                       {item.title}
                     </p>
                     {item.description ? (
-                      <p className="text-sm text-muted-foreground hidden md:block">
+                      <p className="text-muted-foreground hidden text-sm md:block">
                         {item.description}
                       </p>
                     ) : null}

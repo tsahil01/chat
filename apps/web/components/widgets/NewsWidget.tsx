@@ -61,18 +61,18 @@ export function NewsWidget({ className }: { className?: string }) {
       <CardContent>
         {loading ? (
           <div className="space-y-2">
-            <Skeleton className="h-3 sm:h-4 w-5/6" />
-            <Skeleton className="h-3 sm:h-4 w-4/6" />
-            <Skeleton className="h-3 sm:h-4 w-3/6" />
-            <Skeleton className="h-3 sm:h-4 w-2/3" />
-            <Skeleton className="h-3 sm:h-4 w-1/2" />
+            <Skeleton className="h-3 w-5/6 sm:h-4" />
+            <Skeleton className="h-3 w-4/6 sm:h-4" />
+            <Skeleton className="h-3 w-3/6 sm:h-4" />
+            <Skeleton className="h-3 w-2/3 sm:h-4" />
+            <Skeleton className="h-3 w-1/2 sm:h-4" />
           </div>
         ) : items.length === 0 ? (
-          <div className="text-xs sm:text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-xs sm:text-sm">
             No headlines available right now.
           </div>
         ) : (
-          <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm leading-snug">
+          <ul className="space-y-1.5 text-xs leading-snug sm:space-y-2 sm:text-sm">
             {items.map((item) => (
               <li key={item.id} className="truncate">
                 {item.url ? (

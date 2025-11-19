@@ -59,7 +59,7 @@ export function IntegrationCard({
               {integration.connected ? "Re-link" : "Connect"}
             </Button>
             {integration.connected && !isComingSoon && (
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex items-center justify-between text-sm">
                 <Button
                   className="cursor-pointer"
                   variant="destructive"

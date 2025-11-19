@@ -61,11 +61,11 @@ export function ChatList({
           <Card key={i}>
             <CardContent className="p-3">
               <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0">
-                  <Skeleton className="h-4 w-3/4 mb-1" />
+                <div className="min-w-0 flex-1">
+                  <Skeleton className="mb-1 h-4 w-3/4" />
                   <Skeleton className="h-3 w-1/4" />
                 </div>
-                <Skeleton className="h-3 w-12 ml-3" />
+                <Skeleton className="ml-3 h-3 w-12" />
               </div>
             </CardContent>
           </Card>
@@ -78,7 +78,7 @@ export function ChatList({
     return (
       <Card>
         <CardContent className="p-4 text-center">
-          <p className="text-sm text-muted-foreground mb-3">{error}</p>
+          <p className="text-muted-foreground mb-3 text-sm">{error}</p>
           {onRetry && (
             <Button variant="outline" size="sm" onClick={onRetry}>
               Try Again
@@ -93,7 +93,7 @@ export function ChatList({
     return (
       <Card>
         <CardContent className="p-4 text-center">
-          <p className="text-sm text-muted-foreground mb-3">{emptyMessage}</p>
+          <p className="text-muted-foreground mb-3 text-sm">{emptyMessage}</p>
           <Button size="sm" onClick={onNewChat}>
             {emptyActionText}
           </Button>
@@ -107,14 +107,14 @@ export function ChatList({
       {chats.map((chat) => (
         <Card
           key={chat.id}
-          className="cursor-pointer hover:bg-muted/50 transition-colors"
+          className="hover:bg-muted/50 cursor-pointer transition-colors"
           onClick={() => onChatClick(chat.id)}
         >
           <CardContent className="p-3">
             <div className="flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium truncate text-sm">{chat.title}</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate text-sm font-medium">{chat.title}</h3>
+                <p className="text-muted-foreground mt-0.5 text-xs">
                   {formatDate(chat.createdAt)}
                 </p>
               </div>

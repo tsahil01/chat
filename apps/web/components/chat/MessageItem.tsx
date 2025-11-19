@@ -51,10 +51,10 @@ export function MessageItem({
           );
         });
       })()}
-      <div className="flex gap-2 sm:gap-3 items-start">
+      <div className="flex items-start gap-2 sm:gap-3">
         {message.role === "user" && (
-          <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center">
-            <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
+          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full sm:h-8 sm:w-8">
+            <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
               <AvatarImage src={data?.user?.image || ""} />
               <AvatarFallback className="text-xs">
                 {data?.user?.name?.charAt(0) || "U"}
@@ -67,7 +67,7 @@ export function MessageItem({
           className={`space-y-2 ${message.role === "user" ? "w-auto max-w-[85%] sm:max-w-xl" : "w-full"}`}
         >
           <div
-            className={`rounded-xl px-3 py-2 sm:px-4 sm:py-2 shadow-sm ${message.role === "user" ? "bg-muted text-foreground w-auto rounded-tl-sm" : "text-foreground"}`}
+            className={`rounded-xl px-3 py-2 shadow-sm sm:px-4 sm:py-2 ${message.role === "user" ? "bg-muted text-foreground w-auto rounded-tl-sm" : "text-foreground"}`}
           >
             <div className="space-y-2 sm:space-y-3">
               {message.parts.map((part, i: number) => {
@@ -78,7 +78,7 @@ export function MessageItem({
                       return (
                         <div
                           key={`${message.id}-${i}`}
-                          className="whitespace-pre-wrap max-h-90 overflow-y-auto"
+                          className="max-h-90 overflow-y-auto whitespace-pre-wrap"
                         >
                           {part.text}
                         </div>
@@ -332,7 +332,7 @@ export function MessageItem({
                 showRetry={showRetry}
               />
               {isLastAssistant && (
-                <p className="text-xs text-muted-foreground text-end px-1">
+                <p className="text-muted-foreground px-1 text-end text-xs">
                   AI can make mistakes. Please double-check responses.
                 </p>
               )}

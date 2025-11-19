@@ -32,7 +32,7 @@ export function UserMenu({
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <SidebarMenuButton className="w-full hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
+          <SidebarMenuButton className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full cursor-pointer">
             <Avatar className="h-6 w-6">
               <AvatarImage src={user?.image || ""} />
               <AvatarFallback className="text-xs">
@@ -46,7 +46,7 @@ export function UserMenu({
           <div className="space-y-1">
             {/* User Email Header */}
             <div className="px-2 py-1.5">
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
+              <p className="text-muted-foreground text-xs">{user?.email}</p>
             </div>
 
             {/* Plan Section */}
@@ -60,7 +60,7 @@ export function UserMenu({
                 </Avatar>
                 <div className="flex flex-col">
                   <p className="text-sm font-medium">{user?.name}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     {isPro ? "Pro plan" : "Free plan"}
                   </p>
                 </div>
@@ -70,7 +70,7 @@ export function UserMenu({
 
             {/* Settings Section */}
             <div className="border-t pt-2">
-              <p className="px-2 py-1 text-xs font-medium text-muted-foreground">
+              <p className="text-muted-foreground px-2 py-1 text-xs font-medium">
                 Settings
               </p>
               <UsageBar
@@ -87,7 +87,7 @@ export function UserMenu({
                     ? redirectToCustomerPortal()
                     : setUpgradeDialogOpen(true)
                 }
-                className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 my-1 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                className="hover:bg-accent hover:text-accent-foreground my-1 flex w-full cursor-pointer items-center space-x-3 rounded-sm px-2 py-2 text-sm"
               >
                 {isPro ? (
                   <MdManageAccounts className="h-4 w-4" />
@@ -106,7 +106,7 @@ export function UserMenu({
             <div className="border-t py-2">
               <button
                 onClick={onLogout}
-                className="flex w-full items-center space-x-3 rounded-sm px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center space-x-3 rounded-sm px-2 py-2 text-sm"
               >
                 <MdLogout className="h-4 w-4" />
                 <span>Log out</span>

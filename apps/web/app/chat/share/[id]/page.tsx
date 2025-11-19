@@ -111,17 +111,17 @@ export default function Page() {
 
   if (isLoadingMessages && messages.length === 0) {
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex h-full items-center justify-center">
         <Spinner variant="ring" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4.5rem)] w-full mx-auto px-2">
-      <div className="flex-1 overflow-y-auto space-y-4 p-2 sm:p-4">
+    <div className="mx-auto flex h-[calc(100vh-4.5rem)] w-full flex-col px-2">
+      <div className="flex-1 space-y-4 overflow-y-auto p-2 sm:p-4">
         <MessageList
-          className="w-full md:max-w-5xl mx-auto"
+          className="mx-auto w-full md:max-w-5xl"
           messages={messages}
           isReasoningCollapsed={() => false}
           onToggleReasoning={() => {}}

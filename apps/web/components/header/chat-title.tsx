@@ -128,7 +128,7 @@ export function ChatTitle({
   }, [isOpen, title]);
 
   const titleDisplay = (
-    <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
+    <h1 className="text-foreground truncate text-sm tracking-tight md:text-base">
       {displayedTitle || title}
     </h1>
   );
@@ -141,7 +141,7 @@ export function ChatTitle({
 
   if (!hasTitle) {
     return (
-      <h1 className="md:text-base text-sm tracking-tight text-foreground truncate">
+      <h1 className="text-foreground truncate text-sm tracking-tight md:text-base">
         {displayedTitle || title || "New Chat"}
       </h1>
     );
@@ -154,7 +154,7 @@ export function ChatTitle({
           <span className="truncate">
             {displayedTitle || title || "New Chat"}
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" />
+          <ChevronDown className="h-4 w-4 shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80" align="start">

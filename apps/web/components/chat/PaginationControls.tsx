@@ -38,7 +38,7 @@ export function PaginationControls({
   return (
     <>
       <Separator />
-      <div className="flex items-center justify-between pb-4 w-full">
+      <div className="flex w-full items-center justify-between pb-4">
         <Pagination>
           <PaginationContent>
             <PaginationItem>

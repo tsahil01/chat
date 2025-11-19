@@ -33,7 +33,7 @@ export default function RootLayout({
         <meta name="description" content={metadata.description as string} />
       </head>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
+        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
       >
         <Providers>{children}</Providers>
         <Analytics />

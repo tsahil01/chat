@@ -13,14 +13,14 @@ export function MessageActions({
   showRetry,
 }: MessageActionsProps) {
   return (
-    <div className="flex justify-end items-center gap-2 text-sm text-muted-foreground">
+    <div className="text-muted-foreground flex items-center justify-end gap-2 text-sm">
       <Button
         variant="ghost"
         size="sm"
         className="h-8 w-8 p-0"
         onClick={onCopy}
       >
-        <Copy className="w-4 h-4" />
+        <Copy className="h-4 w-4" />
       </Button>
       {showRetry && (
         <Button
@@ -29,7 +29,7 @@ export function MessageActions({
           className="h-8 w-8 p-0"
           onClick={onRetry}
         >
-          <RefreshCcw className="w-4 h-4" />
+          <RefreshCcw className="h-4 w-4" />
         </Button>
       )}
     </div>
