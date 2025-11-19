@@ -185,13 +185,13 @@ export function ChatInput({
     <>
       <div
         className={cn(
-          "bg-muted/30 rounded-lg flex flex-col border border-border m-2",
+          "bg-muted/30 border-border m-2 flex flex-col rounded-lg border",
           className,
         )}
       >
         <div className="w-full">
           {(uploadingPreview || fileParts) && (
-            <div className="rounded-lg mb-3 flex flex-row gap-2 flex-wrap">
+            <div className="mb-3 flex flex-row flex-wrap gap-2 rounded-lg">
               {uploadingPreview && (
                 <ImageSquarePreview
                   src={uploadingPreview}
@@ -222,11 +222,11 @@ export function ChatInput({
               onKeyDown={handleKeyDown}
               placeholder="Ask me anything..."
               disabled={isSubmitting}
-              className="text-sm sm:text-base bg-muted/30 dark:bg-muted/30 focus:bg-muted/30 dark:focus:bg-muted/30 resize-none focus:outline-none focus:ring-0 border-none focus:border-none focus-visible:border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:shadow-none focus:shadow-none focus:ring-offset-0 focus:ring-offset-transparent shadow-none ring-0 outline-none max-h-[200px] sm:max-h-[300px] rounded-t-lg rounded-b-none px-3 py-2 relative z-10"
+              className="bg-muted/30 dark:bg-muted/30 focus:bg-muted/30 dark:focus:bg-muted/30 relative z-10 max-h-[200px] resize-none rounded-t-lg rounded-b-none border-none px-3 py-2 text-sm shadow-none ring-0 outline-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none focus-visible:border-none focus-visible:shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 sm:max-h-[300px] sm:text-base"
             />
             {autocompleteText && !isSubmitting && textareaRef.current && (
               <div
-                className="absolute inset-0 bg-transparent pointer-events-none z-20 px-3 py-2 whitespace-pre-wrap break-words overflow-hidden"
+                className="pointer-events-none absolute inset-0 z-20 overflow-hidden bg-transparent px-3 py-2 break-words whitespace-pre-wrap"
                 style={{
                   maxHeight: "200px",
                   fontFamily: window.getComputedStyle(textareaRef.current)
@@ -246,8 +246,8 @@ export function ChatInput({
             )}
           </div>
         </div>
-        <div className="flex flex-row justify-between items-center gap-2 p-2 my-auto">
-          <div className="flex flex-row gap-1 sm:gap-2 flex-wrap">
+        <div className="my-auto flex flex-row items-center justify-between gap-2 p-2">
+          <div className="flex flex-row flex-wrap gap-1 sm:gap-2">
             <Tooltip>
               <TooltipTrigger>
                 <Toggle
@@ -255,7 +255,7 @@ export function ChatInput({
                   onPressedChange={setToggleWebSearch}
                   size="sm"
                 >
-                  <CiGlobe className="w-4 h-4" />
+                  <CiGlobe className="h-4 w-4" />
                 </Toggle>
               </TooltipTrigger>
               <TooltipContent>
@@ -276,7 +276,7 @@ export function ChatInput({
                   variant="ghost"
                   disabled={refinePromptLoading || input.length < 3}
                 >
-                  <MdAutoFixHigh className="w-4 h-4" />
+                  <MdAutoFixHigh className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -284,8 +284,8 @@ export function ChatInput({
               </TooltipContent>
             </Tooltip>
           </div>
-          <div className="flex-shrink-0 flex flex-row gap-2 my-auto flex-wrap">
-            <div className="flex flex-row gap-1 sm:gap-2 flex-wrap">
+          <div className="my-auto flex flex-shrink-0 flex-row flex-wrap gap-2">
+            <div className="flex flex-row flex-wrap gap-1 sm:gap-2">
               <SelectPersonality
                 disabled={disablePersonality}
                 personalities={personalities}
@@ -305,10 +305,15 @@ export function ChatInput({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  className="hover:cursor-pointer my-auto"
+                  className="my-auto hover:cursor-pointer"
                   size="sm"
                   onClick={onSubmit}
-                  disabled={isSubmitting || isUploading || refinePromptLoading || input.length < 1}
+                  disabled={
+                    isSubmitting ||
+                    isUploading ||
+                    refinePromptLoading ||
+                    input.length < 1
+                  }
                 >
                   <FaArrowUp className="my-auto" />
                 </Button>

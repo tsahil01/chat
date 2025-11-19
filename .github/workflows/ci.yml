@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   ci:
-    name: Lint, Type Check & Build
+    name: Lint, Format, Type Check & Build
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
