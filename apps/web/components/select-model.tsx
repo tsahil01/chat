@@ -84,14 +84,13 @@ export function SelectModel({
                     {model.tags?.map((tag) => (
                       <Badge
                         key={tag}
-                        variant={"secondary"}
                         className="text-xs"
                       >
                         {tag}
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-xs text-start text-muted-foreground truncate">
+                  <div className="text-xs text-start truncate">
                     Provider: {model.provider}
                   </div>
                 </div>

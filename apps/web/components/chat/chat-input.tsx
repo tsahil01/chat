@@ -274,7 +274,7 @@ export function ChatInput({
                   onClick={handleRefinePrompt}
                   size="sm"
                   variant="ghost"
-                  disabled={refinePromptLoading}
+                  disabled={refinePromptLoading || input.length < 3}
                 >
                   <MdAutoFixHigh className="w-4 h-4" />
                 </Button>
@@ -308,7 +308,7 @@ export function ChatInput({
                   className="hover:cursor-pointer my-auto"
                   size="sm"
                   onClick={onSubmit}
-                  disabled={isSubmitting || isUploading || refinePromptLoading}
+                  disabled={isSubmitting || isUploading || refinePromptLoading || input.length < 1}
                 >
                   <FaArrowUp className="my-auto" />
                 </Button>
