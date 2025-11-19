@@ -45,12 +45,12 @@ export default function IntegrationsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 max-w-4xl">
+    <div className="container mx-auto p-4 max-w-4xl">
       <div className="space-y-6">
         {/* Header */}
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Integrations</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight">Integrations</h1>
+          <p className="text-sm text-muted-foreground">
             Connect your accounts to unlock powerful features and streamline
             your workflow.
           </p>

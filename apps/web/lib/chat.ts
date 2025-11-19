@@ -1,8 +1,8 @@
 import { generateText } from "ai";
 import { Message } from "@workspace/db";
-import { moonshot } from "./providers/moonshot";
 import { getChat, getSharedChat } from "@/app/api/chat/action";
-import { UIMessage } from "./types";
+import { UIMessage } from "@/lib/types";
+import { defaultModel, getSelectedModel } from "@/lib/models";
 
 export async function generateTitleFromUserMessage({
   message,
@@ -11,13 +11,17 @@ export async function generateTitleFromUserMessage({
 }) {
   try {
     const { text: title } = await generateText({
-      model: moonshot("kimi-k2-0905-preview"),
+      model: getSelectedModel({
+        model: defaultModel!.model,
+        provider: defaultModel!.provider,
+      })!,
       system: `\n
       - you will generate a short title based on the first message a user begins a conversation with
       - ensure it is not more than 80 characters long
       - the title should be a summary of the user's message
       - do not use quotes or colons`,
       prompt: JSON.stringify(message),
+      maxOutputTokens: 80,
     });
 
     return title;
@@ -46,7 +50,7 @@ export async function getSharedChatInfo(chatId: string) {
 }
 
 export async function getUIMessages(
-  messages?: Message[] | null,
+  messages?: Message[] | null
 ): Promise<UIMessage[]> {
   if (!Array.isArray(messages) || messages.length === 0) return [];
   return messages.map((message: Message) => ({

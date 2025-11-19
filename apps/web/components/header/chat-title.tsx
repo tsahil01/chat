@@ -150,7 +150,7 @@ export function ChatTitle({
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="my-auto">
+        <Button variant="outline" className="my-auto">
           <span className="truncate">
             {displayedTitle || title || "New Chat"}
           </span>
