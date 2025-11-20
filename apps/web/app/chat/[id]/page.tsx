@@ -302,10 +302,10 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-3rem)] w-full flex-col p-2">
+    <div className="relative mx-auto flex h-[calc(100vh-3rem)] w-full flex-col p-2">
       <div className="flex-1 space-y-4 overflow-y-auto p-2 sm:p-4">
         <MessageList
-          className="mx-auto w-full md:max-w-5xl"
+          className="mx-auto mb-50 w-full md:max-w-5xl"
           messages={messages}
           isReasoningCollapsed={(key) => collapsedReasoning.has(key)}
           onToggleReasoning={toggleReasoning}
@@ -320,27 +320,29 @@ export default function Page() {
         </div>
       </div>
 
-      <ChatInput
-        className="mx-auto w-full md:max-w-5xl"
-        disablePersonality={true}
-        firstMessage={
-          messages[0]?.parts[0]?.type === "text"
-            ? messages[0]?.parts[0]?.text
-            : undefined
-        }
-        input={input}
-        setInput={setInput}
-        isSubmitting={isSubmitting}
-        toggleWebSearch={toggleWebSearch}
-        setToggleWebSearch={setToggleWebSearch}
-        selectedModel={selectedModel}
-        setSelectedModel={setSelectedModel}
-        onSubmit={handleSubmit}
-        fileParts={fileParts}
-        setFileParts={setFileParts}
-        personality={personalityName}
-        setPersonality={setPersonalityName}
-      />
+      <div className="absolute right-0 bottom-0 left-0 px-2">
+        <ChatInput
+          className="border-border bg-background/10 mx-auto w-full border backdrop-blur-2xl backdrop-saturate-150 md:max-w-5xl"
+          disablePersonality={true}
+          firstMessage={
+            messages[0]?.parts[0]?.type === "text"
+              ? messages[0]?.parts[0]?.text
+              : undefined
+          }
+          input={input}
+          setInput={setInput}
+          isSubmitting={isSubmitting}
+          toggleWebSearch={toggleWebSearch}
+          setToggleWebSearch={setToggleWebSearch}
+          selectedModel={selectedModel}
+          setSelectedModel={setSelectedModel}
+          onSubmit={handleSubmit}
+          fileParts={fileParts}
+          setFileParts={setFileParts}
+          personality={personalityName}
+          setPersonality={setPersonalityName}
+        />
+      </div>
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}

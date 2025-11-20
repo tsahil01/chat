@@ -222,7 +222,7 @@ export function ChatInput({
               onKeyDown={handleKeyDown}
               placeholder="Ask me anything..."
               disabled={isSubmitting}
-              className="bg-muted/30 dark:bg-muted/30 focus:bg-muted/30 dark:focus:bg-muted/30 relative z-10 max-h-[200px] resize-none rounded-t-lg rounded-b-none border-none px-3 py-2 text-sm shadow-none ring-0 outline-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none focus-visible:border-none focus-visible:shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 sm:max-h-[300px] sm:text-base"
+              className="bg-muted/30 dark:bg-muted/30 focus:bg-muted/30 dark:focus:bg-muted/30 relative z-10 max-h-50 resize-none rounded-t-lg rounded-b-none border-none px-3 py-2 text-sm shadow-none ring-0 outline-none focus:border-none focus:shadow-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none focus-visible:border-none focus-visible:shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 sm:text-base"
             />
             {autocompleteText && !isSubmitting && textareaRef.current && (
               <div
