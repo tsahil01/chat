@@ -41,11 +41,11 @@ export function SelectPersonality({
             <Button
               disabled={disabled}
               variant="ghost"
-              className="max-w-[120px] min-w-[80px] justify-between sm:max-w-[150px] sm:min-w-[100px]"
+              className="max-w-[120px] min-w-0 justify-between sm:max-w-[150px] md:min-w-[100px]"
             >
               <div className="flex items-center gap-1 truncate sm:gap-2">
-                <LuBrain className="hidden h-3 w-3 flex-shrink-0 sm:block sm:h-4 sm:w-4" />
-                <span className="truncate text-xs">
+                <LuBrain className="h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                <span className="hidden truncate text-xs sm:block">
                   {selectedPersonality?.name.charAt(0).toUpperCase() +
                     selectedPersonality?.name.slice(1) || "Default"}
                 </span>

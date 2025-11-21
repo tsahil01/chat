@@ -3,19 +3,19 @@
 import { MessageActions } from "@/components/chat/message-actions";
 import { UIMessage } from "ai";
 
-type AssistantActionsProps = {
+type UserActionsProps = {
   className?: string;
   message: UIMessage;
   onRetry: (messageId: string) => void;
   showRetry?: boolean;
 };
 
-export function AssistantActions({
+export function UserActions({
   className,
   message,
   onRetry,
   showRetry,
-}: AssistantActionsProps) {
+}: UserActionsProps) {
   return (
     <MessageActions
       className={className}

@@ -43,8 +43,7 @@ export function ChatTitle({
     } else {
       info = await getChatInfo(chatId);
     }
-    console.log("info", info);
-    if (!info || !info.title) {
+    if (!info || !info.title || info.title === "New Chat") {
       setTitle("");
       onPersonalityChange?.("Default");
       return false;

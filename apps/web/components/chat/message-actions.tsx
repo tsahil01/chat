@@ -1,19 +1,27 @@
 import { Button } from "@workspace/ui/components/button";
+import { cn } from "@workspace/ui/lib/utils";
 import { Copy, RefreshCcw } from "lucide-react";
 
 interface MessageActionsProps {
+  className?: string;
   onCopy: () => void;
   onRetry: () => void;
   showRetry?: boolean;
 }
 
 export function MessageActions({
+  className,
   onCopy,
   onRetry,
   showRetry,
 }: MessageActionsProps) {
   return (
-    <div className="text-muted-foreground flex items-center justify-end gap-2 text-sm">
+    <div
+      className={cn(
+        "text-muted-foreground flex items-center justify-end gap-1 text-sm",
+        className,
+      )}
+    >
       <Button
         variant="ghost"
         size="sm"

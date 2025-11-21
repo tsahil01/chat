@@ -39,11 +39,11 @@ export function SelectModel({
           <PopoverTrigger asChild>
             <Button
               variant="ghost"
-              className="max-w-[120px] min-w-[80px] justify-between sm:max-w-[150px] sm:min-w-[100px]"
+              className="max-w-[120px] min-w-0 justify-between sm:max-w-[150px] md:min-w-[100px]"
             >
               <div className="flex items-center gap-1 truncate sm:gap-2">
-                <LuCpu className="hidden h-3 w-3 flex-shrink-0 sm:block sm:h-4 sm:w-4" />
-                <span className="truncate text-xs">
+                <LuCpu className="h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                <span className="hidden truncate text-xs sm:block">
                   {selectedModel?.displayName || "Model"}
                 </span>
               </div>
