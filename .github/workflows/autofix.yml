@@ -1,0 +1,25 @@
+name: autofix.ci
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+permissions:
+  contents: read
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+
+      - run: npm ci
+      - name: Format with Prettier
+        run: pnpm format
+
+      - name: Lint & Fix
+        run: pnpm lint -- --fix
+
+      - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27
+
+
