@@ -10,7 +10,7 @@ interface WelcomeScreenProps {
   className?: string;
 }
 
-export function WelcomeScreen({ className = "" }: WelcomeScreenProps) {
+export function WelcomeScreen({ className }: WelcomeScreenProps) {
   return (
     <div className={`flex h-full w-full flex-col justify-center ${className}`}>
       <div className="mb-4 px-3 text-left sm:mb-6 sm:px-0">
