@@ -16,7 +16,12 @@ export function MessageActions({
   showRetry,
 }: MessageActionsProps) {
   return (
-    <div className={cn("text-muted-foreground flex items-center justify-end gap-1 text-sm", className)}>
+    <div
+      className={cn(
+        "text-muted-foreground flex items-center justify-end gap-1 text-sm",
+        className,
+      )}
+    >
       <Button
         variant="ghost"
         size="sm"

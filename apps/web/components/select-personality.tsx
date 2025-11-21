@@ -45,7 +45,7 @@ export function SelectPersonality({
             >
               <div className="flex items-center gap-1 truncate sm:gap-2">
                 <LuBrain className="h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
-                <span className="truncate text-xs hidden sm:block">
+                <span className="hidden truncate text-xs sm:block">
                   {selectedPersonality?.name.charAt(0).toUpperCase() +
                     selectedPersonality?.name.slice(1) || "Default"}
                 </span>
