@@ -4,18 +4,21 @@ import { MessageActions } from "@/components/chat/message-actions";
 import { UIMessage } from "ai";
 
 type AssistantActionsProps = {
+  className?: string;
   message: UIMessage;
   onRetry: (messageId: string) => void;
   showRetry?: boolean;
 };
 
 export function AssistantActions({
+  className,
   message,
   onRetry,
   showRetry,
 }: AssistantActionsProps) {
   return (
     <MessageActions
+      className={className}
       onCopy={() => {
         const textParts = message.parts
           .filter((p) => p.type === "text" && "text" in p)
