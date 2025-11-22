@@ -59,7 +59,7 @@ export function MessageItem({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="item-start flex gap-2 sm:gap-3 w-full">
+        <div className="item-start flex w-full gap-2 sm:gap-3">
           {message.role === "user" && (
             <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full sm:h-8 sm:w-8">
               <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
@@ -74,7 +74,7 @@ export function MessageItem({
             className={`space-y-2 ${message.role === "user" ? "w-auto max-w-[85%] sm:max-w-xl" : "w-full"}`}
           >
             <div
-              className={`rounded-xl px-3 w-full py-2 shadow-sm sm:px-4 sm:py-2 ${message.role === "user" ? "bg-muted text-foreground w-auto rounded-tl-sm" : "text-foreground"}`}
+              className={`w-full rounded-xl px-3 py-2 shadow-sm sm:px-4 sm:py-2 ${message.role === "user" ? "bg-muted text-foreground w-auto rounded-tl-sm" : "text-foreground"}`}
             >
               <div className="space-y-2 sm:space-y-3">
                 {message.parts.map((part, i: number) => {
