@@ -14,6 +14,14 @@ export interface Models {
 
 export const models: Models[] = [
   {
+    model: "nvidia/nemotron-nano-9b-v2:free",
+    displayName: "nvidia nemotron nano",
+    provider: "openrouter",
+    thinking: true,
+    fileSupport: false,
+    toolSupport: true,
+  },
+  {
     model: "kimi-k2-turbo-preview",
     displayName: "kimi k2 turbo",
     provider: "moonshot",
@@ -25,14 +33,6 @@ export const models: Models[] = [
   {
     model: "moonshotai/kimi-k2-thinking",
     displayName: "kimi k2 thinking",
-    provider: "openrouter",
-    thinking: true,
-    fileSupport: false,
-    toolSupport: true,
-  },
-  {
-    model: "nvidia/nemotron-nano-9b-v2:free",
-    displayName: "nvidia nemotron nano",
     provider: "openrouter",
     thinking: true,
     fileSupport: false,
