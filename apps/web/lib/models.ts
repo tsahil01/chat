@@ -55,6 +55,14 @@ export const models: Models[] = [
     toolSupport: true,
   },
   {
+    model: "google/gemini-2.5-flash-lite-preview-09-2025",
+    displayName: "gemini 2.5 flash lite preview",
+    provider: "openrouter",
+    thinking: false,
+    fileSupport: true,
+    toolSupport: true,
+  },
+  {
     model: "google/gemini-2.5-flash-image",
     displayName: "gemini 2.5 flash image",
     provider: "openrouter",

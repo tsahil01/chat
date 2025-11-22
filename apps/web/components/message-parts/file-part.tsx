@@ -44,7 +44,7 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
   };
 
   const handleOpen = () => {
-    window.open((attachment as FileUIPart).url, "_blank");
+    window.open(new URL((attachment as FileUIPart).url || "").href, "_blank");
   };
 
   if (isImage) {
@@ -71,7 +71,6 @@ export function FilePart({ attachment, messageId, partIndex }: FilePartProps) {
 
   return (
     <Card key={`${messageId}-${partIndex}`} className="max-w-xs p-3">
-      {JSON.stringify(attachment)}
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0">{getFileIcon()}</div>
         <div className="min-w-0 flex-1">
