@@ -14,6 +14,14 @@ export interface Models {
 
 export const models: Models[] = [
   {
+    model: "nvidia/nemotron-nano-9b-v2:free",
+    displayName: "nvidia nemotron nano",
+    provider: "openrouter",
+    thinking: true,
+    fileSupport: false,
+    toolSupport: true,
+  },
+  {
     model: "kimi-k2-turbo-preview",
     displayName: "kimi k2 turbo",
     provider: "moonshot",
@@ -31,14 +39,6 @@ export const models: Models[] = [
     toolSupport: true,
   },
   {
-    model: "nvidia/nemotron-nano-9b-v2:free",
-    displayName: "nvidia nemotron nano",
-    provider: "openrouter",
-    thinking: true,
-    fileSupport: false,
-    toolSupport: true,
-  },
-  {
     model: "z-ai/glm-4.5-air:free",
     displayName: "z-ai glm 4.5 air",
     provider: "openrouter",
@@ -49,6 +49,14 @@ export const models: Models[] = [
   {
     model: "google/gemini-2.5-flash",
     displayName: "gemini 2.5 flash",
+    provider: "openrouter",
+    thinking: false,
+    fileSupport: true,
+    toolSupport: true,
+  },
+  {
+    model: "google/gemini-2.5-flash-lite-preview-09-2025",
+    displayName: "gemini 2.5 flash lite preview",
     provider: "openrouter",
     thinking: false,
     fileSupport: true,

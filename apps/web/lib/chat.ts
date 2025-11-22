@@ -53,11 +53,15 @@ export async function getUIMessages(
   messages?: Message[] | null,
 ): Promise<UIMessage[]> {
   if (!Array.isArray(messages) || messages.length === 0) return [];
-  return messages.map((message: Message) => ({
-    role: message.role as "system" | "user" | "assistant",
-    parts: JSON.parse(JSON.stringify(message.parts)),
-    id: message.id,
-    createdAt: message.createdAt,
-    attachments: JSON.parse(JSON.stringify(message.attachments)),
-  }));
+  return messages
+    .map((message: Message) => ({
+      role: message.role as "system" | "user" | "assistant",
+      parts: JSON.parse(JSON.stringify(message.parts)),
+      id: message.id,
+      createdAt: message.createdAt,
+      attachments: JSON.parse(JSON.stringify(message.attachments)),
+    }))
+    .sort((a, b) => {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    });
 }
