@@ -13,14 +13,14 @@ self.onmessage = async (e: MessageEvent) => {
 
   try {
     if (!shikiPromise) shikiPromise = import("shiki");
-    const { codeToHtml } = await shikiPromise;
-    const html = await codeToHtml(code, {
+    const shiki = await shikiPromise;
+    const html = await shiki.codeToHtml(code, {
       lang: language,
       themes,
     });
-    (self as unknown as Worker)["postMessage"]({ id, instanceId, html });
+    (self as unknown as Worker).postMessage({ id, instanceId, html });
   } catch {
     // Ignore errors and send empty HTML
-    (self as unknown as Worker)["postMessage"]({ id, instanceId, html: "" });
+    (self as unknown as Worker).postMessage({ id, instanceId, html: "" });
   }
 };
