@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@prisma/client": "^7.0.1",
+    "@prisma/client-runtime-utils": "^7.0.1",
     "@prisma/extension-accelerate": "^2.0.2",
     "dotenv": "^17.2.2"
   },
