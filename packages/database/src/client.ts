@@ -7,12 +7,13 @@ import { resolve } from "path";
 // Always load .env in development and build, Vercel will provide env vars in production
 config({ path: resolve(process.cwd(), "../../.env") });
 
-const connectionString = `${process.env.DATABASE_URL}`
+const connectionString = `${process.env.DATABASE_URL}`;
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 export const prisma =
-  globalForPrisma.prisma || new PrismaClient({
+  globalForPrisma.prisma ||
+  new PrismaClient({
     accelerateUrl: connectionString,
   }).$extends(withAccelerate());
 
