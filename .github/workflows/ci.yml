@@ -5,7 +5,6 @@ on:
   pull_request:
     branches: [main]
 
-    
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -20,11 +19,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db # ggignore
+      EXASEARCH_API_KEY: dummy_key_for_ci # ggignore
+      FIRECRAWL_API_KEY: dummy_key_for_ci # ggignore
+
     services:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: postgres  # ggignore
+          POSTGRES_PASSWORD: postgres # ggignore
           POSTGRES_DB: test_db
         options: >-
           --health-cmd pg_isready
@@ -48,8 +52,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -59,8 +63,3 @@ jobs:
 
       - name: Build
         run: pnpm build
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db  # ggignore
-          EXASEARCH_API_KEY: dummy_key_for_ci  # ggignore
-          FIRECRAWL_API_KEY: dummy_key_for_ci  # ggignore
-
