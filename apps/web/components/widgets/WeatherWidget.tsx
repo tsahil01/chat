@@ -88,33 +88,33 @@ export function WeatherWidget({ className }: { className?: string }) {
   return (
     <Card className={`${className ?? ""} ${bgClass}`}>
       <CardHeader>
-        <CardTitle>Weather</CardTitle>
+        <CardTitle className="text-sm font-medium">Weather</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
           <div className="flex flex-col items-start gap-2 sm:gap-3">
             <Skeleton className="h-3 w-28" />
-            <Skeleton className="h-9 w-24 sm:h-10 sm:w-28" />
+            <Skeleton className="h-8 w-24 sm:h-9 sm:w-28" />
             <Skeleton className="h-3 w-32" />
           </div>
         ) : data ? (
           <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-            <div className="text-muted-foreground text-xs sm:text-sm">
+            <div className="text-muted-foreground text-xs">
               {data.condition}
             </div>
-            <div className="text-2xl font-semibold tabular-nums sm:text-3xl">
+            <div className="text-xl font-semibold tabular-nums sm:text-2xl">
               {data.temperatureC != null
                 ? `${Math.round(data.temperatureC)}°C`
                 : "—"}
             </div>
-            <div className="text-muted-foreground text-xs sm:text-sm">
+            <div className="text-muted-foreground text-[10px] sm:text-xs">
               {data.highC != null && data.lowC != null
                 ? `H ${Math.round(data.highC)}° / L ${Math.round(data.lowC)}°`
                 : ""}
             </div>
           </div>
         ) : (
-          <div className="text-muted-foreground text-xs sm:text-sm">
+          <div className="text-muted-foreground text-[10px] sm:text-xs">
             Location permission needed to show local weather.
           </div>
         )}

@@ -65,21 +65,17 @@ export default function Chat() {
   };
 
   return (
-    <div className="mx-auto my-auto flex h-[calc(99vh)] max-w-5xl flex-col">
-      <div className="overflow-y-autoitems-center flex-1 justify-center space-y-4 p-4">
-        <WelcomeScreen />
-        {isSubmitting && (
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <div className="rounded-lg p-3">
-                <Spinner variant="bars" size={16} />
-              </div>
-            </div>
-          </div>
-        )}
+    <div className="mx-auto my-auto flex h-full max-w-5xl flex-col justify-center">
+      <div className="mb-4 px-3 text-left sm:mb-6 sm:px-0">
+        <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
+          Welcome to Chat
+        </h1>
+        <p className="text-muted-foreground text-xs sm:text-sm">
+          Start a conversation by typing a message below.
+        </p>
       </div>
-
       <ChatInput
+        className="m-0"
         input={input}
         setInput={setInput}
         isSubmitting={isSubmitting}
@@ -93,6 +89,7 @@ export default function Chat() {
         personality={personalityName}
         setPersonality={setPersonalityName}
       />
+      {/* <WelcomeScreen /> */}
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}

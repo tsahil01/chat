@@ -40,17 +40,15 @@ export function DemoPromptWidget({ className }: { className?: string }) {
   return (
     <Card className={`${className} cursor-pointer`} onClick={handleClick}>
       <CardHeader>
-        <CardTitle>Try this</CardTitle>
+        <CardTitle className="text-sm font-medium">Try this</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-muted-foreground text-xs sm:text-sm">
-            Tap to prefill
-          </div>
-          <div className="line-clamp-3 text-base leading-snug font-medium sm:text-lg">
+          <div className="text-muted-foreground text-xs">Tap to prefill</div>
+          <div className="line-clamp-3 text-sm leading-snug font-medium sm:text-base">
             {prompt.title}
           </div>
-          <div className="text-muted-foreground text-xs sm:text-sm">
+          <div className="text-muted-foreground text-[10px] sm:text-xs">
             Ask AI to help you
           </div>
         </div>
