@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@workspace/ui/components/button";
 import {
   Popover,
@@ -12,7 +12,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
-import { LuBrain, LuChevronDown } from "react-icons/lu";
+import { Input } from "@workspace/ui/components/input";
+import { LuBrain, LuChevronDown, LuSearch } from "react-icons/lu";
 import { Personality } from "@/lib/prompts/personality";
 
 export function SelectPersonality({
@@ -27,10 +28,28 @@ export function SelectPersonality({
   disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredPersonalities = useMemo(() => {
+    if (!searchQuery.trim()) return personalities;
+    const query = searchQuery.toLowerCase();
+    return personalities.filter(
+      (personality) =>
+        personality.name.toLowerCase().includes(query) ||
+        personality.description.toLowerCase().includes(query)
+    );
+  }, [personalities, searchQuery]);
+
+  useEffect(() => {
+    if (!open) {
+      setSearchQuery("");
+    }
+  }, [open]);
 
   const handlePersonalitySelect = (personality: Personality) => {
     setSelectedPersonality(personality);
     setOpen(false);
+    setSearchQuery("");
   };
 
   return (
@@ -58,13 +77,35 @@ export function SelectPersonality({
           <p>{selectedPersonality?.description || "Default personality"}</p>
         </TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-72 p-0 sm:w-80" align="start">
+      <PopoverContent
+        className="w-72 p-0 sm:w-80"
+        align="start"
+        side="top"
+        sideOffset={8}
+        avoidCollisions={true}
+        collisionPadding={8}
+      >
         <div className="p-2">
           <div className="text-muted-foreground mb-2 px-2 text-xs font-medium sm:text-sm">
             Select Personality
           </div>
-          <div className="space-y-1">
-            {personalities.map((personality, index) => (
+          <div className="relative mb-2">
+            <LuSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search personalities..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-8 pl-8 text-sm"
+            />
+          </div>
+          <div className="max-h-[300px] overflow-y-auto space-y-1">
+            {filteredPersonalities.length === 0 ? (
+              <div className="text-muted-foreground py-4 text-center text-sm">
+                No personalities found
+              </div>
+            ) : (
+              filteredPersonalities.map((personality, index) => (
               <Button
                 key={index}
                 variant={
@@ -87,7 +128,8 @@ export function SelectPersonality({
                   </div>
                 </div>
               </Button>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </PopoverContent>

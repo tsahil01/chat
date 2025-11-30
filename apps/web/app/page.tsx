@@ -75,6 +75,7 @@ export default function Chat() {
         </p>
       </div>
       <ChatInput
+        className="m-0"
         input={input}
         setInput={setInput}
         isSubmitting={isSubmitting}
@@ -88,7 +89,7 @@ export default function Chat() {
         personality={personalityName}
         setPersonality={setPersonalityName}
       />
-      <WelcomeScreen />
+      {/* <WelcomeScreen /> */}
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}

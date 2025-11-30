@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@workspace/ui/components/button";
 import {
   Popover,
@@ -12,7 +12,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
-import { LuCpu, LuChevronDown } from "react-icons/lu";
+import { Input } from "@workspace/ui/components/input";
+import { LuCpu, LuChevronDown, LuSearch } from "react-icons/lu";
 import { Models } from "@/lib/models";
 import { Badge } from "@workspace/ui/components/badge";
 
@@ -26,10 +27,30 @@ export function SelectModel({
   setSelectedModel: (model: Models) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredModels = useMemo(() => {
+    if (!searchQuery.trim()) return models;
+    const query = searchQuery.toLowerCase();
+    return models.filter(
+      (model) =>
+        model.displayName.toLowerCase().includes(query) ||
+        model.model.toLowerCase().includes(query) ||
+        model.provider.toLowerCase().includes(query) ||
+        model.tags?.some((tag) => tag.toLowerCase().includes(query))
+    );
+  }, [models, searchQuery]);
+
+  useEffect(() => {
+    if (!open) {
+      setSearchQuery("");
+    }
+  }, [open]);
 
   const handleModelSelect = (model: Models) => {
     setSelectedModel(model);
     setOpen(false);
+    setSearchQuery("");
   };
 
   return (
@@ -55,13 +76,35 @@ export function SelectModel({
           <p>{selectedModel?.displayName}</p>
         </TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-72 p-0 sm:w-80" align="start">
+      <PopoverContent
+        className="w-72 p-0 sm:w-80"
+        align="start"
+        side="top"
+        sideOffset={8}
+        avoidCollisions={true}
+        collisionPadding={8}
+      >
         <div className="p-2">
           <div className="text-muted-foreground mb-2 px-2 text-xs font-medium sm:text-sm">
             Select Model
           </div>
-          <div className="space-y-1">
-            {models.map((model, index) => (
+          <div className="relative mb-2">
+            <LuSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search models..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-8 pl-8 text-sm"
+            />
+          </div>
+          <div className="max-h-[300px] overflow-y-auto space-y-1">
+            {filteredModels.length === 0 ? (
+              <div className="text-muted-foreground py-4 text-center text-sm">
+                No models found
+              </div>
+            ) : (
+              filteredModels.map((model, index) => (
               <Button
                 key={index}
                 variant={
@@ -92,7 +135,8 @@ export function SelectModel({
                   </div>
                 </div>
               </Button>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </PopoverContent>
