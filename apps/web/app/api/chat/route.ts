@@ -5,6 +5,9 @@ import {
   StepResult,
   ToolSet,
   stepCountIs,
+  UIMessagePart,
+  UIDataTypes,
+  UITools,
 } from "ai";
 import { getTools } from "@/lib/tools";
 import { auth } from "@/lib/auth";
@@ -112,9 +115,18 @@ export async function POST(req: Request) {
     stopWhen: stepCountIs(100),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {
+      const parts: UIMessagePart<UIDataTypes, UITools>[] = [];
+
+      result.response.messages.forEach((msg) => {
+        const content = Array.isArray(msg.content)
+          ? msg.content
+          : [msg.content];
+        parts.push(...(content as UIMessagePart<UIDataTypes, UITools>[]));
+      });
+
       const assistantMessage = {
-        role: "assistant" as const,
-        parts: result.content,
+        role: "assistant",
+        parts: parts,
         id: result.response.id,
         createdAt: new Date(),
       } as UIMessage;
