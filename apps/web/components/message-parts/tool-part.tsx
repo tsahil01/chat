@@ -16,8 +16,6 @@ export function ToolPart({
   messageId,
   partIndex,
 }: ToolPartProps) {
-  
-
   function parseToolName(toolName: string) {
     if (toolName.includes("WebSearch")) {
       return "Web Search";
@@ -30,7 +28,7 @@ export function ToolPart({
     }
     if (toolName.includes("CheckCalendarAvailability")) {
       return "Check Calendar Availability";
-  }
+    }
     if (toolName.includes("ViewCodeDiff")) {
       return "View Code Diff";
     }
@@ -59,7 +57,7 @@ export function ToolPart({
       return "Get GitHub User Info";
     }
     return toolName;
-  } 
+  }
 
   return (
     <div

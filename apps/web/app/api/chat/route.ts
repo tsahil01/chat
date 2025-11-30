@@ -115,10 +115,12 @@ export async function POST(req: Request) {
     stopWhen: stepCountIs(100),
     system: system.trim() !== "" ? system : undefined,
     onFinish: async (result: StepResult<ToolSet>) => {
-      let parts: UIMessagePart<UIDataTypes, UITools>[] = [];
+      const parts: UIMessagePart<UIDataTypes, UITools>[] = [];
 
       result.response.messages.forEach((msg) => {
-        const content = Array.isArray(msg.content) ? msg.content : [msg.content];
+        const content = Array.isArray(msg.content)
+          ? msg.content
+          : [msg.content];
         parts.push(...(content as UIMessagePart<UIDataTypes, UITools>[]));
       });
 
