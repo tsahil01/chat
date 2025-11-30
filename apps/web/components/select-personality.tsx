@@ -36,7 +36,7 @@ export function SelectPersonality({
     return personalities.filter(
       (personality) =>
         personality.name.toLowerCase().includes(query) ||
-        personality.description.toLowerCase().includes(query)
+        personality.description.toLowerCase().includes(query),
     );
   }, [personalities, searchQuery]);
 
@@ -90,7 +90,7 @@ export function SelectPersonality({
             Select Personality
           </div>
           <div className="relative mb-2">
-            <LuSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <LuSearch className="text-muted-foreground absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2" />
             <Input
               type="text"
               placeholder="Search personalities..."
@@ -99,35 +99,35 @@ export function SelectPersonality({
               className="h-8 pl-8 text-sm"
             />
           </div>
-          <div className="max-h-[300px] overflow-y-auto space-y-1">
+          <div className="max-h-[300px] space-y-1 overflow-y-auto">
             {filteredPersonalities.length === 0 ? (
               <div className="text-muted-foreground py-4 text-center text-sm">
                 No personalities found
               </div>
             ) : (
               filteredPersonalities.map((personality, index) => (
-              <Button
-                key={index}
-                variant={
-                  selectedPersonality?.name === personality.name
-                    ? "secondary"
-                    : "ghost"
-                }
-                className="h-auto w-full justify-start p-2 sm:p-3"
-                onClick={() => handlePersonalitySelect(personality)}
-              >
-                <div className="flex w-full flex-col justify-between gap-1">
-                  <div className="flex flex-row items-start justify-between gap-1">
-                    <div className="truncate text-sm font-medium sm:text-base">
-                      {personality.name.charAt(0).toUpperCase() +
-                        personality.name.slice(1)}
+                <Button
+                  key={index}
+                  variant={
+                    selectedPersonality?.name === personality.name
+                      ? "secondary"
+                      : "ghost"
+                  }
+                  className="h-auto w-full justify-start p-2 sm:p-3"
+                  onClick={() => handlePersonalitySelect(personality)}
+                >
+                  <div className="flex w-full flex-col justify-between gap-1">
+                    <div className="flex flex-row items-start justify-between gap-1">
+                      <div className="truncate text-sm font-medium sm:text-base">
+                        {personality.name.charAt(0).toUpperCase() +
+                          personality.name.slice(1)}
+                      </div>
+                    </div>
+                    <div className="text-muted-foreground truncate text-start text-xs">
+                      {personality.description}
                     </div>
                   </div>
-                  <div className="text-muted-foreground truncate text-start text-xs">
-                    {personality.description}
-                  </div>
-                </div>
-              </Button>
+                </Button>
               ))
             )}
           </div>
