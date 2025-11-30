@@ -65,7 +65,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="mx-auto my-auto flex h-full justify-center max-w-5xl flex-col">
+    <div className="mx-auto my-auto flex h-full max-w-5xl flex-col justify-center">
       <div className="mb-4 px-3 text-left sm:mb-6 sm:px-0">
         <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
           Welcome to Chat

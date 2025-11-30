@@ -44,9 +44,7 @@ export function DemoPromptWidget({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-muted-foreground text-xs">
-            Tap to prefill
-          </div>
+          <div className="text-muted-foreground text-xs">Tap to prefill</div>
           <div className="line-clamp-3 text-sm leading-snug font-medium sm:text-base">
             {prompt.title}
           </div>
