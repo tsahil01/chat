@@ -100,6 +100,21 @@ export function MessageItem({
                           />
                         );
                       }
+                    case "tool-result": {
+                      const toolName =
+                        "toolName" in part && typeof part.toolName === "string"
+                          ? part.toolName
+                          : "Unknown Tool";
+                      return (
+                        <ToolPart
+                          key={`${message.id}-${i}`}
+                          toolName={toolName}
+                          part={part}
+                          messageId={message.id}
+                          partIndex={i}
+                        />
+                      );
+                    }
                     case "tool-exaWebSearch":
                       return (
                         <ToolPart
