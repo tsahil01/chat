@@ -304,22 +304,23 @@ export default function Page() {
   return (
     <div className="relative mx-auto flex h-[calc(100vh-3rem)] w-full flex-col p-2">
       <div className="flex-1 space-y-4 overflow-y-auto p-2 sm:p-4">
-        <MessageList
-          className="mx-auto mb-50 w-full md:max-w-5xl"
-          messages={messages}
-          isReasoningCollapsed={(key) => collapsedReasoning.has(key)}
-          onToggleReasoning={toggleReasoning}
-          onRetry={(messageId) => {
-            setIsSubmitting(true);
-            regenerate({ messageId });
-          }}
-          chatEndRef={chatEndRef}
-        />
-        <div className="mx-auto w-full p-2 md:max-w-5xl">
-          {isSubmitting && <TypingIndicator />}
+        <div className="mb-50 flex flex-col">
+          <MessageList
+            className="mx-auto w-full md:max-w-5xl"
+            messages={messages}
+            isReasoningCollapsed={(key) => collapsedReasoning.has(key)}
+            onToggleReasoning={toggleReasoning}
+            onRetry={(messageId) => {
+              setIsSubmitting(true);
+              regenerate({ messageId });
+            }}
+            chatEndRef={chatEndRef}
+          />
+          <div className="mx-auto w-full p-2 md:max-w-5xl">
+            {isSubmitting && <TypingIndicator />}
+          </div>
         </div>
       </div>
-
       <div className="absolute right-0 bottom-0 left-0 px-2">
         <ChatInput
           className="border-border bg-background/10 mx-auto w-full border backdrop-blur-2xl backdrop-saturate-150 md:max-w-5xl"

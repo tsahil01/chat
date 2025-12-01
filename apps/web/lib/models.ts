@@ -14,6 +14,14 @@ export interface Models {
 
 export const models: Models[] = [
   {
+    model: "x-ai/grok-4.1-fast:free",
+    displayName: "grok 4.1 fast",
+    provider: "openrouter",
+    thinking: false,
+    fileSupport: false,
+    toolSupport: true,
+  },
+  {
     model: "nvidia/nemotron-nano-9b-v2:free",
     displayName: "nvidia nemotron nano",
     provider: "openrouter",
@@ -72,7 +80,7 @@ export const models: Models[] = [
   },
 ];
 
-export const defaultModel = models[1];
+export const defaultModel = models[0];
 
 export function getSelectedModel({
   model,
