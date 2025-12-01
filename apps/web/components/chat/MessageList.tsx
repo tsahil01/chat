@@ -29,7 +29,7 @@ export function MessageList({
     .find((m) => m.role === "assistant")?.id;
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn("space-y-0", className)}>
       {messages.map((message: UIMessage<unknown, UIDataTypes, UITools>) => (
         <MessageItem
           key={message.id}

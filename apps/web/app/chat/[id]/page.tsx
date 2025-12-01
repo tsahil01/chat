@@ -316,7 +316,7 @@ export default function Page() {
             }}
             chatEndRef={chatEndRef}
           />
-          <div className="mx-auto w-full p-2 md:max-w-5xl">
+          <div className="mx-auto w-full md:max-w-5xl">
             {isSubmitting && <TypingIndicator />}
           </div>
         </div>
