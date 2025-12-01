@@ -58,10 +58,9 @@ export function ChatTitle({
       description: info.title,
     };
     document.title = metadata.title as string;
-    document.querySelector('meta[name="description"]')?.setAttribute(
-      "content",
-      metadata.description as string,
-    );
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", metadata.description as string);
     return true;
   }
 
