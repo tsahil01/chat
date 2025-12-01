@@ -72,7 +72,7 @@ export const models: Models[] = [
   },
 ];
 
-export const defaultModel = models[0];
+export const defaultModel = models[1];
 
 export function getSelectedModel({
   model,
@@ -86,7 +86,7 @@ export function getSelectedModel({
   }
   switch (provider) {
     case "moonshot":
-      return moonshot(model);
+      return moonshot.chat(model);
     case "openrouter":
       return openrouter(model);
     default:
