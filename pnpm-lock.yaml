@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@workspace/config':
+        specifier: workspace:*
+        version: link:packages/config
       '@workspace/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
@@ -53,6 +56,9 @@ importers:
       '@vercel/blob':
         specifier: ^2.0.0
         version: 2.0.0
+      '@workspace/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@workspace/db':
         specifier: workspace:*
         version: link:../../packages/database
@@ -141,6 +147,8 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+
+  packages/config: {}
 
   packages/database:
     dependencies:

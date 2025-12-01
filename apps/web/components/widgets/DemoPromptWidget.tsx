@@ -1,32 +1,22 @@
 "use client";
 
-import { useMemo } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateUUID } from "@/lib/utils";
 import { PROMPTS, Prompts } from "@/lib/prompts/demo-prompts";
+import { Button } from "@workspace/ui/components/button";
+import { cn } from "@workspace/ui/lib/utils";
 
 export function DemoPromptWidget({ className }: { className?: string }) {
+  const [prompts, setPrompts] = useState<Prompts[]>(
+    [...PROMPTS].sort(() => Math.random() - 0.5).slice(0, 6),
+  );
   const router = useRouter();
-  const prompt: Prompts = useMemo(() => {
-    return (
-      PROMPTS[Math.floor(Math.random() * PROMPTS.length)] ?? {
-        title: "",
-        prompt: "",
-        personality: "",
-      }
-    );
-  }, []);
 
-  function handleClick() {
-    const encodedInput = encodeURIComponent(prompt.prompt);
+  function handleClick({ prompt }: { prompt: Prompts }) {
+    const encodedInput = encodeURIComponent(prompt?.prompt ?? "");
     const encodedPersonality = encodeURIComponent(
-      (prompt.personality?.toLowerCase() ?? "") || "",
+      (prompt?.personality?.toLowerCase() ?? "") || "",
     );
     const newChatId = generateUUID();
     router.replace(
@@ -38,22 +28,17 @@ export function DemoPromptWidget({ className }: { className?: string }) {
   }
 
   return (
-    <Card className={`${className} cursor-pointer`} onClick={handleClick}>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">Try this</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col items-baseline gap-1.5 sm:gap-2">
-          <div className="text-muted-foreground text-xs">Tap to prefill</div>
-          <div className="line-clamp-3 text-sm leading-snug font-medium sm:text-base">
-            {prompt.title}
-          </div>
-          <div className="text-muted-foreground text-[10px] sm:text-xs">
-            Ask AI to help you
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className={cn("flex flex-row flex-wrap gap-2", className)}>
+      {prompts.map((prompt, index) => (
+        <Button
+          key={index}
+          onClick={() => handleClick({ prompt })}
+          variant="outline"
+        >
+          {prompt?.title}
+        </Button>
+      ))}
+    </div>
   );
 }
 

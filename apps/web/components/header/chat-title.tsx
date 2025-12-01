@@ -11,6 +11,8 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 import { ChevronDown } from "lucide-react";
+import { Metadata } from "next";
+import { appConfig } from "@workspace/config";
 
 interface ChatTitleProps {
   onTitleChange?: (title: string) => void;
@@ -51,6 +53,15 @@ export function ChatTitle({
     setTitle(info.title);
     onTitleChange?.(info.title);
     onPersonalityChange?.(info.personality);
+
+    const metadata: Metadata = {
+      title: `${info.title} | ${appConfig.appName}`,
+      description: info.title,
+    };
+    document.title = metadata.title as string;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", metadata.description as string);
     return true;
   }
 

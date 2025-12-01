@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Metadata } from "next";
-
+import { appConfig } from "@workspace/config";
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
 import { Analytics } from "@vercel/analytics/next";
@@ -16,9 +16,8 @@ const fontMono = Geist_Mono({
 });
 
 const metadata: Metadata = {
-  title: "AI Chat",
-  description:
-    "AI Chat is a chatbot that can answer questions and help with tasks.",
+  title: appConfig.appName,
+  description: appConfig.appDescription,
 };
 
 export default function RootLayout({

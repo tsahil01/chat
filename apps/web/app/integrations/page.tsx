@@ -8,6 +8,7 @@ import { SuccessMessage } from "@/components/integrations/SuccessMessage";
 import { LoadingState } from "@/components/integrations/LoadingState";
 import { AuthRequired } from "@/components/integrations/AuthRequired";
 import { useIntegrations } from "@/hooks/useIntegrations";
+import { Metadata } from "next";
 
 export default function IntegrationsPage() {
   const [user, setUser] = useState<User | null>(null);
