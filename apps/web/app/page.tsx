@@ -89,7 +89,7 @@ export default function Chat() {
         personality={personalityName}
         setPersonality={setPersonalityName}
       />
-      {/* <WelcomeScreen /> */}
+      <WelcomeScreen />
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}

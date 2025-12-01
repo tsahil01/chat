@@ -50,10 +50,7 @@ export async function PATCH(
   }
 
   const body = await request.json();
-  console.log("body", body);
   const { title, visibility } = body;
-  console.log("title", title);
-  console.log("visibility", visibility);
 
   const updateData: { title?: string; visibility?: Visibility } = {};
   if (title !== undefined) {
