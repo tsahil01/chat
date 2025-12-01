@@ -25,6 +25,7 @@ import { FiMessageCircle } from "react-icons/fi";
 import { PiPlusBold } from "react-icons/pi";
 import { LuWorkflow } from "react-icons/lu";
 import Link from "next/link";
+import { appConfig } from "@workspace/config";
 
 export function AppSidebar() {
   const [recentChats, setRecentChats] = useState<Chat[]>([]);
@@ -150,7 +151,7 @@ export function AppSidebar() {
         {/* Header */}
         <div className="border-sidebar-border flex justify-between border-b p-3">
           <Link href="/">
-            <h1 className="my-auto text-base font-semibold">AI Chat</h1>
+            <h1 className="my-auto text-base font-semibold">{appConfig.appName}</h1>
           </Link>
           <SidebarTrigger className="bg-sidebar-accent text-sidebar-accent-foreground my-auto hover:cursor-pointer" />
         </div>
