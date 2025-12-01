@@ -21,6 +21,7 @@
     "@prisma/client": "^7.0.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/blob": "^2.0.0",
+    "@workspace/config": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/ui": "workspace:*",
     "ai": "^5.0.44",
