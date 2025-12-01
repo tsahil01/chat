@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Spinner } from "@workspace/ui/components/ui/shadcn-io/spinner";
 import { WelcomeScreen } from "@/components/welcome-screen";
+import { appConfig } from "@workspace/config";
 import { ChatInput } from "@/components/chat/chat-input";
 import { models, Models } from "@/lib/models";
 import { useRouter } from "next/navigation";
@@ -68,7 +68,7 @@ export default function Chat() {
     <div className="mx-auto my-auto flex h-full max-w-5xl flex-col justify-center">
       <div className="mb-4 px-3 text-left sm:mb-6 sm:px-0">
         <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
-          Welcome to Chat
+          Welcome to {appConfig.appName}
         </h1>
         <p className="text-muted-foreground text-xs sm:text-sm">
           Start a conversation by typing a message below.
