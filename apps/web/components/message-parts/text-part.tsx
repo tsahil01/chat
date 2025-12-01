@@ -12,21 +12,22 @@ export function TextPart({ text, messageId, partIndex }: TextPartProps) {
   const parts = parseCodeBlocks(text);
 
   return (
-    <div key={`${messageId}-${partIndex}`} className="max-w-none">
+    <div key={`${messageId}-${partIndex}`} className="w-full max-w-full min-w-0">
       {parts.map((part, index) => {
         if (part.type === "code") {
           const language = part.language || "text";
           const filename = `code.${language}`;
 
           return (
-            <LightCodeBlock
-              key={`code-${messageId}-${partIndex}-${index}`}
-              language={language}
-              filename={filename}
-              code={part.content}
-              syntaxHighlighting={!part.unfinished}
-              lineNumbers={true}
-            />
+            <div key={`code-${messageId}-${partIndex}-${index}`} className="md:max-w-full max-w-xs min-w-0 overflow-x-scroll">
+              <LightCodeBlock
+                language={language}
+                filename={filename}
+                code={part.content}
+                syntaxHighlighting={!part.unfinished}
+                lineNumbers={true}
+              />
+            </div>
           );
         }
 
