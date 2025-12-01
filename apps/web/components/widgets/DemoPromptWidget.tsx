@@ -8,7 +8,9 @@ import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 
 export function DemoPromptWidget({ className }: { className?: string }) {
-  const [prompts, setPrompts] = useState<Prompts[]>(([...PROMPTS].sort(() => Math.random() - 0.5)).slice(0, 6));
+  const [prompts, setPrompts] = useState<Prompts[]>(
+    [...PROMPTS].sort(() => Math.random() - 0.5).slice(0, 6),
+  );
   const router = useRouter();
 
   function handleClick({ prompt }: { prompt: Prompts }) {
@@ -26,7 +28,7 @@ export function DemoPromptWidget({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn("flex flex-row gap-2 flex-wrap", className)}>
+    <div className={cn("flex flex-row flex-wrap gap-2", className)}>
       {prompts.map((prompt, index) => (
         <Button
           key={index}

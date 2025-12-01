@@ -53,7 +53,7 @@ export function ChatTitle({
     setTitle(info.title);
     onTitleChange?.(info.title);
     onPersonalityChange?.(info.personality);
-    
+
     const metadata: Metadata = {
       title: `${info.title} | ${appConfig.appName}`,
       description: info.title,
