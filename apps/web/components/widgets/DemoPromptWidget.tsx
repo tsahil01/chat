@@ -28,7 +28,12 @@ export function DemoPromptWidget({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn("flex flex-row flex-wrap gap-2 justify-center items-center", className)}>
+    <div
+      className={cn(
+        "flex flex-row flex-wrap items-center justify-center gap-2",
+        className,
+      )}
+    >
       {prompts.map((prompt, index) => (
         <Button
           key={index}
