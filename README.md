@@ -33,7 +33,7 @@ docker run --name chat-postgres -e POSTGRES_PASSWORD=mysecretpassword \
 cp .env.example .env
 
 # 4) Set the database connection in .env file
-DB_URL='postgresql://postgres:mysecretpassword@localhost:5432/postgres'
+DATABASE_URL='postgresql://postgres:mysecretpassword@localhost:5432/postgres'
 printf "\nDATABASE_URL=${DB_URL}\n" | tee -a .env > /dev/null
 
 # 5) Generate client and run migrations
