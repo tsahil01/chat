@@ -131,7 +131,10 @@ export async function POST(req: Request) {
         createdAt: new Date(),
       } as UIMessage;
 
-      console.log("assistantMessage", JSON.stringify(assistantMessage, null, 2));
+      console.log(
+        "assistantMessage",
+        JSON.stringify(assistantMessage, null, 2),
+      );
 
       const { success, errors } = await handleChatCompletion({
         chatId,
