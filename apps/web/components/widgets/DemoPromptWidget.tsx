@@ -28,12 +28,14 @@ export function DemoPromptWidget({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn("flex flex-row flex-wrap gap-2", className)}>
+    <div className={cn("flex flex-row flex-wrap gap-2 justify-center items-center", className)}>
       {prompts.map((prompt, index) => (
         <Button
           key={index}
           onClick={() => handleClick({ prompt })}
           variant="outline"
+          size="sm"
+          className="text-xs"
         >
           {prompt?.title}
         </Button>

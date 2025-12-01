@@ -12,7 +12,7 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ className }: WelcomeScreenProps) {
   return (
-    <div className={`mt-5 flex flex-col ${className}`}>
+    <div className={`mt-3 flex flex-col ${className}`}>
       {/* <div className="grid grid-cols-1 gap-2 px-3 sm:grid-cols-2 sm:px-0 lg:grid-cols-6"> */}
       {/* <ClockWidget className="bg-muted/30 dark:bg-muted/10 sm:col-span-1" />
         <WeatherWidget className="sm:col-span-2" /> */}
