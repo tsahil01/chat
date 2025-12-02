@@ -125,16 +125,16 @@ export function MessageItem({
                           partIndex={i}
                         />
                       );
-                      case "tool-parallelWebSearch":
-                        return (
-                          <ToolPart
-                            key={`${message.id}-${i}`}
-                            toolName="Web Search"
-                            part={part}
-                            messageId={message.id}
-                            partIndex={i}
-                          />
-                        );
+                    case "tool-parallelWebSearch":
+                      return (
+                        <ToolPart
+                          key={`${message.id}-${i}`}
+                          toolName="Web Search"
+                          part={part}
+                          messageId={message.id}
+                          partIndex={i}
+                        />
+                      );
                     case "tool-createCalendarEvent":
                       return (
                         <ToolPart
