@@ -126,10 +126,7 @@ export function SelectModel({
                       </div>
                       <div className="flex flex-row items-center gap-1">
                         {model.tags?.map((tag) => (
-                          <Badge
-                            key={tag}
-                            className="my-auto text-xs"
-                          >
+                          <Badge key={tag} className="my-auto text-xs">
                             {tag}
                           </Badge>
                         ))}
