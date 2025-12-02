@@ -34,6 +34,7 @@
     "lucide-react": "^0.475.0",
     "next": "^15.4.5",
     "next-themes": "^0.4.6",
+    "parallel-web": "^0.2.4",
     "react": "^19.1.1",
     "react-country-state-city": "^1.1.12",
     "react-dom": "^19.1.1",

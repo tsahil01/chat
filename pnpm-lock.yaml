@@ -95,6 +95,9 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      parallel-web:
+        specifier: ^0.2.4
+        version: 0.2.4
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -3308,6 +3311,9 @@ packages:
   pac-resolver@7.0.1:
     resolution: {integrity: sha512-5NPgf87AT2STgwa2ntRMr45jTKrYBGkVU36yT0ig/n/GMAa3oPqhZfIQ2kMEimReg0+t9kZViDVZ83qfVUlckg==}
     engines: {node: '>= 14'}
+
+  parallel-web@0.2.4:
+    resolution: {integrity: sha512-684TtVFf0wvyZ83FMrhxX1Qg0+PDjsB7bPu0SXBCRVywxSeOloFIKHPKiAsAKWpDgAz3ok/bZmd2CAXImqH3Iw==}
 
   param-case@2.1.1:
     resolution: {integrity: sha512-eQE845L6ot89sk2N8liD8HAuH4ca6Vvr7VWAWwt7+kvvG5aBcPmmphQ68JsEG2qa9n1TykS2DLeMt363AAH8/w==}
@@ -7880,6 +7886,8 @@ snapshots:
     dependencies:
       degenerator: 5.0.1
       netmask: 2.0.2
+
+  parallel-web@0.2.4: {}
 
   param-case@2.1.1:
     dependencies:

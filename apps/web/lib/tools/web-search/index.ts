@@ -2,8 +2,30 @@ import { tool } from "ai";
 import { z } from "zod";
 import Exa from "exa-js";
 import FirecrawlApp from "@mendable/firecrawl-js";
+import { Parallel } from "parallel-web";
 
+const parallel = new Parallel({ apiKey: process.env.PARALLEL_API_KEY });
 export const exa = new Exa(process.env.EXA_API_KEY as string);
+const firecrawlApp = new FirecrawlApp({
+  apiKey: process.env.FIRECRAWL_API_KEY,
+});
+
+export const parallelWebSearch = tool({
+  description: "Use this tool to search the web.",
+  inputSchema: z.object({
+    searchQueries: z.array(z.string()).describe("Search queries"),
+    usersQuestion: z.string().describe("The user's question"),
+  }),
+  execute: async ({ searchQueries, usersQuestion }) => {
+    const search = await parallel.beta.search({
+      objective: usersQuestion,
+      search_queries: searchQueries,
+      max_results: 3,
+      max_chars_per_result: 1000,
+    });
+    return search.results;
+  },
+});
 
 export const exaWebSearch = tool({
   description: "Search the web for up-to-date information",
@@ -22,10 +44,6 @@ export const exaWebSearch = tool({
       publishedDate: result.publishedDate,
     }));
   },
-});
-
-const firecrawlApp = new FirecrawlApp({
-  apiKey: process.env.FIRECRAWL_API_KEY,
 });
 
 export const firecrawlWebSearch = tool({
