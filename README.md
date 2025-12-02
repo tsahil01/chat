@@ -71,3 +71,14 @@ Re-run after schema changes.
 ### Env file
 
 - Root: `.env.example` → copy to `.env`
+
+#### Populate .env with demo values
+
+This can be useful for quick testing and building the app locally. To automatically add any missing variables from `.env.example` to your `.env` file (with empty values), run:
+
+```bash
+$ chmod +x scripts/populate-env.sh
+$ ./scripts/populate-env.sh
+```
+
+**Note**: This script will only add variables that don't already exist in `.env`, preserving your existing values. Variables are added with empty values - you'll need to fill them in manually.
