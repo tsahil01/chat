@@ -138,7 +138,7 @@ export function ChatTitle({
   }, [isOpen, title]);
 
   const titleDisplay = (
-    <h1 className="text-foreground truncate text-sm tracking-tight md:text-base">
+    <h1 className="max-w-[60vw] truncate text-foreground text-xs tracking-tight sm:text-sm md:max-w-md md:text-base">
       {displayedTitle || title}
     </h1>
   );
@@ -151,7 +151,7 @@ export function ChatTitle({
 
   if (!hasTitle) {
     return (
-      <h1 className="text-foreground truncate text-sm tracking-tight md:text-base">
+      <h1 className="max-w-[40vw] truncate text-foreground text-xs tracking-tight sm:text-sm md:max-w-md md:text-base">
         {displayedTitle || title || "New Chat"}
       </h1>
     );
@@ -160,11 +160,14 @@ export function ChatTitle({
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="my-auto">
-          <span className="truncate">
+        <Button
+          variant="ghost"
+          className="my-auto max-w-[40vw] min-w-0 justify-between px-2 py-1 sm:max-w-[50vw] md:max-w-md"
+        >
+          <span className="truncate text-left text-xs sm:text-sm">
             {displayedTitle || title || "New Chat"}
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
+          <ChevronDown className="h-3 w-3 shrink-0 opacity-60 transition-opacity group-hover:opacity-100 sm:h-4 sm:w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80" align="start">
