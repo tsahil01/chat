@@ -138,7 +138,7 @@ export function ChatTitle({
   }, [isOpen, title]);
 
   const titleDisplay = (
-    <h1 className="max-w-[60vw] truncate text-foreground text-xs tracking-tight sm:text-sm md:max-w-md md:text-base">
+    <h1 className="text-foreground max-w-[60vw] truncate text-xs tracking-tight sm:text-sm md:max-w-md md:text-base">
       {displayedTitle || title}
     </h1>
   );
@@ -151,7 +151,7 @@ export function ChatTitle({
 
   if (!hasTitle) {
     return (
-      <h1 className="max-w-[40vw] truncate text-foreground text-xs tracking-tight sm:text-sm md:max-w-md md:text-base">
+      <h1 className="text-foreground max-w-[40vw] truncate text-xs tracking-tight sm:text-sm md:max-w-md md:text-base">
         {displayedTitle || title || "New Chat"}
       </h1>
     );
