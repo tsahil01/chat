@@ -15,23 +15,16 @@ export interface Models {
 export const models: Models[] = [
   {
     model: "x-ai/grok-4.1-fast:free",
-    displayName: "grok 4.1 fast",
+    displayName: "Grok 4.1 Fast",
     provider: "openrouter",
     thinking: false,
     fileSupport: false,
     toolSupport: true,
-  },
-  {
-    model: "nvidia/nemotron-nano-9b-v2:free",
-    displayName: "nvidia nemotron nano",
-    provider: "openrouter",
-    thinking: true,
-    fileSupport: false,
-    toolSupport: true,
+    tags: ["Fast"],
   },
   {
     model: "kimi-k2-turbo-preview",
-    displayName: "kimi k2 turbo",
+    displayName: "Kimi K2",
     provider: "moonshot",
     thinking: false,
     tags: ["Fast"],
@@ -40,15 +33,16 @@ export const models: Models[] = [
   },
   {
     model: "moonshotai/kimi-k2-thinking",
-    displayName: "kimi k2 thinking",
+    displayName: "Kimi K2 Thinking",
     provider: "openrouter",
     thinking: true,
     fileSupport: false,
     toolSupport: true,
+    tags: ["Fast"],
   },
   {
     model: "z-ai/glm-4.5-air:free",
-    displayName: "z-ai glm 4.5 air",
+    displayName: "Z-AI GLM 4.5 Air",
     provider: "openrouter",
     thinking: true,
     fileSupport: false,
@@ -56,7 +50,7 @@ export const models: Models[] = [
   },
   {
     model: "google/gemini-2.5-flash",
-    displayName: "gemini 2.5 flash",
+    displayName: "Gemini 2.5 Flash",
     provider: "openrouter",
     thinking: false,
     fileSupport: true,
@@ -64,7 +58,7 @@ export const models: Models[] = [
   },
   {
     model: "google/gemini-2.5-flash-lite-preview-09-2025",
-    displayName: "gemini 2.5 flash lite preview",
+    displayName: "Gemini 2.5 Flash Lite",
     provider: "openrouter",
     thinking: false,
     fileSupport: true,
@@ -72,7 +66,7 @@ export const models: Models[] = [
   },
   {
     model: "google/gemini-2.5-flash-image",
-    displayName: "gemini 2.5 flash image",
+    displayName: "Gemini 2.5 Flash Image",
     provider: "openrouter",
     thinking: false,
     fileSupport: true,

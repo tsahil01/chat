@@ -13,7 +13,13 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
 import { Input } from "@workspace/ui/components/input";
-import { LuCpu, LuChevronDown, LuSearch } from "react-icons/lu";
+import {
+  LuCpu,
+  LuChevronDown,
+  LuSearch,
+  LuFile,
+  LuBrain,
+} from "react-icons/lu";
 import { Models } from "@/lib/models";
 import { Badge } from "@workspace/ui/components/badge";
 
@@ -118,20 +124,22 @@ export function SelectModel({
                       <div className="text-sm font-medium sm:text-base">
                         {model.displayName}
                       </div>
-                      {model.fileSupport && (
-                        <Badge className="text-xs">File Upload</Badge>
-                      )}
-                      {model.thinking && (
-                        <Badge className="text-xs">Reasoning</Badge>
-                      )}
-                      {model.tags?.map((tag) => (
-                        <Badge key={tag} className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="truncate text-start text-xs">
-                      Provider: {model.provider}
+                      <div className="flex flex-row items-center gap-1">
+                        {model.tags?.map((tag) => (
+                          <Badge
+                            key={tag}
+                            className="my-auto text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                        {model.fileSupport && (
+                          <LuFile className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                        )}
+                        {model.thinking && (
+                          <LuBrain className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </Button>
