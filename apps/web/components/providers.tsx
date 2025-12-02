@@ -57,7 +57,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
       enableColorScheme
     >
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
         <AppSidebar />
         <main className="flex-1">
           <HeaderContent />
