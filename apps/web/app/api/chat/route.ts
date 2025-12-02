@@ -87,7 +87,7 @@ export async function POST(req: Request) {
   );
 
   if (toggleWebSearch) {
-    system += `- You need to use the exaWebSearch tool for next user message. It does not matter what the user asks, you need to use the exaWebSearch tool.\n`;
+    system += `- You need to use the parallelWebSearch tool for next user message. It does not matter what the user asks, you need to use the parallelWebSearch tool.\n`;
   }
 
   const sanitizedMessages: UIMessage[] = messages.map((msg) => ({

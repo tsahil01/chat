@@ -1,5 +1,5 @@
 import { ToolSet } from "ai";
-import { exaWebSearch } from "./web-search";
+import { exaWebSearch, parallelWebSearch } from "./web-search";
 import {
   createCalendarEvent,
   deleteCalendarEvent,
@@ -65,7 +65,8 @@ const googleTools: ToolSet = {
 
 export const getTools = (integrations: Integration[]) => {
   let tools: ToolSet = {
-    exaWebSearch,
+    // exaWebSearch,
+    parallelWebSearch,
   };
 
   if (
