@@ -216,12 +216,7 @@ export function LightCodeBlock({
         <div className="text-accent-foreground truncate text-xs">
           {filename ?? `code.${language}`}
         </div>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={onCopy}
-          className="shrink-0"
-        >
+        <Button size="sm" variant="ghost" onClick={onCopy} className="shrink-0">
           {isCopied ? (
             <CheckIcon size={16} className="text-muted-foreground" />
           ) : (
