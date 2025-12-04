@@ -19,7 +19,7 @@ export function TextPart({ text, messageId, partIndex }: TextPartProps) {
       {parts.map((part, index) => {
         if (part.type === "code") {
           const language = part.language || "text";
-          const filename = `code.${language}`;
+          const filename = `${language}`;
 
           return (
             <div

@@ -212,20 +212,20 @@ export function LightCodeBlock({
 
   return (
     <div className={containerClass}>
-      <div className="bg-accent flex items-center justify-between border-b px-3 py-1">
+      <div className="bg-accent flex items-center justify-between border-b px-3">
         <div className="text-accent-foreground truncate text-xs">
           {filename ?? `code.${language}`}
         </div>
         <Button
-          size="icon"
+          size="sm"
           variant="ghost"
           onClick={onCopy}
           className="shrink-0"
         >
           {isCopied ? (
-            <CheckIcon size={14} className="text-muted-foreground" />
+            <CheckIcon size={16} className="text-muted-foreground" />
           ) : (
-            <CopyIcon size={14} className="text-muted-foreground" />
+            <CopyIcon size={16} className="text-muted-foreground" />
           )}
         </Button>
       </div>
