@@ -110,7 +110,7 @@ export async function POST(req: Request) {
 
   const model = getModelDetails(selectedChatModel)!;
 
-  if ((!isPro && model.pro)) {
+  if (!isPro && model.pro) {
     return Response.json(
       { error: "Model is not available for your plan" },
       { status: 400 },

@@ -14,11 +14,7 @@ import {
 } from "@workspace/ui/components/tooltip";
 import { Input } from "@workspace/ui/components/input";
 import { Badge } from "@workspace/ui/components/badge";
-import {
-  LuCpu,
-  LuChevronDown,
-  LuSearch,
-} from "react-icons/lu";
+import { LuCpu, LuChevronDown, LuSearch } from "react-icons/lu";
 import { Models } from "@/lib/models";
 import { useUserPlan } from "@/hooks/useUserPlan";
 import { FaBrain, FaFire } from "react-icons/fa6";
@@ -128,7 +124,7 @@ export function SelectModel({
                         {model.pro && (
                           <Badge
                             variant="outline"
-                            className="border-primary/40 bg-primary/5 px-1.5 py-0 text-[10px] uppercase tracking-wide"
+                            className="border-primary/40 bg-primary/5 px-1.5 py-0 text-[10px] tracking-wide uppercase"
                           >
                             Pro
                           </Badge>
