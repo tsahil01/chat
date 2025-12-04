@@ -13,15 +13,11 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
 import { Input } from "@workspace/ui/components/input";
-import {
-  LuCpu,
-  LuChevronDown,
-  LuSearch,
-  LuFile,
-  LuBrain,
-} from "react-icons/lu";
-import { Models } from "@/lib/models";
 import { Badge } from "@workspace/ui/components/badge";
+import { LuCpu, LuChevronDown, LuSearch } from "react-icons/lu";
+import { Models } from "@/lib/models";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import { FaBrain, FaFire } from "react-icons/fa6";
 
 export function SelectModel({
   models,
@@ -34,6 +30,7 @@ export function SelectModel({
 }) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { isPro, loading: isProLoading } = useUserPlan();
 
   const filteredModels = useMemo(() => {
     if (!searchQuery.trim()) return models;
@@ -118,23 +115,59 @@ export function SelectModel({
                   }
                   className="h-auto w-full justify-start p-2 sm:p-3"
                   onClick={() => handleModelSelect(model)}
+                  disabled={!isPro && model.pro}
                 >
                   <div className="flex w-full flex-col justify-between gap-1">
                     <div className="flex flex-row items-start justify-between gap-1">
-                      <div className="text-sm font-medium sm:text-base">
-                        {model.displayName}
+                      <div className="flex items-center gap-1 text-sm font-medium sm:text-base">
+                        <span>{model.displayName}</span>
+                        {model.pro && (
+                          <Badge
+                            variant="outline"
+                            className="border-primary/40 bg-primary/5 px-1.5 py-0 text-[10px] tracking-wide uppercase"
+                          >
+                            Pro
+                          </Badge>
+                        )}
                       </div>
                       <div className="flex flex-row items-center gap-1">
-                        {model.tags?.map((tag) => (
-                          <Badge key={tag} className="my-auto text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
                         {model.fileSupport && (
-                          <LuFile className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="inline-flex items-center">
+                                <FaFire className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Supports file uploads</p>
+                            </TooltipContent>
+                          </Tooltip>
                         )}
                         {model.thinking && (
-                          <LuBrain className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="inline-flex items-center">
+                                <FaBrain className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reasoning</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                        {model.tags?.map((tag) =>
+                          tag === "Fast" ? (
+                            <Tooltip key={tag}>
+                              <TooltipTrigger asChild>
+                                <span className="inline-flex items-center">
+                                  <FaFire className="text-primary my-auto h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{tag}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          ) : null,
                         )}
                       </div>
                     </div>

@@ -10,6 +10,7 @@ export interface Models {
   tags?: string[];
   fileSupport: boolean;
   toolSupport: boolean;
+  pro: boolean;
 }
 
 export const models: Models[] = [
@@ -21,6 +22,7 @@ export const models: Models[] = [
     fileSupport: false,
     toolSupport: true,
     tags: ["Fast"],
+    pro: false,
   },
   {
     model: "x-ai/grok-4.1-fast",
@@ -30,6 +32,7 @@ export const models: Models[] = [
     fileSupport: false,
     toolSupport: true,
     tags: ["Fast"],
+    pro: false,
   },
   {
     model: "kimi-k2-turbo-preview",
@@ -39,6 +42,7 @@ export const models: Models[] = [
     tags: ["Fast"],
     fileSupport: false,
     toolSupport: true,
+    pro: true,
   },
   {
     model: "moonshotai/kimi-k2-thinking",
@@ -48,6 +52,7 @@ export const models: Models[] = [
     fileSupport: false,
     toolSupport: true,
     tags: ["Fast"],
+    pro: true,
   },
   {
     model: "z-ai/glm-4.5-air:free",
@@ -56,6 +61,7 @@ export const models: Models[] = [
     thinking: true,
     fileSupport: false,
     toolSupport: true,
+    pro: true,
   },
   {
     model: "google/gemini-2.5-flash",
@@ -64,22 +70,7 @@ export const models: Models[] = [
     thinking: false,
     fileSupport: true,
     toolSupport: true,
-  },
-  {
-    model: "google/gemini-2.5-flash-lite-preview-09-2025",
-    displayName: "Gemini 2.5 Flash Lite",
-    provider: "openrouter",
-    thinking: false,
-    fileSupport: true,
-    toolSupport: true,
-  },
-  {
-    model: "google/gemini-2.5-flash-image",
-    displayName: "Gemini 2.5 Flash Image",
-    provider: "openrouter",
-    thinking: false,
-    fileSupport: true,
-    toolSupport: false,
+    pro: false,
   },
 ];
 
