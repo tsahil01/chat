@@ -14,7 +14,16 @@ export interface Models {
 
 export const models: Models[] = [
   {
-    model: "x-ai/grok-4.1-fast:free",
+    model: "openai/gpt-oss-20b:free",
+    displayName: "GPT-OSS 20B",
+    provider: "openrouter",
+    thinking: false,
+    fileSupport: false,
+    toolSupport: true,
+    tags: ["Fast"],
+  },
+  {
+    model: "x-ai/grok-4.1-fast",
     displayName: "Grok 4.1 Fast",
     provider: "openrouter",
     thinking: false,
