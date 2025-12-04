@@ -114,6 +114,7 @@ export async function getChatWithUsage(
 ): Promise<{
   chat: (Chat & { messages: Message[] }) | null;
   usage: { currentUsage: number; limit: number; remaining: number } | null;
+  isPro: boolean;
 }> {
   try {
     const currentMonth = new Date().toISOString().slice(0, 7);
@@ -149,10 +150,11 @@ export async function getChatWithUsage(
         limit,
         remaining: Math.max(0, limit - currentUsage),
       },
+      isPro,
     };
   } catch (error) {
     console.error("Error getting chat with usage:", error);
-    return { chat: null, usage: null };
+    return { chat: null, usage: null, isPro: false };
   }
 }
 

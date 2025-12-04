@@ -54,7 +54,10 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { chat, usage } = await getChatWithUsage(chatId, session.user.id);
+  const { chat, usage, isPro } = await getChatWithUsage(
+    chatId,
+    session.user.id,
+  );
 
   if (!usage || usage.remaining <= 0) {
     return Response.json(
@@ -100,14 +103,22 @@ export async function POST(req: Request) {
   }));
 
   const getModelDetails = (modelName: string): Models | undefined => {
-    return models.find((model) => model.model === modelName);
+    return models.find(
+      (model) => model.model === modelName && (isPro || !model.pro),
+    );
   };
 
+  const model = getModelDetails(selectedChatModel)!;
+
+  if ((!isPro && model.pro)) {
+    return Response.json(
+      { error: "Model is not available for your plan" },
+      { status: 400 },
+    );
+  }
+
   const result = streamText({
-    model: getSelectedModel({
-      model: selectedChatModel,
-      provider: selectedChatProvider,
-    })!,
+    model: model.model,
     messages: convertToModelMessages(sanitizedMessages),
     ...(getModelDetails(selectedChatModel)?.toolSupport
       ? { tools: getTools(integrations) }
