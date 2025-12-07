@@ -10,6 +10,7 @@ import { generateUUID } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import { AuthDialog } from "@/components/auth-dialog";
 import { FileUIPart } from "ai";
+import DemoPromptWidget from "@/components/widgets/DemoPrompts";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -89,7 +90,13 @@ export default function Chat() {
         personality={personalityName}
         setPersonality={setPersonalityName}
       />
-      <WelcomeScreen />
+      <div className="mt-3 flex flex-col">
+        <DemoPromptWidget 
+        className="w-full" 
+        setInput={setInput}
+        setPersonality={setPersonalityName}
+        />
+      </div>
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}
