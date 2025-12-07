@@ -77,10 +77,16 @@ export function ThemeSwitcher() {
             />
             <div className="flex min-w-0 flex-col text-left">
               <span className="truncate text-sm font-medium">
-                {appliedTheme?.label ?? "System"}
+                {activeThemeId === "system"
+                  ? "System"
+                  : appliedTheme?.label ?? "System"}
               </span>
               <span className="text-muted-foreground truncate text-xs">
-                {appliedTheme ? `${appliedTheme.mode} mode` : "Auto"}
+                {activeThemeId === "system"
+                  ? "Auto"
+                  : appliedTheme
+                    ? `${appliedTheme.mode} mode`
+                    : "Auto"}
               </span>
             </div>
           </div>
