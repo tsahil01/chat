@@ -4,7 +4,7 @@ import { ClockWidget } from "@/components/widgets/ClockWidget";
 import { WeatherWidget } from "@/components/widgets/WeatherWidget";
 import { NewsWidget } from "@/components/widgets/NewsWidget";
 import { CryptoWidget } from "@/components/widgets/CryptoWidget";
-import { DemoPromptWidget } from "@/components/widgets/DemoPromptWidget";
+import { DemoPromptWidget } from "@/components/widgets/DemoPrompts";
 
 interface WelcomeScreenProps {
   className?: string;
@@ -20,7 +20,7 @@ export function WelcomeScreen({ className }: WelcomeScreenProps) {
       {/* <CryptoWidget />
         <NewsWidget className="bg-muted/30 dark:bg-muted/10 sm:col-span-2 lg:col-span-3" /> */}
       {/* </div> */}
-      <DemoPromptWidget className="w-full" />
+      {/* <DemoPromptWidget className="w-full" /> */}
     </div>
   );
 }
