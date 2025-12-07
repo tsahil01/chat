@@ -91,6 +91,7 @@ export const appThemes: AppTheme[] = [
 ];
 
 export const themeIds = appThemes.map((theme) => theme.id);
+export const themeOptions = ["system", ...themeIds];
 
 export function getThemeMode(theme?: string): "light" | "dark" {
   if (!theme || theme === "system") return "light";

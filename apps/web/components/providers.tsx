@@ -10,7 +10,7 @@ import {
   type AnnouncementToastOptions,
 } from "@workspace/ui/components/announcement-toast";
 import { HeaderContent } from "@/components/header";
-import { themeIds } from "@/lib/themes";
+import { themeOptions } from "@/lib/themes";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hasShownAnnouncementRef = React.useRef(false);
@@ -58,7 +58,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
       enableColorScheme
-      themes={themeIds}
+      themes={themeOptions}
     >
       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
