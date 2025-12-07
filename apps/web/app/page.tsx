@@ -91,10 +91,10 @@ export default function Chat() {
         setPersonality={setPersonalityName}
       />
       <div className="mt-3 flex flex-col">
-        <DemoPromptWidget 
-        className="w-full" 
-        setInput={setInput}
-        setPersonality={setPersonalityName}
+        <DemoPromptWidget
+          className="w-full"
+          setInput={setInput}
+          setPersonality={setPersonalityName}
         />
       </div>
       <AuthDialog

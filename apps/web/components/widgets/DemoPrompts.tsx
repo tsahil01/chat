@@ -11,7 +11,11 @@ interface DemoPromptWidgetProps {
   setPersonality: (personality: string) => void;
 }
 
-export function DemoPromptWidget({ className, setInput, setPersonality }: DemoPromptWidgetProps) {
+export function DemoPromptWidget({
+  className,
+  setInput,
+  setPersonality,
+}: DemoPromptWidgetProps) {
   const [prompts, setPrompts] = useState<Prompts[]>(
     [...PROMPTS].sort(() => Math.random() - 0.5).slice(0, 6),
   );
