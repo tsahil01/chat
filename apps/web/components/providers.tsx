@@ -10,6 +10,7 @@ import {
   type AnnouncementToastOptions,
 } from "@workspace/ui/components/announcement-toast";
 import { HeaderContent } from "@/components/header";
+import { themeIds } from "@/lib/themes";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hasShownAnnouncementRef = React.useRef(false);
@@ -53,9 +54,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <NextThemesProvider
       attribute="class"
       defaultTheme="system"
+      storageKey="chat-theme"
       enableSystem
       disableTransitionOnChange
       enableColorScheme
+      themes={themeIds}
     >
       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
