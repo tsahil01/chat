@@ -79,7 +79,7 @@ export function ThemeSwitcher() {
               <span className="truncate text-sm font-medium">
                 {activeThemeId === "system"
                   ? "System"
-                  : appliedTheme?.label ?? "System"}
+                  : (appliedTheme?.label ?? "System")}
               </span>
               <span className="text-muted-foreground truncate text-xs">
                 {activeThemeId === "system"
