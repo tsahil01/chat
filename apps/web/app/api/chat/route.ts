@@ -118,7 +118,10 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: model.model,
+    model: getSelectedModel({
+      model: model.model,
+      provider: model.provider,
+    })!,
     messages: convertToModelMessages(sanitizedMessages),
     ...(getModelDetails(selectedChatModel)?.toolSupport
       ? { tools: getTools(integrations) }
