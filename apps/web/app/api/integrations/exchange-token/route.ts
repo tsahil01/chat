@@ -44,6 +44,7 @@ export async function POST(request: Request) {
         client_id: config.clientId,
         client_secret: config.clientSecret,
         code,
+        grant_type: "authorization_code",
         redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/integrations/callback`,
       }),
     });

@@ -35,6 +35,10 @@ export function buildOAuthUrl(
     response_type: "code",
     state: options?.state || `${provider}:${Date.now()}`,
     ...(config.name === "github" && { allow_signup: "true" }),
+    ...(config.name === "google" && {
+      access_type: "offline",
+      prompt: "consent",
+    }),
   });
 
   return `${baseUrl}?${params.toString()}`;
