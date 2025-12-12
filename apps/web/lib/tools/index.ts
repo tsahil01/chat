@@ -57,9 +57,9 @@ const googleTools: ToolSet = {
   checkCalendarAvailability,
 
   // Google Email
-  // listEmails,
-  // getEmail,
-  // searchEmails,
+  listEmails,
+  getEmail,
+  searchEmails,
   // sendEmail,
 };
 
