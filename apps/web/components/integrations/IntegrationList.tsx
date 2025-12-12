@@ -1,12 +1,8 @@
 "use client";
 
 import { IntegrationCard } from "./IntegrationCard";
-import {
-  FiCalendar,
-  FiGithub,
-  FiMessageSquare,
-  FiFileText,
-} from "react-icons/fi";
+import { FaGoogle, FaGithub, FaSlack } from "react-icons/fa";
+import { LuNotebook } from "react-icons/lu";
 
 interface Integration {
   id: string;
@@ -28,23 +24,23 @@ const INTEGRATION_CONFIG = {
     name: "Google",
     description:
       "Create, view, and manage your Emails, Google Calendar events, and more",
-    icon: <FiCalendar className="h-5 w-5" />,
+    icon: <FaGoogle className="h-5 w-5" />,
   },
   github: {
     name: "GitHub",
     description:
       "Access GitHub repositories, manage issues, pull requests, and more",
-    icon: <FiGithub className="h-5 w-5" />,
+    icon: <FaGithub className="h-5 w-5" />,
   },
   slack: {
     name: "Slack",
     description: "Send messages and manage your Slack workspace",
-    icon: <FiMessageSquare className="h-5 w-5" />,
+    icon: <FaSlack className="h-5 w-5" />,
   },
   notion: {
     name: "Notion",
     description: "Sync your Notion pages and databases",
-    icon: <FiFileText className="h-5 w-5" />,
+    icon: <LuNotebook className="h-5 w-5" />,
   },
 };
 
@@ -72,7 +68,7 @@ export function IntegrationList({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Available Integrations</h2>
+      {/* <h2 className="text-xl font-semibold">Available Integrations</h2> */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {availableIntegrations.map((integration) => (
           <IntegrationCard
