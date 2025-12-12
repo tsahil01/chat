@@ -26,7 +26,7 @@ export const listEmails = tool({
       });
 
       const messages = response.data.messages || [];
-      
+
       if (messages.length === 0) {
         return "📧 No emails found in your inbox.";
       }
@@ -39,14 +39,16 @@ export const listEmails = tool({
             format: "metadata",
             metadataHeaders: ["From", "Subject", "Date"],
           });
-          
+
           const headers = detail.data.payload?.headers || [];
-          const from = headers.find((h) => h.name === "From")?.value || "Unknown";
-          const subject = headers.find((h) => h.name === "Subject")?.value || "(No subject)";
+          const from =
+            headers.find((h) => h.name === "From")?.value || "Unknown";
+          const subject =
+            headers.find((h) => h.name === "Subject")?.value || "(No subject)";
           const date = headers.find((h) => h.name === "Date")?.value || "";
-          
+
           return `• From: ${from}\n  Subject: ${subject}\n  Date: ${date}\n  ID: ${msg.id}`;
-        })
+        }),
       );
 
       return `📧 Found ${messages.length} emails in inbox. Showing first ${emailDetails.length}:\n\n${emailDetails.join("\n\n")}`;
@@ -65,7 +67,7 @@ export const getEmail = tool({
     try {
       const { googleAccount } = await getCurrentUserGoogleAccount();
       const gmail = createGoogleGmailClient(googleAccount);
-      
+
       const email = await gmail.users.messages.get({
         userId: "me",
         id: emailId,
@@ -75,19 +77,22 @@ export const getEmail = tool({
       const headers = email.data.payload?.headers || [];
       const from = headers.find((h) => h.name === "From")?.value || "Unknown";
       const to = headers.find((h) => h.name === "To")?.value || "Unknown";
-      const subject = headers.find((h) => h.name === "Subject")?.value || "(No subject)";
+      const subject =
+        headers.find((h) => h.name === "Subject")?.value || "(No subject)";
       const date = headers.find((h) => h.name === "Date")?.value || "";
-      
+
       let body = "";
       if (email.data.payload?.parts) {
         const textPart = email.data.payload.parts.find(
-          (part) => part.mimeType === "text/plain"
+          (part) => part.mimeType === "text/plain",
         );
         if (textPart?.body?.data) {
           body = Buffer.from(textPart.body.data, "base64").toString("utf-8");
         }
       } else if (email.data.payload?.body?.data) {
-        body = Buffer.from(email.data.payload.body.data, "base64").toString("utf-8");
+        body = Buffer.from(email.data.payload.body.data, "base64").toString(
+          "utf-8",
+        );
       }
 
       return `📧 Email Details:\n\nFrom: ${from}\nTo: ${to}\nSubject: ${subject}\nDate: ${date}\n\n--- Message Body ---\n${body.slice(0, 1000)}${body.length > 1000 ? "\n\n[Message truncated...]" : ""}`;
@@ -98,16 +103,25 @@ export const getEmail = tool({
 });
 
 export const searchEmails = tool({
-  description: "Search emails using Gmail search syntax (e.g., 'from:someone@example.com', 'subject:meeting', 'after:2024/01/01')",
+  description:
+    "Search emails using Gmail search syntax (e.g., 'from:someone@example.com', 'subject:meeting', 'after:2024/01/01')",
   inputSchema: z.object({
-    query: z.string().describe("Gmail search query (supports operators like from:, to:, subject:, after:, before:)"),
-    maxResults: z.number().default(10).optional().describe("Maximum number of results to return"),
+    query: z
+      .string()
+      .describe(
+        "Gmail search query (supports operators like from:, to:, subject:, after:, before:)",
+      ),
+    maxResults: z
+      .number()
+      .default(10)
+      .optional()
+      .describe("Maximum number of results to return"),
   }),
   execute: async ({ query, maxResults = 10 }) => {
     try {
       const { googleAccount } = await getCurrentUserGoogleAccount();
       const gmail = createGoogleGmailClient(googleAccount);
-      
+
       const response = await gmail.users.messages.list({
         userId: "me",
         q: query,
@@ -115,7 +129,7 @@ export const searchEmails = tool({
       });
 
       const messages = response.data.messages || [];
-      
+
       if (messages.length === 0) {
         return `🔍 No emails found matching query: "${query}"`;
       }
@@ -128,14 +142,16 @@ export const searchEmails = tool({
             format: "metadata",
             metadataHeaders: ["From", "Subject", "Date"],
           });
-          
+
           const headers = detail.data.payload?.headers || [];
-          const from = headers.find((h) => h.name === "From")?.value || "Unknown";
-          const subject = headers.find((h) => h.name === "Subject")?.value || "(No subject)";
+          const from =
+            headers.find((h) => h.name === "From")?.value || "Unknown";
+          const subject =
+            headers.find((h) => h.name === "Subject")?.value || "(No subject)";
           const date = headers.find((h) => h.name === "Date")?.value || "";
-          
+
           return `• From: ${from}\n  Subject: ${subject}\n  Date: ${date}\n  ID: ${msg.id}`;
-        })
+        }),
       );
 
       return `🔍 Found ${messages.length} emails matching "${query}". Showing first ${emailDetails.length}:\n\n${emailDetails.join("\n\n")}`;
