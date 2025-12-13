@@ -18,8 +18,6 @@ model User {
   sessions      Session[]
   accounts      Account[]
   Chat          Chat[]
-  Document      Document[]
-  Suggestion    Suggestion[]
   usage         UserUsage[]
   integrations  Integration[]
 
@@ -99,7 +97,6 @@ model Chat {
   // Relations
   user     User      @relation(fields: [userId], references: [id])
   messages Message[]
-  streams  Stream[]
 
   @@map("Chat")
 }
@@ -116,51 +113,6 @@ model Message {
   chat Chat @relation(fields: [chatId], references: [id])
 
   @@map("Message")
-}
-
-model Document {
-  id        String       @default(uuid()) @db.Uuid
-  createdAt DateTime     @default(now())
-  title     String
-  content   String?
-  kind      ArtifactKind @default(TEXT) @map("text")
-  userId    String
-
-  // Relations
-  user        User         @relation(fields: [userId], references: [id])
-  suggestions Suggestion[]
-
-  @@id([id, createdAt])
-  @@map("Document")
-}
-
-model Suggestion {
-  id                String   @id @default(uuid()) @db.Uuid
-  documentId        String   @db.Uuid
-  documentCreatedAt DateTime
-  originalText      String
-  suggestedText     String
-  description       String?
-  isResolved        Boolean  @default(false)
-  userId            String
-  createdAt         DateTime @default(now())
-
-  // Relations
-  user     User     @relation(fields: [userId], references: [id])
-  document Document @relation(fields: [documentId, documentCreatedAt], references: [id, createdAt])
-
-  @@map("Suggestion")
-}
-
-model Stream {
-  id        String   @id @default(uuid()) @db.Uuid
-  chatId    String   @db.Uuid
-  createdAt DateTime @default(now())
-
-  // Relations
-  chat Chat @relation(fields: [chatId], references: [id])
-
-  @@map("Stream")
 }
 
 // Enums
