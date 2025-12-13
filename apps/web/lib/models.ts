@@ -74,7 +74,7 @@ export const models: Models[] = [
   },
 ];
 
-export const defaultModel = models[0];
+export const defaultModel = models[2];
 
 export function getSelectedModel({
   model,
