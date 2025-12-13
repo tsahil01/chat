@@ -4,7 +4,9 @@ import Exa from "exa-js";
 import FirecrawlApp from "@mendable/firecrawl-js";
 import { Parallel } from "parallel-web";
 
-const parallel = new Parallel({ apiKey: process.env.PARALLEL_API_KEY as string });
+const parallel = new Parallel({
+  apiKey: process.env.PARALLEL_API_KEY as string,
+});
 export const exa = new Exa(process.env.EXA_API_KEY as string);
 const firecrawlApp = new FirecrawlApp({
   apiKey: process.env.FIRECRAWL_API_KEY as string,
