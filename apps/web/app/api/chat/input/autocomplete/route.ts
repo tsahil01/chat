@@ -42,7 +42,7 @@ Return only the continuation text.`;
       provider: defaultModel!.provider,
     })!,
     system,
-    messages: convertToModelMessages([message]),
+    messages: await convertToModelMessages([message]),
     maxOutputTokens: 30,
   });
 

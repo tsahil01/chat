@@ -39,7 +39,7 @@ Return only the refined prompt.`;
       provider: defaultModel!.provider,
     })!,
     system,
-    messages: convertToModelMessages([message]),
+    messages: await convertToModelMessages([message]),
     maxOutputTokens: 30,
   });
 
