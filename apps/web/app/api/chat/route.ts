@@ -122,7 +122,7 @@ export async function POST(req: Request) {
       model: model.model,
       provider: model.provider,
     })!,
-    messages: convertToModelMessages(sanitizedMessages),
+    messages: await convertToModelMessages(sanitizedMessages),
     ...(getModelDetails(selectedChatModel)?.toolSupport
       ? { tools: getTools(integrations) }
       : {}),
