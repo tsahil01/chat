@@ -19,13 +19,12 @@ import { authClient } from "@/lib/auth-client";
 import { User } from "better-auth";
 import { AuthDialog } from "./auth-dialog";
 import { UserMenu } from "./user-menu";
-import { useTheme } from "next-themes";
-import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FiMessageCircle } from "react-icons/fi";
 import { PiPlusBold } from "react-icons/pi";
 import { LuWorkflow } from "react-icons/lu";
 import Link from "next/link";
 import { appConfig } from "@workspace/config";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export function AppSidebar() {
   const [recentChats, setRecentChats] = useState<Chat[]>([]);
@@ -34,7 +33,6 @@ export function AppSidebar() {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [user, setUser] = useState<User | null>(null);
-  const { theme, setTheme } = useTheme();
   const hasFetchedOnce = useRef(false);
   const lastChatsSignature = useRef<string>("");
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -249,7 +247,7 @@ export function AppSidebar() {
       <SidebarFooter className="border-sidebar-border border-t">
         <SidebarMenu>
           <SidebarMenuItem>
-            <div className="flex w-full flex-row items-center gap-2">
+            <div className="flex w-full flex-col gap-3">
               <div className="min-w-0 flex-1 overflow-hidden">
                 {user ? (
                   <UserMenu user={user} onLogout={handleLogout} />
@@ -257,17 +255,7 @@ export function AppSidebar() {
                   <AuthDialog />
                 )}
               </div>
-              <button
-                aria-label="Toggle theme"
-                className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground shrink-0 cursor-pointer rounded p-2"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                {theme === "dark" ? (
-                  <MdLightMode className="h-4 w-4" />
-                ) : (
-                  <MdDarkMode className="h-4 w-4" />
-                )}
-              </button>
+              <ThemeSwitcher />
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
